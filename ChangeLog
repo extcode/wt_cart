@@ -1,0 +1,138 @@
+1.4.2
+	wt_cart Development Team <info@wt-cart.com>
+
+	* ADD feature #33742: Add min and max order quantity
+	* ADD feature #32135: SQL query becomes cObj
+	* FIX: code cleanup (PHP)
+	* FIX: Use language string 'wtcart_ll_special_each' for special service costs
+	* FIX: Fixed problem when adding tt_content elements to wt_cart via pi2
+
+1.4.1
+	wt_cart Development Team <info@wt-cart.com>
+
+	* ADD feature #32244: Add new constant to control position of currency symbol
+	* UPD: Fixed some problems in HTML template (missing subpart in table based template and static order number string)
+	* FIX: Cleaned TypoScript Templates
+
+1.4.0
+	wt_cart Development Team <info@wt-cart.com>
+
+	* Release of wt_cart 1.4.0
+	* ADD feature #32243: Implement mini cart
+	* ADD feature #31693: Allow more than one wt_cart plugin per domain record
+	* ADD feature #31692: Include order numbers
+	* ADD feature #31691: Advanced shipping and payment calculation
+	* FIX #27456: Problems when adding more than one product
+	* FIX #10101: Problem with localization of product title
+	* UPD: Update of manual
+
+1.3.3
+	2011-09-11
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * FIX: removed some TS which sets standard payment and shipping
+    * FIX: removed deprecated methods GPvar() and GParrayMerged()
+    * FIX: clear powermail session data
+
+1.3.2
+	2011-05-25
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+	* Release of wt_cart 1.3.2
+	* UPD: Update of manual
+
+	Daniel Lorenz <info@capsicum-ug.de>
+
+	* ADD feature #26813: free shipping
+	* FIX: code cleanup (PHP and TS)
+	
+1.3.1
+	2011-05-23
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+	* Release of wt_cart 1.3.1
+
+	Daniel Lorenz <info@capsicum-ug.de>
+
+	* FIX fixed bug #25883: Amount can't update
+	* FIX fixed bug #9870: Behaviour when adding product again to cart
+
+1.3.0
+	2011-05-25
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+	* Release of wt_cart 1.3.0
+	* UPD: Update of manual
+
+    2011-01-16
+    Dirk Wildt <http://wildt.at.die-netzmacher.de>
+
+    * UPD: Update of manual
+    * ADD feature #12283: Extend wt_cart for related tables
+    * ADD feature #12282: Use wt_cart with tax rates instead of ids for tax rates
+    * ADD feature #12278: Variants
+    * ADD feature #12254: Prompt for error and query in case of an SQL error
+    * INFO: Dirk Wildt (Netzmacher) joines the development team
+
+1.2.1
+    2010-12-21
+    Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * Release of wt_cart 1.2.1
+    * ADD feature #11619: Add table based template
+
+1.2.0
+    2010-12-16
+    Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * Release of wt_cart 1.2
+    * ADD translation for french.
+    * UPD: Update of manual
+    * INFO: Daniel Lorenz (Capsicumnet) joines the development team
+    * UPD: changed user_wtcart_numberFormat() for better integration with quick_shop
+    * ADD feature #11516: Add calculation of costs for shipping and payment
+    * ADD feature #11515: New constants
+    * ADD feature #11514: Don't include CSS via TS, use static CSS file
+
+2010-09-22
+    Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * FIX: replaced deleted HTML template
+    * UPD: removed tt_news examples and HTML template file
+    * UPD #9869: Update manual with example for displaying additional product data
+    * ADD feature #9868: Add new constants for taxes
+
+2010-09-16
+    Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * UPD: Update of manual
+    * ADD feature #9134: Price and Title from POST param
+    * ADD feature #9146: Message if you forgot to add the static template
+    * ADD feature #9431: wt_cart depents on TYPO3 4.3 or higher
+    * FIX fixed bug #9150: Changing GPvar in TypoScript (deprecated)
+
+2010-06-29
+    Bjoern Jacob <bjoern.jacob@tritum.de>
+     
+    * ADD: New constant for cart pid which can be used in your own order form
+    * ADD: New constant for currency which allows other currencies than Euro
+    * UPD: Update of manual
+
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * UPD: Update of manual including #8237 and #7903
+    * FIX fixed bug #7895
+    * UPD: Extension now beta
+
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * FIX: Fixed some problems in manual.
+
+	Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * FIX: Changed some labels. No new functions, no bugfixes.
+
+2010-05-06
+    Bjoern Jacob <bjoern.jacob@tritum.de>
+
+    * Initial Release

@@ -1,0 +1,86 @@
+<T3DataStructure>
+  <meta>
+    <langDisable>1</langDisable>
+  </meta>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>LLL:EXT:wt_cart/locallang_db.php:tt_content.list_type_pi2</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <puid>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi2/locallang.xml:flexform.pid</label>
+              <config>
+                <type>input</type>
+                <eval>int</eval>
+                <range>
+                  <lower>1</lower>
+                  <upper>9999999</upper>
+                </range>
+              </config>
+            </TCEforms>
+          </puid>
+          <title>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi2/locallang.xml:flexform.title</label>
+              <config>
+                <type>input</type>
+                <eval>required</eval>
+              </config>
+            </TCEforms>
+          </title>
+          <sku>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi2/locallang.xml:flexform.sku</label>
+              <config>
+                <type>input</type>       
+              </config>
+            </TCEforms>
+          </sku>
+          <price>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi2/locallang.xml:flexform.price</label>
+              <config>
+                <type>input</type>
+                <eval>tx_wtcart_evalprice</eval>
+              </config>
+            </TCEforms>
+          </price>      
+          <taxclass>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi2/locallang.xml:flexform.taxclass</label>
+              <config>
+                <type>select</type>
+                <items type="array">
+                  <numIndex index="0" type="array">
+                    <numIndex index="0">LLL:EXT:wt_cart/pi2/locallang.xml:flexform.taxclass.1</numIndex>
+                    <numIndex index="1">1</numIndex>
+                  </numIndex>
+                  <numIndex index="1" type="array">
+                    <numIndex index="0">LLL:EXT:wt_cart/pi2/locallang.xml:flexform.taxclass.2</numIndex>
+                    <numIndex index="1">2</numIndex>
+                  </numIndex>
+                  <numIndex index="2" type="array">
+                    <numIndex index="0">LLL:EXT:wt_cart/pi2/locallang.xml:flexform.taxclass.3</numIndex>
+                    <numIndex index="1">3</numIndex>
+                  </numIndex>
+                </items>
+              </config>
+            </TCEforms>
+          </taxclass>
+          <attributes>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi2/locallang.xml:flexform.attributes</label>
+              <config>
+                <type>text</type>
+              </config>
+            </TCEforms>
+          </attributes>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

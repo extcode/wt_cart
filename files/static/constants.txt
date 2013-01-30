@@ -1,0 +1,164 @@
+###
+# These are the default TS-constants for wt_cart
+##
+
+plugin.wtcart {
+	# cat=plugin.wt_cart//0010; type=file[html,htm,tmpl,txt]; label= Template File: HTML-template file FE output (see EXT:wt_cart/files/templates/cart.html or EXT:wt_cart/files/templates/cart_table.html)
+	main.template = EXT:wt_cart/files/templates/cart.html
+
+    # cat=plugin.wt_cart//0020; type=text; label= Decimal (e.g. 2). This setting will be used for formatting prices.
+	main.decimal = 2
+
+	# cat=plugin.wt_cart//0030; type=text; label= Decimal symbol (e.g. , or .). This setting will be used for formatting prices.
+	main.dec_point = ,
+
+	# cat=plugin.wt_cart//0040; type=text; label= Thousands separator (e.g. , or .). This setting will be used for formatting prices.
+	main.thousands_sep = .
+
+	# cat=plugin.wt_cart//0050; type=text; label= Currency symbol (e.g. &euro or $).
+	main.currencySymbol = &euro;
+
+	# cat=plugin.wt_cart//0055; type=boolean; label= Show currency symbol before price.
+	main.currencySymbolBeforePrice = 0
+
+	# cat=plugin.wt_cart//0060; type=text; label= Quantity symbol (e.g. St.).
+	main.quantitySymbol = St.
+
+	# cat=plugin.wt_cart//0070; type=text; label= Service Attribute 1 symbol (e.g. Weight: g, kg, lbs).
+	main.service_attribute_1_symbol =
+
+	# cat=plugin.wt_cart//0071; type=text; label= Service Attribute 2 symbol (e.g. Volume: l, gal).
+	main.service_attribute_2_symbol =
+
+	# cat=plugin.wt_cart//0072; type=text; label= Service Attribute 3 symbol (e.g. Length: m, cm, inch).
+	main.service_attribute_3_symbol =
+
+	# cat=plugin.wt_cart//0090; type=text; label= Enter the uid of the page where wt_cart plugin resides (e.g. 10).
+	main.pid =
+
+	# cat=plugin.wt_cart//0095; type=text; label= Enter the boolean value if the prices of products are net or gross prices (0 or 1).
+   main.isNetCart = 0
+
+	# cat=plugin.wt_cart//0100; type=text; label= Param PUID: Enter the correct parameter name for a unique product number (integer) of your order form. wt_cart uses this number for internal purposes. It can't be a string. The PUID will never be displayed (e.g. tx_browser_pi1|showUid). Default: puid.
+	gpvar.puid = puid
+
+	# cat=plugin.wt_cart//0105; type=text; label= Param CID: Enter the correct parameter name for the uid of the current tt_content element. This value is only needed if you want to add tt_content elements to your cart. The provided parameter must be equal to the name in your HTML template. Default: cid.
+	gpvar.cid = cid
+
+	# cat=plugin.wt_cart//0110; type=text; label= Param Quantity: Enter the correct parameter name for the quantity/amount field of your order form (e.g. tx_trbooks_qty). The provided parameter must be equal to the name in your HTML template. Default: qty.
+	gpvar.qty = qty
+
+	# cat=plugin.wt_cart//0115; type=text; label= Param Title: Enter the correct parameter name for the title field in your order form (e.g. title).
+	gpvar.title = title
+
+	# cat=plugin.wt_cart//0120; type=text; label= Param Price: Enter the correct parameter name for the price field in your order form (e.g. price).
+	gpvar.price = price
+
+	# cat=plugin.wt_cart//0121; type=text; label= Param Service Attribute 1: Enter the correct parameter name for the service attribute field 1 of your order form (e.g. weight).
+	gpvar.service_attribute_1 =
+
+	# cat=plugin.wt_cart//0122; type=text; label= Param Service Attribute 2: Enter the correct parameter name for the service attribute field 2 of your order form (e.g. volume).
+	gpvar.service_attribute_2 =
+
+	# cat=plugin.wt_cart//0123; type=text; label= Param Service Attribute 3: Enter the correct parameter name for the service attribute field 3 of your order form (e.g. length).
+	gpvar.service_attribute_3 =
+
+	# cat=plugin.wt_cart//0140; type=text; label= Param SKU: Enter the correct parameter name for your SKU (stock keeping unit).
+	gpvar.sku =
+
+	# cat=plugin.wt_cart//0150; type=text; label= Param Variants: Enter the correct parameter name for the variant 1.
+   gpvar.variants.1 =
+
+	# cat=plugin.wt_cart//0151; type=text; label= Param Variants: Enter the correct parameter name for the variant 2.
+   gpvar.variants.2 =
+
+	# cat=plugin.wt_cart//0152; type=text; label= Param Variants: Enter the correct parameter name for the variant 3.
+   gpvar.variants.3 =
+
+	# cat=plugin.wt_cart//0153; type=text; label= Param Multiple: Enter the correct parameter name if adding multiple products to cart in one form.
+   gpvar.multiple = multiple
+
+	# cat=plugin.wt_cart//0160; type=text; label= Tax rate: Enter the taxclass value for this taxclass item (e.g. 19). Value will be displayed.
+	taxclass.1.value = 19
+
+	# cat=plugin.wt_cart//0161; type=text; label= Tax rate: Enter the taxclass rate for this taxclass item (e.g. 0.19). Used for calculation.
+	taxclass.1.calc = 0.19
+
+	# cat=plugin.wt_cart//0162; type=text; label= Tax rate: Enter the taxclass name for this taxclass item (e.g. normal). Value can be displayed.
+	taxclass.1.name = normal
+
+	# cat=plugin.wt_cart//0170; type=text; label= Tax rate: Enter the taxclass value for this taxclass item (e.g. 7). Value will be displayed.
+	taxclass.2.value = 7
+
+	# cat=plugin.wt_cart//0171; type=text; label= Tax rate: Enter the taxclass rate for this taxclass item (e.g. 0.07). Used for calculation.
+	taxclass.2.calc = 0.07
+
+	# cat=plugin.wt_cart//0172; type=text; label= Tax rate: Enter the taxclass name for this taxclass item (e.g. reduced). Value can be displayed.
+	taxclass.2.name = reduced
+
+	# cat=plugin.wt_cart//0180; type=text; label= Tax rate: Enter the taxclass value for this taxclass item (e.g. 0). Value will be displayed.
+	taxclass.3.value = 0
+
+	# cat=plugin.wt_cart//0181; type=text; label= Tax rate: Enter the taxclass rate for this taxclass item (e.g. 0.19). Used for calculation.
+	taxclass.3.calc = 0.00
+
+	# cat=plugin.wt_cart//0182; type=text; label= Tax rate: Enter the taxclass name for this tax item (e.g. free). Value can be displayed.
+	taxclass.3.name = free
+
+	# cat=plugin.wt_cart//0200; type=text; label= Table name: Enter the correct table name where the products are stored (e.g. tx_myext).
+	db.table =
+
+	# cat=plugin.wt_cart//0205; type=text; label= Table localisation column: Enter the correct column name where the localisation parent is stored (e.g. l10n_parent | l18n_parent).
+	db.l10n_parent = l10n_parent
+
+	# cat=plugin.wt_cart//0210; type=text; label= Title column: Enter the correct column name of the table where the product titles are stored (e.g. title).
+	db.title = title
+
+	# cat=plugin.wt_cart//0220; type=text; label= Inherit Price column: Enter the correct column name of the table where the inherit price flag is stored (e.g. inherit_price).
+	db.inherit_price =
+
+	# cat=plugin.wt_cart//0230; type=text; label= Price column: Enter the correct column name of the table where the prices are stored (e.g. price).
+	db.price = price
+
+	# cat=plugin.wt_cart//0235; type=text; label= Tax class column: Enter the correct column name of the table where the tax classes are stored (e.g. taxclass).
+	db.taxclass = taxclass
+
+	# cat=plugin.wt_cart//0240; type=text; label= SKU column: Enter the correct column name of the table where the SKUs are stored (e.g. sku).
+	db.sku =
+
+	# cat=plugin.wt_cart//0241; type=text; label= MIN column: Enter the correct column name of the table where the MIN order quantities are stored (e.g. min).
+	db.min =
+
+	# cat=plugin.wt_cart//0242; type=text; label= MAX column: Enter the correct column name of the table where the MAX order quantities are stored (e.g. max).
+	db.max =
+
+	# cat=plugin.wt_cart//0243; type=text; label= Variants column: Enter the correct column name of the table where the Variants are stored (e.g. variants).
+	db.variants =
+
+	# cat=plugin.wt_cart//0250; type=text; label= Service Attribute 1 column: Enter the correct column name of the table where the service attribute 1 are stored (e.g. for weight).
+	db.service_attribute_1 =
+
+	# cat=plugin.wt_cart//0251; type=text; label= Service Attribute 2 column: Enter the correct column name of the table where the service attribute 2 are stored (e.g. for volume).
+	db.service_attribute_2 =
+	
+	# cat=plugin.wt_cart//0252; type=text; label= Service Attribute 3 column: Enter the correct column name of the table where the service attribute 3 are stored (e.g. for length).
+	db.service_attribute_3 =
+
+	# cat=plugin.wt_cart//0260; type=text; label= Has FE Variant column: Enter the correct column name of the table where the has fe variant attribute are stored (e.g. has_fe_variant).
+	db.has_fe_variants =
+
+	# cat=plugin.wt_cart//0300; type=int+; label= Powermail content uid: Enter the uid of the powermail content element to hide this element if the cart is empty AND to clear cart if this form was submitted.
+	powermailContent.uid =
+
+	# cat=plugin.wt_cart//0600; type=text; label= Prefix for Order Number.
+	ordernumber.prefix =
+	
+	# cat=plugin.wt_cart//0610; type=text; label= Suffix for Order Number.
+	ordernumber.suffix =
+	
+	# cat=plugin.wt_cart//0620; type=int+; label= Offset for Order Number: The offset is added to the order number (e.g. for offset 1000000 the first order number will be 1000001).
+	ordernumber.offset =
+}
+
+#clear powermail session data
+plugin.powermail.clear.session = 1

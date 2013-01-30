@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_wtcart_pi2&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="wtcart_ll_form_submit">order</label>
+			<label index="flexform.pid">Unique Product Id (PUID) *</label>
+			<label index="flexform.title">Title *</label>
+			<label index="flexform.sku">Stock Keeping Unit (SKU)</label>
+			<label index="flexform.price">Price *</label>
+			<label index="flexform.taxclass">Tax Class *</label>
+			<label index="flexform.taxclass.1">normal</label>
+			<label index="flexform.taxclass.2">reduced</label>
+			<label index="flexform.taxclass.3">free</label>
+			<label index="flexform.attributes">Additional Attributes</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="wtcart_ll_form_submit">bestellen</label>
+			<label index="flexform.pid">Eindeutige Produkt Kennung (PUID) *</label>
+			<label index="flexform.title">Titel *</label>
+			<label index="flexform.sku">Artikelnummer (SKU)</label>
+			<label index="flexform.price">Preis *</label>
+			<label index="flexform.taxclass">Steuerklasse *</label>
+			<label index="flexform.taxclass.1">normal</label>
+			<label index="flexform.taxclass.2">reduziert</label>
+			<label index="flexform.taxclass.3">frei</label>
+			<label index="flexform.attributes">Zusätzliche Attribute</label>
+		</languageKey>
+	</data>
+</T3locallang>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_wtcart_pi3&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="flexform.pid">page ID of the cart</label>
+            <label index="wtcart_ll_one_product_in_cart">product in cart</label>
+			<label index="wtcart_ll_many_products_in_cart">products in cart</label>
+			<label index="wtcart_ll_link">go to cart</label>
+			<label index="wtcart_ll_minicart_empty">Currently there are no products in the cart.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="flexform.pid">Page ID des Warekorbs</label>
+            <label index="wtcart_ll_one_product_in_cart">Produkt im Warenkorb</label>
+			<label index="wtcart_ll_many_products_in_cart">Produkte im Warenkorb</label>
+			<label index="wtcart_ll_link">zum Warenkorb</label>
+			<label index="wtcart_ll_minicart_empty">Derzeit befinden sich keine Produkte im Warenkorb.</label>
+		</languageKey>
+	</data>
+</T3locallang>

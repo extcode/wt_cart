@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'wt_cart'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tt_content.list_type_pi1">wt_cart : cart</label>
+			<label index="tt_content.list_type_pi2">wt_cart : add to cart</label>
+			<label index="tt_content.list_type_pi3">wt_cart : minicart</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tt_content.list_type_pi1">wt_cart : Warenkorb</label>
+			<label index="tt_content.list_type_pi2">wt_cart : Produkt in den Warenkorb</label>
+			<label index="tt_content.list_type_pi3">wt_cart : Miniwarenkorb</label>
+		</languageKey>
+	</data>
+</T3locallang>

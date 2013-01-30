@@ -1,0 +1,34 @@
+<T3DataStructure>
+  <meta>
+    <langDisable>1</langDisable>
+  </meta>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>LLL:EXT:wt_cart/locallang_db.php:tt_content.list_type_pi3</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <pid>
+            <TCEforms>
+              <label>LLL:EXT:wt_cart/pi3/locallang.xml:flexform.pid</label>
+              <config>
+                <type>input</type>
+                <size>10</size>
+                <max>9999999999</max>
+                <eval>int</eval>
+                <checkbox>1</checkbox>
+                <range>
+                 <upper>9999999999</upper>
+                 <lower>1</lower>
+               </range>
+               <default>1</default>
+             </config>
+           </TCEforms>
+         </pid>
+       </el>
+     </ROOT>
+   </sDEF>
+ </sheets>
+</T3DataStructure>

@@ -1,0 +1,745 @@
+###
+# Default TS setup for wt_cart
+##
+
+includeLibs {
+  user_wtcart_userfuncs     = EXT:wt_cart/lib/user_wtcart_userfuncs.php
+  user_wtcart_powermailCart = EXT:wt_cart/lib/user_wtcart_powermailCart.php
+}
+
+plugin.tx_wtcart_pi1 {
+
+  # constants
+  main {
+    template                   = {$plugin.wtcart.main.template}
+    decimal                    = {$plugin.wtcart.main.decimal}
+    dec_point                  = {$plugin.wtcart.main.dec_point}
+    thousands_sep              = {$plugin.wtcart.main.thousands_sep}
+    currencySymbol             = {$plugin.wtcart.main.currencySymbol}
+    currencySymbolBeforePrice  = {$plugin.wtcart.main.currencySymbolBeforePrice}
+    quantitySymbol             = {$plugin.wtcart.main.quantitySymbol}
+    service_attribute_1_symbol = {$plugin.wtcart.main.service_attribute_1_symbol}
+    service_attribute_2_symbol = {$plugin.wtcart.main.service_attribute_2_symbol}
+    service_attribute_3_symbol = {$plugin.wtcart.main.service_attribute_3_symbol}
+    pid                        = {$plugin.wtcart.main.pid}
+    isNetCart                  = {$plugin.wtcart.main.isNetCart}
+  }
+  gpvar {
+    qty                 = {$plugin.wtcart.gpvar.qty}
+    service_attribute_1 = {$plugin.wtcart.gpvar.service_attribute_1}
+    service_attribute_2 = {$plugin.wtcart.gpvar.service_attribute_2}
+    service_attribute_3 = {$plugin.wtcart.gpvar.service_attribute_3}
+    puid                = {$plugin.wtcart.gpvar.puid}
+    sku                 = {$plugin.wtcart.gpvar.sku}
+    variants            = {$plugin.wtcart.gpvar.variants}
+    multiple            = {$plugin.wtcart.gpvar.multiple}
+  }
+  taxclass {
+    1 {
+      value = {$plugin.wtcart.taxclass.1.value}
+      calc = {$plugin.wtcart.taxclass.1.calc}
+      name = {$plugin.wtcart.taxclass.1.name}
+    }
+    2 {
+      value = {$plugin.wtcart.taxclass.2.value}
+      calc = {$plugin.wtcart.taxclass.2.calc}
+      name = {$plugin.wtcart.taxclass.2.name}
+    }
+    3 {
+      value = {$plugin.wtcart.taxclass.3.value}
+      calc = {$plugin.wtcart.taxclass.3.calc}
+      name = {$plugin.wtcart.taxclass.3.name}
+    }
+  }
+  db {
+    table = {$plugin.wtcart.db.table}
+    l10n_parent = {$plugin.wtcart.db.l10n_parent}
+    title = {$plugin.wtcart.db.title}
+    price = {$plugin.wtcart.db.price}
+    taxclass = {$plugin.wtcart.db.taxclass}
+    sku   = {$plugin.wtcart.db.sku}
+    min   = {$plugin.wtcart.db.min}
+    max   = {$plugin.wtcart.db.max}
+    service_attribute_1   = {$plugin.wtcart.db.service_attribute_1}
+    service_attribute_2   = {$plugin.wtcart.db.service_attribute_2}
+    service_attribute_3   = {$plugin.wtcart.db.service_attribute_3}
+    has_fe_variants        = {$plugin.wtcart.db.has_fe_variants}
+    variants {
+      db {
+        table = {$plugin.wtcart.db.variants.db.table}
+        title = {$plugin.wtcart.db.variants.db.title}
+        price = {$plugin.wtcart.db.variants.db.price}
+        inherit_price = {$plugin.wtcart.db.variants.db.inherit_price}
+        sku = {$plugin.wtcart.db.variants.db.sku}
+        has_fe_variants = {$plugin.wtcart.db.variants.db.has_fe_variants}
+      }
+    }
+  }
+  powermailContent {
+    uid = {$plugin.wtcart.powermailContent.uid}
+  }
+  debug = {$plugin.wtcart.debug}
+
+  # main settings
+  settings {
+
+    # GET or POST param for title (if not empty: Overwrite values from db request with puid)
+    title = TEXT
+    title {
+      data = GP:{$plugin.wtcart.gpvar.title}
+      htmlSpecialChars = 1
+    }
+
+    # GET or POST param for price (if not empty: Overwrite values from db request with puid)
+    price = TEXT
+    price {
+      data = GP:{$plugin.wtcart.gpvar.price}
+      htmlSpecialChars = 1
+    }
+
+    # GET or POST param for qty
+    qty = TEXT
+    qty {
+      data = GP:{$plugin.wtcart.gpvar.qty}
+      intval = 1
+    }
+
+    # GET or POST param for sku
+    sku = TEXT
+    sku {
+      data = GP:{$plugin.wtcart.gpvar.sku}
+      htmlSpecialChars = 1
+    }
+
+    # GET or POST param for min
+    min = TEXT
+    min {
+      data = GP:{$plugin.wtcart.gpvar.min}
+      htmlSpecialChars = 1
+    }
+
+    # GET or POST param for max
+    max = TEXT
+    max {
+      data = GP:{$plugin.wtcart.gpvar.max}
+      htmlSpecialChars = 1
+    }
+
+    # GET or POST param for variants
+    variants = COA
+    variants {
+      1 = TEXT
+      1 {
+        data = GP:{$plugin.wtcart.gpvar.variants.1}
+        htmlSpecialChars = 1
+      }
+      2 = TEXT
+      2 {
+        data = GP:{$plugin.wtcart.gpvar.variants.2}
+        htmlSpecialChars = 1
+      }
+      3 = TEXT
+      3 {
+        data = GP:{$plugin.wtcart.gpvar.variants.3}
+        htmlSpecialChars = 1
+      }
+    }
+
+#TODO: Check
+    # GET or POST param for weight
+    weight = TEXT
+    weight {
+      data = GP:{$plugin.wtcart.gpvar.weight}
+      floatval = 1
+    }
+
+#TODO: Check
+    # GET or POST param for volume
+    volume = TEXT
+    volume {
+      data = GP:{$plugin.wtcart.gpvar.volume}
+      floatval = 1
+    }
+
+    # Param for taxclass (will be overwritten from db request)
+    taxclass = TEXT
+    taxclass.value = {$plugin.wtcart.taxclass.1.calc}
+
+    # GET or POST param for product uid
+    puid = TEXT
+    puid {
+      data = GP:{$plugin.wtcart.gpvar.puid}
+      intval = 1
+    }
+
+    # GET or POST param for content id
+    cid = TEXT
+    cid {
+      data = GP:{$plugin.wtcart.gpvar.cid}
+      intval = 1
+    }
+
+    multiple = TEXT
+    multiple {
+      data = GP:{$plugin.wtcart.gpvar.multiple}
+      intval = 1
+    }
+
+    # manipulate output of the fields in the cart
+    fields {
+      title = TEXT
+      title.field = title
+
+      title_with_variants = COA
+      title_with_variants {
+        10 = TEXT
+        10.field = title
+
+        20 = COA
+        20 {
+          stdWrap.noTrimWrap = | (|)|
+
+          20 = TEXT
+          20.field = varianttitle1
+          20.if.isTrue.field = varianttitle1
+          20.noTrimWrap = | ||
+
+          30 = TEXT
+          30.field = varianttitle2
+          30.if.isTrue.field = varianttitle2
+          30.noTrimWrap = |, ||
+
+          40 = TEXT
+          40.field = varianttitle3
+          40.if.isTrue.field = varianttitle3
+          40.noTrimWrap = |, ||
+        }
+      }
+
+      puid = TEXT
+      puid.field = puid
+
+      qty = TEXT
+      qty.field = qty
+
+      min = TEXT
+      min.field = min
+
+      max = TEXT
+      max.field = max
+
+      sku = TEXT
+      sku.field = sku
+
+      sku_with_variants = COA
+      sku_with_variants {
+        10 = TEXT
+        10.field = sku
+
+        20 = TEXT
+        20.field = variantsku1
+        20.if.isTrue.field = variantsku1
+        20.wrap = -|
+
+        30 = TEXT
+        30.field = variantsku2
+        30.if.isTrue.field = variantsku2
+        30.wrap = -|
+
+        40 = TEXT
+        40.field = variantsku3
+        40.if.isTrue.field = variantsku3
+        40.wrap = -|
+      }
+ 
+      price = COA
+      price {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = price
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      price_total_gross = COA
+      price_total_gross {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = price_total_gross
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      price_total_net = COA
+      price_total_net {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = price_total_net
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      # price_total will be removed in a later version
+      price_total < .price_total_gross
+
+      delete = IMAGE
+      delete {
+        file = EXT:wt_cart/files/img/icon_delete.png
+        altText = delete product
+        titleText.data = LLL:EXT:wt_cart/pi1/locallang.xml:wt_cart_ll_delete
+        params = class="wt_cart_delete"
+        imageLinkWrap = 1
+        imageLinkWrap {
+          enable = 1
+          typolink.parameter.data = page:alias//TSFE:id
+          typolink.additionalParams = &tx_wtcart_pi1[del][{field:puid}]{field:variantParam}=1
+          typolink.additionalParams.insertData = 1
+        }
+      }
+
+      qty_name = TEXT
+      qty_name {
+        value = tx_wtcart_pi1[qty][{field:puid}]{field:variantParam}
+        insertData = 1
+      }
+
+      clear_cart = COA
+      clear_cart {
+        wrap = <div class="wt_cart_clear_cart">|</div>
+        10 = IMAGE
+        10 {
+          file = EXT:wt_cart/files/img/icon_delete.png
+          altText.data = LLL:EXT:wt_cart/pi1/locallang.xml:wt_cart_ll_clear_cart
+          titleText.data = LLL:EXT:wt_cart/pi1/locallang.xml:wt_cart_ll_clear_cart
+          imageLinkWrap = 1
+          imageLinkWrap {
+            enable = 1
+            typolink.parameter.data = page:alias // TSFE:id
+            typolink.additionalParams.wrap = &tx_wtcart_pi1[clear]=1
+          }
+        }
+        20 = TEXT
+        20 {
+          data = LLL:EXT:wt_cart/pi1/locallang.xml:wt_cart_ll_clear_cart
+          typolink {
+            parameter.data = page:alias // TSFE:id
+            additionalParams.wrap = &tx_wtcart_pi1[clear]=1
+          }
+        }
+      }
+
+      tax = CASE
+      tax {
+        key.field = tax
+
+        default = TEXT
+        default {
+          current = 1
+          setCurrent.field = price_total
+          setCurrent.wrap = (| / (1 + ###TAX###)) * (###TAX###)
+          prioriCalc = 1
+        }
+
+        1 = TEXT
+        1 {
+          current = 1
+          setCurrent.field = price_total
+          setCurrent.wrap = (| / (1 + {$plugin.wtcart.taxclass.1.calc})) * ({$plugin.wtcart.taxclass.1.calc})
+          prioriCalc = 1
+        }
+
+        2 = TEXT
+        2 {
+          current = 1
+          setCurrent.field = price_total
+          setCurrent.wrap = (| / (1 + {$plugin.wtcart.taxclass.2.calc})) * ({$plugin.wtcart.taxclass.2.calc})
+          prioriCalc = 1
+        }
+
+        3 = TEXT
+        3 {
+          current = 1
+          setCurrent.field = price_total
+          setCurrent.wrap = (| / (1 + {$plugin.wtcart.taxclass.3.calc})) * ({$plugin.wtcart.taxclass.3.calc})
+          prioriCalc = 1
+        }
+      }
+    }
+
+    # manipulate overall output of the fields in the bottom of the cart
+    overall {
+      cart_net = COA
+      cart_net {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = cart_net
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      cart_net_no_service = COA
+      cart_net_no_service {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = cart_net_no_service
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      cart_gross = COA
+      cart_gross {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = cart_gross
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      cart_gross_no_service = COA
+      cart_gross_no_service {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = cart_gross_no_service
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      price_total_overall_without_service = COA
+      price_total_overall_without_service {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = price_total_overall_without_service
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      service_cost_net = COA
+      service_cost_net {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = service_cost_net
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      service_cost_gross = COA
+      service_cost_gross {
+        stdWrap.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = service_cost_gross
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      ordernumber = COA
+      ordernumber {
+        10 = TEXT
+        10.data = LLL:EXT:wt_cart/pi1/locallang.xml:wtcart_ll_ordernumber
+        10.noTrimWrap = ||: |
+
+        20 = TEXT
+        20.value = {$plugin.wtcart.ordernumber.prefix}
+
+        30 = TEXT
+        30.current = 1
+        30.setCurrent.field = ordernumber
+        30.setCurrent.wrap = | + {$plugin.wtcart.ordernumber.offset}
+        30.prioriCalc = intval
+
+        30 = TEXT
+        30.value = {$plugin.wtcart.ordernumber.suffix}
+      }
+
+      target = TEXT
+      target {
+        value = x
+        typolink.parameter.data = page:alias//TSFE:id
+        typolink.returnLast = url
+      }
+
+      taxclass_1_string = COA
+      taxclass_1_string {
+        wrap = |<br />
+        if.isTrue.field = cart_tax_1
+        10 = TEXT
+        10 {
+          noTrimWrap = || {$plugin.wtcart.taxclass.1.value} %|
+          value = Mehrwertsteuer normal
+        }
+      }
+
+      taxclass_2_string < .taxclass_1_string
+      taxclass_2_string {
+        if.isTrue.field = cart_tax_2
+        10 {
+          noTrimWrap = || {$plugin.wtcart.taxclass.2.value} %|
+          value = Mehrwertsteuer reduziert
+        }
+      }
+
+      taxclass_3_string < .taxclass_1_string
+      taxclass_3_string {
+        if.isTrue.field = cart_tax_3
+        10 {
+          noTrimWrap = || {$plugin.wtcart.taxclass.3.value} %|
+          value = Mehrwertsteuer frei
+        }
+      }
+
+      cart_tax_1 = COA
+      cart_tax_1 {
+        wrap = |<br />
+        if.isTrue.field = cart_tax_1
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = cart_tax_1
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+
+        20 = TEXT
+        20.noTrimWrap = || {$plugin.wtcart.main.currencySymbol}|
+      }
+
+      cart_tax_2 < .cart_tax_1
+      cart_tax_2 {
+        if.isTrue.field = cart_tax_2
+        10.userFunc.number.field = cart_tax_2
+      }
+
+      cart_tax_3 < .cart_tax_1
+      cart_tax_3 {
+        if.isTrue.field = cart_tax_3
+        10.userFunc.number.field = cart_tax_3
+      }
+    }
+
+    # for the userFunc
+    powermailCart {
+      fields < plugin.tx_wtcart_pi1.settings.fields
+      overall < plugin.tx_wtcart_pi1.settings.overall
+
+      overall {
+        payment_note = TEXT
+        payment_note.field = payment_note
+
+        shipping_option = TEXT
+        shipping_option.field = shipping_option
+
+        payment_option = TEXT
+        payment_option.field = payment_option
+
+        special_option = TEXT
+        special_option.field = special_option
+      }
+    }
+  }
+
+  shipping {
+    #set default shipping method
+    preset = 1
+    options {
+      #shipping method 1
+      1 {
+        #title of shipping method
+        title = Standard
+        #extra cost (gross price) of shipping method
+        extra = 0.00
+        #tax rate which will be applied (e.g. 1 for normal; 2 for reduced; 3 for free)
+        taxclass = 1
+      }
+    }
+  }
+
+  payment {
+    #set default payment method
+    preset = 1
+    options {
+      #payment method 1
+      1 {
+        #title of payment method
+        title = Standard
+        #extra cost (gross price) of payment method
+        extra = 0.00
+        #tax rate which will be applied (e.g. 1 for normal; 2 for reduced; 3 for free)
+        taxclass = 1
+      }
+    }
+  }
+}
+
+# enable cart in powermail
+plugin.tx_powermail_pi1 {
+  dynamicTyposcript {
+    cart = USER
+    cart.userFunc = user_wtcart_powermailCart->showCart
+
+    clearcart = USER
+    clearcart.userFunc = user_wtcart_userfuncs->user_wtcart_clearCart
+  }
+}
+
+plugin.tx_wtcart_pi2 {
+  main {
+    template        = {$plugin.wtcart.main.template}
+    pid             = {$plugin.wtcart.main.pid}
+  }
+  flexfields {
+    puid = puid
+    title = title
+    price = price
+    taxclass = taxclass
+    sku = sku
+    attributes {
+      min = min
+      max = max
+      service_attribute_1 = service_attribute_1
+      service_attribute_2 = service_attribute_2
+      service_attribute_3 = service_attribute_3
+    }
+  }
+}
+
+plugin.tx_wtcart_pi3 {
+  main {
+    template        = {$plugin.wtcart.main.template}
+    pid             = {$plugin.wtcart.main.pid}
+  }
+  settings {
+    fields {
+      minicart_count = COA
+      minicart_count {
+        10 = TEXT
+        10 {
+          field = minicart_count
+          if.value = 1
+          if.equals.field = minicart_count
+          dataWrap = | &nbsp; {LLL:EXT:wt_cart/pi3/locallang.xml:wtcart_ll_one_product_in_cart}
+        }
+        20 = TEXT
+        20 {
+          field = minicart_count
+          if.value = 1
+          if.isGreaterThan.field = minicart_count
+          dataWrap = | &nbsp; {LLL:EXT:wt_cart/pi3/locallang.xml:wtcart_ll_many_products_in_cart}
+        }
+      }
+
+      minicart_gross = COA
+      minicart_gross {
+        wrap = |&nbsp;{$plugin.wtcart.main.currencySymbol}
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = minicart_gross
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+
+      minicart_gross_with_service = COA
+      minicart_gross_with_service {
+        wrap = |&nbsp;{$plugin.wtcart.main.currencySymbol}
+
+        10 = USER
+        10.userFunc = user_wtcart_userfuncs->user_wtcart_numberFormat
+        10.userFunc {
+          number = TEXT
+          number.field = minicart_gross_with_service
+
+          decimal = 2
+          dec_point = {$plugin.wtcart.main.dec_point}
+          thousands_sep = {$plugin.wtcart.main.thousands_sep}
+        }
+      }
+    }
+  }
+}
+
+# add lib for powermail 2.x
+# add the following code to your powermail plugin {f:cObject(typoscriptObjectPath:'lib.wt_cart')}
+# this allows you to display the whole shopping cart information
+lib.wt_cart = USER
+lib.wt_cart.userFunc = user_wtcart_powermailCart->showCart
+
+lib.wt_cart_ordernumber = USER
+lib.wt_cart_ordernumber.userFunc = user_wtcart_powermailCart->showOrderNumber

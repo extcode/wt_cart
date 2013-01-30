@@ -1,0 +1,20 @@
+AMOUNT                      => QTY                              OK
+WTCART_LL_AMOUNT            => WTCART_LL_QTY                    OK
+NETTO_TOTAL                 => CART_NET_NO_SERVICE              OK
+WTCART_LL_NET_TOTAL         => WTCART_LL_CART_NET               OK
+TAX_NORMAL                  => TAXRATE_NORMAL_STRING            OK
+TAX_REDUCED                 => TAXRATE_REDUCED_STRING           OK
+TAX_OVERALL_NORMAL			=> CART_TAX_NORMAL					OK
+TAX_OVERALL_REDUCED			=> CART_TAX_REDUCED					OK
+PRICE_TOTAL_OVERALL			=> CART_GROSS						OK
+WTCART_LL_VAT				=> WTCART_LL_TAX					OK
+
+TAX_OVERALL			aus setup.txt und pi1 gelöscht
+AMOUNT_OVERALL		aus setup.txt und pi1 gelöscht
+
+PRICE_OVERALL		aus setup.txt und pi1 gelöscht
+
+CART_GROSS_NO_SERVICE (neu)
+CART_NET (neu)
+CART_SERVICE_COST_NET (neu)
+CART_SERVICE_COST_GROSS (neu)
