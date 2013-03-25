@@ -180,6 +180,7 @@ class tx_wtcart_render extends tslib_pibase {
 				$productArr['qty'] = $variant->getQty();
 				$productArr['varianttitle'.$productArr['variantcount']] = $variant->getTitle();
 				$productArr['variantsku'.$productArr['variantcount']] = $variant->getSku();
+				$productArr['variantid'.$productArr['variantcount']] = $variant->getId();
 				$productArr['price'] = $variant->getPrice();
 				$productArr['price_total'] = $variant->getGross();
 				$productArr['price_total_gross'] = $variant->getGross();
