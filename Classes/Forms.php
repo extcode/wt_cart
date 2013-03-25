@@ -129,6 +129,7 @@ class Tx_WtCart_Forms extends Tx_Powermail_Controller_FormsController {
 	 */
 	public function clearSession(array $field = array(), $form, $mail = NULL, $controller) {
 		$div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
+		$div->beforeClearSessionHook($field, $form, $mail, $controller, $this, $this->mailsRepository);
 		$div->removeAllProductsFromSession(); // clear cart now
 	}
 }
