@@ -145,7 +145,6 @@ plugin.tx_wtcart_pi1 {
       }
     }
 
-#TODO: Check
     # GET or POST param for weight
     weight = TEXT
     weight {
@@ -153,7 +152,6 @@ plugin.tx_wtcart_pi1 {
       floatval = 1
     }
 
-#TODO: Check
     # GET or POST param for volume
     volume = TEXT
     volume {
