@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Adds shopping cart to your TYPO3 installation and utilizes powermail for checkout',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '2.0.0 alpha 12',
+	'version' => '2.0.0',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -35,7 +35,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.1.0-0.0.0',
-			'typo3' => '4.3.0-0.0.0',
+			'typo3' => '4.5.0-4.7.99',
+			'powermail' => ''
 		),
 		'conflicts' => array(
 		),
