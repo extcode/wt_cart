@@ -63,7 +63,7 @@ plugin.tx_wtcart_pi1 {
     service_attribute_1   = {$plugin.wtcart.db.service_attribute_1}
     service_attribute_2   = {$plugin.wtcart.db.service_attribute_2}
     service_attribute_3   = {$plugin.wtcart.db.service_attribute_3}
-    has_fe_variants        = {$plugin.wtcart.db.has_fe_variants}
+    has_fe_variants       = {$plugin.wtcart.db.has_fe_variants}
     variants {
       db {
         table = {$plugin.wtcart.db.variants.db.table}

@@ -178,17 +178,34 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		}
 
 			// create new product
-		if ($this->gpvar['puid']) {
-			$newProduct = $this->div->createProduct($this);
+		if ($this->gpvar['multi']) {
+			foreach ($this->gpvar['multi'] as $single) {
+				$this->gpvar = $single;
+				$this->gpvar['isNetPrice'] = $cart->getIsNetCart();
 
-			$newProduct->setMin($this->gpvar['min']);
-			$newProduct->setMax($this->gpvar['max']);
+				if (TYPO3_DLOG) {
+					t3lib_div::devLog('multiple_before', $this->extKey, 0, $this->gpvar);
+				}
 
-			$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
-			$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
-			$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
+				$this->parseDataToProductToCart($cart);
 
-			$cart->addProduct($newProduct);
+				if (TYPO3_DLOG) {
+					t3lib_div::devLog('multiple_after', $this->extKey, 0, $this->gpvar);
+				}
+			}
+		} else {
+			if ($this->gpvar['puid']) {
+				$newProduct = $this->div->createProduct($this);
+
+				$newProduct->setMin($this->gpvar['min']);
+				$newProduct->setMax($this->gpvar['max']);
+
+				$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
+				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
+				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
+
+				$cart->addProduct($newProduct);
+			}
 		}
 
 		$cart->debug();
@@ -383,6 +400,32 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		}
 
 		return NULL;
+	}
+
+	private function parseDataToProductToCart(&$cart) {
+		if (intval($this->gpvar['qty']) > 0 ) {
+
+			$this->div->getProductDetails($this->gpvar, $this);
+			// create new product
+			if ($this->gpvar['puid']) {
+				$newProduct = $this->div->createProduct($this);
+
+				$newProduct->setMin($this->gpvar['min']);
+				$newProduct->setMax($this->gpvar['max']);
+
+				$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
+				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
+				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
+
+				$cart->addProduct($newProduct);
+			} else {
+				return 0;
+			}
+
+			return 0;
+		}
+
+		return 1;
 	}
 }
 
