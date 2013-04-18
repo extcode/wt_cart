@@ -1,3 +1,18 @@
+2.0.0
+	wt_cart Development Team <info@wt-cart.com>
+
+  * Release of wt_cart 2.0.0
+  * ADD feature #46671: Revision of tax system
+  * ADD feature #46670: wt_cart should be based on net prices (optionally)
+  * ADD feature #46669: Support for AJAX / eID
+  * ADD feature #46668: Support of multidimensional variants
+  * ADD feature #41587: Do not cache pi3 (mini cart)
+  * FIX #39093: Request for not existing table field "l10n_parent"
+  * ADD feature #38938: Make wt_cart compatible with powermail 2.x
+  * UPD: complete rewrite of code (PHP)
+  * Task #37764: Move marker documentation from HTML templates to manual
+  * UPD: Update of manual
+
 1.4.2
 	wt_cart Development Team <info@wt-cart.com>
 
