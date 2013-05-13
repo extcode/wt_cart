@@ -119,16 +119,19 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			t3lib_div::devLog('gpvars', $this->extKey, 0, $this->gpvar);
 		}
 
-			// if content id (cid) is given, then product added from plugin
-		if ($this->gpvar['cid']) {
-				// parse data from flexform
-			$this->parseDataFromFlexform();
-		} elseif ($this->gpvar['puid']) {
-				// product added by own form
-			if (!$this->gpvar['ownForm']) {
-				$this->div->getProductDetails($this->gpvar, $this);
-			} else {
-				$this->parseDataFromOwnForm();
+		if ($this->gpvar['multi']) {
+		} else {
+				// if content id (cid) is given, then product added from plugin
+			if ($this->gpvar['cid']) {
+					// parse data from flexform
+				$this->parseDataFromFlexform();
+			} elseif ($this->gpvar['puid']) {
+					// product added by own form
+				if (!$this->gpvar['ownForm']) {
+					$this->div->getProductDetails($this->gpvar, $this);
+				} else {
+					$this->parseDataFromOwnForm();
+				}
 			}
 		}
 
@@ -180,6 +183,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			// create new product
 		if ($this->gpvar['multi']) {
 			foreach ($this->gpvar['multi'] as $single) {
+				$tmp = $this->gpvar;
 				$this->gpvar = $single;
 				$this->gpvar['isNetPrice'] = $cart->getIsNetCart();
 
@@ -192,6 +196,8 @@ class tx_wtcart_pi1 extends tslib_pibase {
 				if (TYPO3_DLOG) {
 					t3lib_div::devLog('multiple_after', $this->extKey, 0, $this->gpvar);
 				}
+
+				$this->gpvar = $tmp;
 			}
 		} else {
 			if ($this->gpvar['puid']) {

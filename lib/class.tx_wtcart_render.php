@@ -182,6 +182,8 @@ class tx_wtcart_render extends tslib_pibase {
 				$productArr['variantsku'.$productArr['variantcount']] = $variant->getSku();
 				$productArr['variantid'.$productArr['variantcount']] = $variant->getId();
 				$productArr['price'] = $variant->getPrice();
+				$productArr['price_calc_method'] = $variant->getPriceCalcMethod();
+				$productArr['parent_price'] = $variant->getParentPrice();
 				$productArr['price_total'] = $variant->getGross();
 				$productArr['price_total_gross'] = $variant->getGross();
 				$productArr['price_total_net'] = $variant->getNet();

@@ -94,8 +94,19 @@ class Product {
 
 	private $error;
 
+	/**
+	 * @var float
+	 */
 	private $serviceAttribute1;
+
+	/**
+	 * @var float
+	 */
 	private $serviceAttribute2;
+
+	/**
+	 * @var float
+	 */
 	private $serviceAttribute3;
 
 	/*+
@@ -181,6 +192,7 @@ class Product {
 			}
 		} else {
 			$this->variants[$newVariantId] = $newVariant;
+			$newVariant->setProduct($this);
 		}
 
 		$this->reCalc();
@@ -328,6 +340,7 @@ class Product {
 	}
 
 	public function getTax() {
+		$this->calcTax();
 		return array('taxclassid' => $this->taxClass->getId(), 'tax' => $this->tax);
 	}
 
@@ -387,28 +400,46 @@ class Product {
 		return $this->error;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getServiceAttribute1() {
 		return $this->serviceAttribute1;
 	}
 
+	/**
+	 * @param float $serviceAttribute1
+	 */
 	public function setServiceAttribute1($serviceAttribute1) {
-		$this->serviceAttribute1 = $serviceAttribute1;
+		$this->serviceAttribute1 = floatval($serviceAttribute1);
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getServiceAttribute2() {
 		return $this->serviceAttribute2;
 	}
 
+	/**
+	 * @param float $serviceAttribute2
+	 */
 	public function setServiceAttribute2($serviceAttribute2) {
-		$this->serviceAttribute2 = $serviceAttribute2;
+		$this->serviceAttribute2 = floatval($serviceAttribute2);
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getServiceAttribute3() {
 		return $this->serviceAttribute3;
 	}
 
+	/**
+	 * @param float $serviceAttribute3
+	 */
 	public function setServiceAttribute3($serviceAttribute3) {
-		$this->serviceAttribute3 = $serviceAttribute3;
+		$this->serviceAttribute3 = floatval($serviceAttribute3);
 	}
 
 	// temp function, should remove later
@@ -431,9 +462,15 @@ class Product {
 	}
 
 	public function debug() {
-
-		// debug the product itself
 		if (TYPO3_DLOG) {
+			//debug all variants
+			if ($this->variants) {
+				foreach ($this->variants as $variant) {
+					$variant->debug();
+				}
+			}
+
+			// debug the product itself
 			$out = $this->getProductAsArray();
 
 			t3lib_div::devLog('product', 'wt_cart', 0, $out);

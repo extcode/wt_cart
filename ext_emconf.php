@@ -16,12 +16,12 @@ $EM_CONF[$_EXTKEY] = array(
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '2.0.0',
-	'dependencies' => '',
+	'dependencies' => 'powermail',
 	'conflicts' => '',
 	'priority' => '',
 	'loadOrder' => '',
 	'module' => '',
-	'state' => 'alpha',
+	'state' => 'beta',
 	'uploadfolder' => 0,
 	'createDirs' => '',
 	'modify_tables' => '',
@@ -36,7 +36,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'depends' => array(
 			'php' => '5.1.0-0.0.0',
 			'typo3' => '4.5.0-4.7.99',
-			'powermail' => ''
+			'powermail' => '',
 		),
 		'conflicts' => array(
 		),

@@ -153,12 +153,12 @@ class Cart {
 			'specials',
 			'service',
 			'products',
-			'maxServiceAttribute1',
-			'maxServiceAttribute2',
-			'maxServiceAttribute3',
-			'sumServiceAttribute1',
-			'sumServiceAttribute2',
-			'sumServiceAttribute3',
+			'maxServiceAttr1',
+			'maxServiceAttr2',
+			'maxServiceAttr3',
+			'sumServiceAttr1',
+			'sumServiceAttr2',
+			'sumServiceAttr3',
 			'isNetCart',
 			'orderNumber'
 		);
@@ -435,10 +435,12 @@ class Cart {
 	 *
 	 */
 	public function debug() {
+		if (TYPO3_DLOG) {
 			//debug all products
-		if ($this->products) {
-			foreach ($this->products as $product) {
-				$product->debug();
+			if ($this->products) {
+				foreach ($this->products as $product) {
+					$product->debug();
+				}
 			}
 		}
 			// debug the cart itself
@@ -482,8 +484,9 @@ class Cart {
 	 */
 	public function addProduct(Product $newProduct) {
 		$newProductPuid = intval($newProduct->getPuid());
+		$product = $this->products[$newProductPuid];
 
-		if ($product = $this->products[$newProductPuid]) {
+		if ($product) {
 			// change $newproduct in cart
 			$this->changeProduct($product, $newProduct);
 			$this->calcAll();

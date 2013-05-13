@@ -63,6 +63,9 @@ plugin.wtcart {
   # cat=plugin.wt_cart//0123; type=text; label= Param Service Attribute 3: Enter the correct parameter name for the service attribute field 3 of your order form (e.g. length).
   gpvar.service_attribute_3 =
 
+  # cat=plugin.wt_cart//0124; type=text; label= Param Price: Enter the correct parameter name for the price field in your order form (e.g. price).
+  gpvar.price_calc_method = price_calc_method
+
   # cat=plugin.wt_cart//0140; type=text; label= Param SKU: Enter the correct parameter name for your SKU (stock keeping unit).
   gpvar.sku =
 
