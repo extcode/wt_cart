@@ -442,9 +442,8 @@ class Cart {
 					$product->debug();
 				}
 			}
-		}
+
 			// debug the cart itself
-		if (TYPO3_DLOG) {
 			if ($this->payment) {
 				$paymentName = $this->payment->getName();
 			}

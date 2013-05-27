@@ -252,6 +252,10 @@ class tx_wtcart_div extends tslib_pibase {
 
 		$select = $table . '.' . $conf['db.']['title'];
 
+		if ($conf['db.']['price_calc_method'] != '' &&
+			$conf['db.']['price_calc_method'] != '{$plugin.wtcart.db.variants.db.price_calc_method}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['price_calc_method'];
+		}
 		if ($conf['db.']['price'] != '' &&
 				$conf['db.']['price'] != '{$plugin.wtcart.db.variants.db.price}') {
 			$select .= ', ' . $table . '.' . $conf['db.']['price'];
@@ -302,6 +306,13 @@ class tx_wtcart_div extends tslib_pibase {
 			$variant->setTitle($row[$conf['db.']['title']]);
 			if ($row[$conf['db.']['sku']]) {
 				$variant->setSku($row[$conf['db.']['sku']]);
+			}
+
+
+			if ($row[$conf['db.']['price_calc_method']]) {
+				$variant->setPriceCalcMethod($row[$conf['db.']['price_calc_method']]);
+			} else {
+				$variant->setPriceCalcMethod(0);
 			}
 
 				// if inherit_price is defined then check the inherit_price and replace the with variant price
@@ -753,6 +764,10 @@ class tx_wtcart_div extends tslib_pibase {
 						$extra = new Extra(rtrim($extrakey, '.'), $extravalue['value'], $extravalue['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 						$service->addExtra($extra);
 					}
+				} elseif (! floatval($value['extra'])) {
+					$service->setExtratype($value['extra']);
+					$extra = new Extra(0, 0, 0, $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
+					$service->addExtra($extra);
 				} else {
 					$service->setExtratype('simple');
 					$extra = new Extra(0, 0, $value['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
@@ -778,12 +793,13 @@ class tx_wtcart_div extends tslib_pibase {
 		$newProduct = new Product($obj->gpvar['puid'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 
 		if ($obj->gpvar['variants']) {
+			$price_calc_method = $obj->gpvar['price_calc_method'];
 			$price = $obj->gpvar['price'];
 			foreach ($obj->gpvar['variants'] as $key => $value) {
 				if ($obj->gpvar['variants'][$key]) {
 					if ($key == 1) {
 						if ($obj->gpvar['has_fe_variants']) {
-							$newVariant[$key] = new Variant(sha1($value), '', '', $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+							$newVariant[$key] = new Variant(sha1($value), '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 							$newVariant[$key]->setHasFeVariants($obj->gpvar['has_fe_variants']-1);
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
@@ -793,7 +809,7 @@ class tx_wtcart_div extends tslib_pibase {
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
 								// creating a new Variant and using Price and Taxclass form Product
-								$newVariant[$key] = new Variant($obj->gpvar['variants'][$key], '', '', $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+								$newVariant[$key] = new Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 								// get further data of variant
 								$obj->div->getVariantDetails($newVariant[$key], $dbconf);
 							} else {
@@ -807,7 +823,7 @@ class tx_wtcart_div extends tslib_pibase {
 					} elseif ($key > 1) {
 						// check if variant key-1 has fe_variants defined then use input as fe variant
 						if ($newVariant[$key - 1]->getHasFeVariants()) {
-							$newVariant[$key] = new Variant(sha1($value), '', '', $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+							$newVariant[$key] = new Variant(sha1($value), '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 							$newVariant[$key]->setHasFeVariants($newVariant[$key-1]->getHasFeVariants()-1);
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
@@ -817,7 +833,7 @@ class tx_wtcart_div extends tslib_pibase {
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
 								// creating a new Variant and using Price and Taxclass form Product
-								$newVariant[$key] = new Variant($obj->gpvar['variants'][$key], '', '', $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+								$newVariant[$key] = new Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 								// get further data of variant
 								$obj->div->getVariantDetails($newVariant[$key], $dbconf);
 							} else {

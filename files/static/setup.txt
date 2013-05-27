@@ -277,8 +277,6 @@ plugin.tx_wtcart_pi1 {
               dec_point = {$plugin.wtcart.main.dec_point}
               thousands_sep = {$plugin.wtcart.main.thousands_sep}
             }
-            20 = TEXT
-            20.field = price_calc_method
           }
 
           1 = COA
