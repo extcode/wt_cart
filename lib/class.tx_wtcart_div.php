@@ -138,12 +138,22 @@ class tx_wtcart_div extends tslib_pibase {
 			return FALSE;
 		}
 
-		t3lib_div::devLog('tid', $this->extKey, 0, array($gpvar['tid']));
 		$tid = intval($gpvar['tid']);
+
+		if (TYPO3_DLOG) {
+			t3lib_div::devLog('tid', $this->extKey, 0, array($tid));
+		}
+
+		$table = $pObj->conf['db.']['table'];
+
 		if ($tid != 0) {
-			$table = $pObj->conf['db.'][$tid]['table'];
-		} else {
-			$table = $pObj->conf['db.']['table'];
+			if ($pObj->conf['db.'][$tid . '.']['table']) {
+				$table = $pObj->conf['db.'][$tid . '.']['table'];
+			}
+		}
+
+		if (TYPO3_DLOG) {
+			t3lib_div::devLog('table', $this->extKey, 0, array($table));
 		}
 
 		$l10nParent = $pObj->conf['db.']['l10n_parent'];
@@ -695,10 +705,13 @@ class tx_wtcart_div extends tslib_pibase {
 	}
 
 	public function getGPVars(&$obj) {
-		$params = array('puid', 'cid', 'title', 'price', 'qty', 'sku', 'taxclass', 'service_attribute_1', 'service_attribute_2', 'service_attribute_3', 'min', 'max');
+		$params = array('puid', 'tid', 'cid', 'title', 'price', 'qty', 'sku', 'taxclass', 'service_attribute_1', 'service_attribute_2', 'service_attribute_3', 'min', 'max');
 
-		$obj->gpvar['multiple'] = intval($obj->cObj->cObjGetSingle($obj->conf['settings.']['multiple'], $obj->conf['settings.']['multiple.']));
+		$obj->gpvar['multiple'] = $obj->cObj->cObjGetSingle($obj->conf['settings.']['multiple'], $obj->conf['settings.']['multiple.']);
 
+		if (TYPO3_DLOG) {
+			t3lib_div::devLog('gpvar after multiple', $this->extKey, 0, $obj->gpvar);
+		}
 			// if param multiple is set to a value greater 0 get GPVars of #multiple products
 		if ($obj->gpvar['multiple']) {
 			$post = t3lib_div::_POST();
@@ -717,7 +730,6 @@ class tx_wtcart_div extends tslib_pibase {
 							$obj->gpvar['multi'][$cnt][$param] = $post[$tmp][$cnt];
 							break;
 					}
-
 				}
 
 				foreach ($obj->conf['settings.']['variants.'] as $key => $value) {

@@ -119,8 +119,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			t3lib_div::devLog('gpvars', $this->extKey, 0, $this->gpvar);
 		}
 
-		if ($this->gpvar['multi']) {
-		} else {
+		if (!$this->gpvar['multi']) {
 				// if content id (cid) is given, then product added from plugin
 			if ($this->gpvar['cid']) {
 					// parse data from flexform
@@ -180,13 +179,6 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$cart->setPayment($payments[$this->conf['payment.']['preset']]);
 		}
 
-
-		if (TYPO3_DLOG) {
-			t3lib_div::devLog('multi', $this->extKey, 0, array($this->gpvar['multi']));
-		}
-		if (TYPO3_DLOG) {
-			t3lib_div::devLog('tid', $this->extKey, 0, array($this->gpvar['tid']));
-		}
 			// create new product
 		if ($this->gpvar['multi']) {
 			foreach ($this->gpvar['multi'] as $single) {
