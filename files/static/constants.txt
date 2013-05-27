@@ -42,6 +42,9 @@ plugin.wtcart {
   # cat=plugin.wt_cart//0100; type=text; label= Param PUID: Enter the correct parameter name for a unique product number (integer) of your order form. wt_cart uses this number for internal purposes. It can't be a string. The PUID will never be displayed (e.g. tx_myext_pi1|showUid). Default: puid.
   gpvar.puid = puid
 
+  # cat=plugin.wt_cart//0101; type=text; label= Param TID: Enter the correct parameter name for a unique product table (integer) of your order form. wt_cart uses this number for internal purposes. It can't be a string. The TID will never be displayed.
+  gpvar.puid = tid
+
   # cat=plugin.wt_cart//0105; type=text; label= Param CID: Enter the correct parameter name for the uid of the current tt_content element. This value is only needed if you want to add tt_content elements to your cart. The provided parameter must be equal to the name in your HTML template. Default: cid.
   gpvar.cid = cid
 

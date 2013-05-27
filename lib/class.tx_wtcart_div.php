@@ -790,7 +790,7 @@ class tx_wtcart_div extends tslib_pibase {
 
 	public function createProduct(&$obj) {
 
-		$newProduct = new Product($obj->gpvar['puid'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+		$newProduct = new Product($obj->gpvar['puid'], $obj->gpvar['tid'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 
 		if ($obj->gpvar['variants']) {
 			$price_calc_method = $obj->gpvar['price_calc_method'];

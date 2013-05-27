@@ -45,6 +45,11 @@ class Product {
 	/**
 	 * @var integer
 	 */
+	private $tid;
+
+	/**
+	 * @var integer
+	 */
 	private $cid;
 
 	/**
@@ -123,21 +128,24 @@ class Product {
 	 * __construct
 	 *
 	 * @param $puid
+	 * @param int $tid
 	 * @param int $cid
 	 * @param $sku
 	 * @param $title
 	 * @param $price
 	 * @param Tax $taxclass
 	 * @param $qty
-	 * @param boolean
+	 * @param bool $isNetPrice
+	 * @internal param $boolean
 	 * @return \Product
 	 */
-	public function __construct($puid, $cid = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
+	public function __construct($puid, $tid = 0, $cid = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
 		$this->puid = $puid;
+		$this->tid = $tid;
 		$this->cid = $cid;
 		$this->sku = $sku;
 		$this->title = $title;
-		$this->price = floatval(str_replace(',' , '.', $price));
+		$this->price = floatval(str_replace(',', '.', $price));
 		$this->taxClass = $taxclass;
 		$this->qty = $qty;
 
@@ -234,6 +242,7 @@ class Product {
 
 	/**
 	 * @param $variantsArray
+	 * @return bool|int
 	 * @internal param $productPuid
 	 * @internal param null $variantId
 	 * @internal param $id
@@ -296,6 +305,14 @@ class Product {
 
 	public function getPuid() {
 		return $this->puid;
+	}
+
+	public function getTid() {
+		return $this->tid;
+	}
+
+	public function getCid() {
+		return $this->cid;
 	}
 
 	public function getPrice() {
@@ -365,7 +382,7 @@ class Product {
 			$this->qty = $this->min;
 
 			if ($this->variants) {
-				foreach($this->variants as $variant) {
+				foreach ($this->variants as $variant) {
 					$variant->changeQty($this->min);
 				}
 			}
@@ -383,7 +400,7 @@ class Product {
 			$this->qty = $this->max;
 
 			if ($this->variants) {
-				foreach($this->variants as $variant) {
+				foreach ($this->variants as $variant) {
 					$variant->changeQty($this->max);
 				}
 			}
@@ -444,21 +461,7 @@ class Product {
 
 	// temp function, should remove later
 	public function getProductAsArray() {
-		return array(
-			'puid' => $this->puid,
-			'cid' => $this->cid,
-			'sku' => $this->sku,
-			'title' => $this->title,
-			'price' => $this->price,
-			'taxclass' => $this->taxClass,
-			'qty' => $this->qty,
-			'min' => $this->min,
-			'max' => $this->max,
-			'price_total' => $this->gross,
-			'price_total_gross' => $this->gross,
-			'price_total_net' => $this->net,
-			'tax' => $this->tax
-		);
+		return array('puid' => $this->puid, 'tid' => $this->tid, 'cid' => $this->cid, 'sku' => $this->sku, 'title' => $this->title, 'price' => $this->price, 'taxclass' => $this->taxClass, 'qty' => $this->qty, 'min' => $this->min, 'max' => $this->max, 'price_total' => $this->gross, 'price_total_gross' => $this->gross, 'price_total_net' => $this->net, 'tax' => $this->tax);
 	}
 
 	public function debug() {

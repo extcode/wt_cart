@@ -26,10 +26,10 @@
 /**
  * Plugin 'Cart' for the 'wt_cart' extension.
  *
- * @author	Daniel Lorenz <daniel.lorenz@capsicum-ug.de>
- * @package	TYPO3
- * @subpackage	tx_wtcart
- * @version	1.5.0
+ * @author    Daniel Lorenz <daniel.lorenz@capsicum-ug.de>
+ * @package    TYPO3
+ * @subpackage    tx_wtcart
+ * @version    1.5.0
  */
 class Variant {
 
@@ -41,7 +41,7 @@ class Variant {
 	/**
 	 * @var Variant
 	 */
-	private $parent_variant;
+	private $parentVariant;
 
 	/**
 	 * @var string
@@ -117,10 +117,14 @@ class Variant {
 	 * __construct
 	 *
 	 * @param $id
-	 * @param $name
+	 * @param $title
 	 * @param $sku
+	 * @param $priceCalcMethod
+	 * @param $price
+	 * @param Tax $taxclass
 	 * @param $qty
-	 * @param $isNetPrice
+	 * @param bool $isNetPrice
+	 * @internal param $name
 	 * @return Variant
 	 */
 	public function __construct($id, $title, $sku, $priceCalcMethod, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
@@ -128,7 +132,7 @@ class Variant {
 		$this->title = $title;
 		$this->sku = $sku;
 		$this->priceCalcMethod = $priceCalcMethod;
-		$this->price = floatval(str_replace(',' , '.', $price));
+		$this->price = floatval(str_replace(',', '.', $price));
 		$this->taxClass = $taxclass;
 		$this->qty = $qty;
 
@@ -155,18 +159,7 @@ class Variant {
 
 	// temp function, should remove later
 	public function getVariantAsArray() {
-		return array(
-			'id' => $this->id,
-			'sku' => $this->sku,
-			'title' => $this->title,
-			'price_calc_method' => $this->priceCalcMethod,
-			'price' => $this->getPrice,
-			'taxclass' => $this->taxClass,
-			'qty' => $this->qty,
-			'price_total_gross' => $this->gross,
-			'price_total_net' => $this->net,
-			'tax' => $this->tax
-		);
+		return array('id' => $this->id, 'sku' => $this->sku, 'title' => $this->title, 'price_calc_method' => $this->priceCalcMethod, 'price' => $this->getPrice, 'taxclass' => $this->taxClass, 'qty' => $this->qty, 'price_total_gross' => $this->gross, 'price_total_net' => $this->net, 'tax' => $this->tax);
 	}
 
 	/**
@@ -186,15 +179,15 @@ class Variant {
 	/**
 	 * @param Variant
 	 */
-	public function setParentVariant($parent_variant) {
-		$this->parent_variant = $parent_variant;
+	public function setParentVariant($parentVariant) {
+		$this->parentVariant = $parentVariant;
 	}
 
 	/**
 	 * @return Variant
 	 */
 	public function getParentVariant() {
-		return $this->parent_variant;
+		return $this->parentVariant;
 	}
 
 
@@ -239,6 +232,44 @@ class Variant {
 	 */
 	public function getPrice() {
 		return $this->price;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getPriceCalculated() {
+		switch ($this->priceCalcMethod) {
+			case 1:
+				if ($this->getParentVariant()) {
+					return $this->getParentVariant()->getPrice() - $this->price;
+				} elseif ($this->getProduct()) {
+					return $this->getProduct()->getPrice() - $this->price;
+				}
+				break;
+			case 2:
+				if ($this->getParentVariant()) {
+					return $this->getParentVariant()->getPrice() - ($this->price / 100 * $this->getParentVariant()->getPrice());
+				} elseif ($this->getProduct()) {
+					return $this->getProduct()->getPrice() - ($this->price / 100 * $this->getProduct()->getPrice());
+				}
+				break;
+			case 3:
+				if ($this->getParentVariant()) {
+					return $this->getParentVariant()->getPrice() + $this->price;
+				} elseif ($this->getProduct()) {
+					return $this->getProduct->getPrice() + $this->price;
+				}
+				break;
+			case 4:
+				if ($this->getParentVariant()) {
+					return $this->getParentVariant()->getPrice() + ($this->price / 100 * $this->getParentVariant()->getPrice());
+				} elseif ($this->getProduct()) {
+					return $this->getProduct()->getPrice() + ($this->price / 100 * $this->getProduct()->getPrice());
+				}
+				break;
+			default:
+				return $this->getPrice();
+		}
 	}
 
 	/**
@@ -458,23 +489,23 @@ class Variant {
 						break;
 					case 2:
 						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() - ($this->price/100 * $this->getParentVariant()->getPrice())) * $this->qty;
+							$this->gross = ($this->getParentVariant()->getPrice() - ($this->price / 100 * $this->getParentVariant()->getPrice())) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct()->getPrice() - ($this->price/100 * $this->getProduct()->getPrice())) * $this->qty;
+							$this->gross = ($this->getProduct()->getPrice() - ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
 						}
 						break;
 					case 3:
 						if ($this->getParentVariant()) {
 							$this->gross = ($this->getParentVariant()->getPrice() + $this->price) * $this->qty;
 						} elseif ($this->getProduct()) {
-								$this->gross = ($this->getProduct->getPrice() + $this->price) * $this->qty;
+							$this->gross = ($this->getProduct->getPrice() + $this->price) * $this->qty;
 						}
 						break;
 					case 4:
 						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() + ($this->price/100 * $this->getParentVariant()->getPrice())) * $this->qty;
+							$this->gross = ($this->getParentVariant()->getPrice() + ($this->price / 100 * $this->getParentVariant()->getPrice())) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct()->getPrice() + ($this->price/100 * $this->getProduct()->getPrice())) * $this->qty;
+							$this->gross = ($this->getProduct()->getPrice() + ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
 						}
 						break;
 					default:
@@ -510,30 +541,30 @@ class Variant {
 				switch ($this->priceCalcMethod) {
 					case 1:
 						if ($this->getParentVariant()) {
-							$this->net = ($this->parent_variant->getPrice() - $this->price) * $this->qty;
+							$this->net = ($this->parentVariant->getPrice() - $this->price) * $this->qty;
 						} elseif ($this->getProduct()) {
 							$this->net = ($this->getProduct()->getPrice() - $this->price) * $this->qty;
 						}
 						break;
 					case 2:
 						if ($this->getParentVariant()) {
-							$this->net = ($this->getParentVariant()->getPrice() - ($this->price/100 * $this->parent_variant->getPrice())) * $this->qty;
+							$this->net = ($this->getParentVariant()->getPrice() - ($this->price / 100 * $this->parentVariant->getPrice())) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->net = ($this->getProduct()->getPrice() - ($this->price/100 * $this->getProduct()->getPrice())) * $this->qty;
+							$this->net = ($this->getProduct()->getPrice() - ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
 						}
 						break;
 					case 3:
 						if ($this->getParentVariant()) {
-							$this->net = ($this->parent_variant->getPrice() + $this->price) * $this->qty;
+							$this->net = ($this->parentVariant->getPrice() + $this->price) * $this->qty;
 						} elseif ($this->getProduct()) {
 							$this->net = ($this->getProduct->getPrice() + $this->price) * $this->qty;
 						}
 						break;
 					case 4:
 						if ($this->getParentVariant()) {
-							$this->net = ($this->getParentVariant()->getPrice() + ($this->price/100 * $this->parent_variant->getPrice())) * $this->qty;
+							$this->net = ($this->getParentVariant()->getPrice() + ($this->price / 100 * $this->parentVariant->getPrice())) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->net = ($this->getProduct()->getPrice() + ($this->price/100 * $this->getProduct()->getPrice())) * $this->qty;
+							$this->net = ($this->getProduct()->getPrice() + ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
 						}
 						break;
 					default:
@@ -543,7 +574,7 @@ class Variant {
 		} else {
 			$this->calcGross();
 			$this->calcTax();
-			$this->net =  $this->gross - $this->tax;
+			$this->net = $this->gross - $this->tax;
 		}
 	}
 
