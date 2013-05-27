@@ -180,6 +180,13 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$cart->setPayment($payments[$this->conf['payment.']['preset']]);
 		}
 
+
+		if (TYPO3_DLOG) {
+			t3lib_div::devLog('multi', $this->extKey, 0, array($this->gpvar['multi']));
+		}
+		if (TYPO3_DLOG) {
+			t3lib_div::devLog('tid', $this->extKey, 0, array($this->gpvar['tid']));
+		}
 			// create new product
 		if ($this->gpvar['multi']) {
 			foreach ($this->gpvar['multi'] as $single) {

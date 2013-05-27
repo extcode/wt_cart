@@ -138,7 +138,14 @@ class tx_wtcart_div extends tslib_pibase {
 			return FALSE;
 		}
 
-		$table = $pObj->conf['db.']['table'];
+		t3lib_div::devLog('tid', $this->extKey, 0, array($gpvar['tid']));
+		$tid = intval($gpvar['tid']);
+		if ($tid != 0) {
+			$table = $pObj->conf['db.'][$tid]['table'];
+		} else {
+			$table = $pObj->conf['db.']['table'];
+		}
+
 		$l10nParent = $pObj->conf['db.']['l10n_parent'];
 
 		$select = $table . '.' . $pObj->conf['db.']['title'] . ', ' .

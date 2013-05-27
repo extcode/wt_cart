@@ -180,6 +180,13 @@ plugin.tx_wtcart_pi1 {
       intval = 1
     }
 
+    # GET or POST param for product tid
+    tid = TEXT
+    tid {
+      data = GP:{$plugin.wtcart.gpvar.tid}
+      intval = 1
+    }
+
     # GET or POST param for content id
     cid = TEXT
     cid {
@@ -226,6 +233,9 @@ plugin.tx_wtcart_pi1 {
 
       puid = TEXT
       puid.field = puid
+
+      tid = TEXT
+      tid.field = tid
 
       qty = TEXT
       qty.field = qty
