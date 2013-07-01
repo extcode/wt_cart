@@ -87,6 +87,32 @@ class tx_wtcart_div extends tslib_pibase {
 		return $errorNumber;
 	}
 
+	/**
+	 * Clear complete session
+	 *
+	 * @return  void
+	 */
+	public function getAllProductsFromSession() {
+		// HOOK for clearSession
+		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['getAllProductsFromSession'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['getAllProductsFromSession'] as $userFunc) {
+				$params = array(
+				);
+				$errorNumber = t3lib_div::callUserFunction($userFunc, $params, $this);
+				//ignore class/method/function not found debug message
+				if ($errorNumber === FALSE) {
+					$errorNumber = 0;
+				}
+				if ($errorNumber > 0) {
+					if (TYPO3_DLOG) {
+						$msg = sprintf("Aborting get all products from session because \"%s\" threw error(%d).", $userFunc, $errorNumber);
+						t3lib_div::devLog($msg, $this->extKey);
+					}
+					break;
+				}
+			}
+		}
+	}
 
 	/**
 	* Clear complete session
@@ -94,15 +120,16 @@ class tx_wtcart_div extends tslib_pibase {
 	* @return  void
 	*/
 	public function removeAllProductsFromSession() {
-/*		// HOOK for clearSession
-		$errorNumber = 0;
+		// HOOK for clearSession
 		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['clearSession'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['clearSession'] as $userFunc) {
 					$params = array(
 				);
 				$errorNumber = t3lib_div::callUserFunction($userFunc, $params, $this);
 				//ignore class/method/function not found debug message
-				if($errorNumber === FALSE) $errorNumber = 0;
+				if ($errorNumber === FALSE) {
+					$errorNumber = 0;
+				}
 				if ($errorNumber > 0) {
 					if (TYPO3_DLOG) {
 						$msg = sprintf("Aborting clear session because \"%s\" threw error(%d).", $userFunc, $errorNumber);
@@ -147,8 +174,8 @@ class tx_wtcart_div extends tslib_pibase {
 		$table = $pObj->conf['db.']['table'];
 
 		if ($tid != 0) {
-			if ($pObj->conf['db.'][$tid . '.']['table']) {
-				$table = $pObj->conf['db.'][$tid . '.']['table'];
+			if ($pObj->conf['db.']['table' . $tid]) {
+				$table = $pObj->conf['db.']['table' . $tid];
 			}
 		}
 

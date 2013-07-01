@@ -248,9 +248,25 @@ class Variant {
 				break;
 			case 2:
 				if ($this->getParentVariant()) {
-					return $this->getParentVariant()->getPrice() - ($this->price / 100 * $this->getParentVariant()->getPrice());
+					$discount = ($this->getPrice() / 100) * ($this->getParentVariant()->getPrice());
+					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+							if ($funcRef) {
+								t3lib_div::callUserFunction($funcRef, $discount, $this);
+							}
+						}
+					}
+					return $this->getParentVariant()->getPrice() - $discount;
 				} elseif ($this->getProduct()) {
-					return $this->getProduct()->getPrice() - ($this->price / 100 * $this->getProduct()->getPrice());
+					$discount = ($this->getPrice() / 100) * ($this->getProduct()->getPrice());
+					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+							if ($funcRef) {
+								t3lib_div::callUserFunction($funcRef, $discount, $this);
+							}
+						}
+					}
+					return $this->getProduct()->getPrice() - $discount;
 				}
 				break;
 			case 3:
@@ -262,9 +278,25 @@ class Variant {
 				break;
 			case 4:
 				if ($this->getParentVariant()) {
-					return $this->getParentVariant()->getPrice() + ($this->price / 100 * $this->getParentVariant()->getPrice());
+					$discount = ($this->getPrice() / 100) * ($this->getParentVariant()->getPrice());
+					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+							if ($funcRef) {
+								t3lib_div::callUserFunction($funcRef, $discount, $this);
+							}
+						}
+					}
+					return $this->getParentVariant()->getPrice() + $discount;
 				} elseif ($this->getProduct()) {
-					return $this->getProduct()->getPrice() + ($this->price / 100 * $this->getProduct()->getPrice());
+					$discount = ($this->getPrice() / 100) * ($this->getProduct()->getPrice());
+					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+							if ($funcRef) {
+								t3lib_div::callUserFunction($funcRef, $discount, $this);
+							}
+						}
+					}
+					return $this->getProduct()->getPrice() + $discount;
 				}
 				break;
 			default:
@@ -482,30 +514,62 @@ class Variant {
 				switch ($this->priceCalcMethod) {
 					case 1:
 						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() - $this->price) * $this->qty;
+							$this->gross = ($this->getParentVariant()->getPrice() - $this->getPrice()) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct()->getPrice() - $this->price) * $this->qty;
+							$this->gross = ($this->getProduct()->getPrice() - $this->getPrice()) * $this->qty;
 						}
 						break;
 					case 2:
 						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() - ($this->price / 100 * $this->getParentVariant()->getPrice())) * $this->qty;
+							$discount = $this->getPrice() / 100 * ($this->getParentVariant()->getPriceCalculated());
+							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+									if ($funcRef) {
+										t3lib_div::callUserFunction($funcRef, $discount, $this);
+									}
+								}
+							}
+							$this->gross = ($this->getParentVariant()->getPriceCalculated() - $discount) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct()->getPrice() - ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
+							$discount = $this->getProduct()->getPrice() / 100 * ($this->getProduct()->getPrice());
+							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+									if ($funcRef) {
+										t3lib_div::callUserFunction($funcRef, $discount, $this);
+									}
+								}
+							}
+							$this->gross = ($this->getProduct()->getPrice() - $discount) * $this->qty;
 						}
 						break;
 					case 3:
 						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() + $this->price) * $this->qty;
+							$this->gross = ($this->getParentVariant()->getPrice() + $this->getPrice()) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct->getPrice() + $this->price) * $this->qty;
+							$this->gross = ($this->getProduct->getPrice() + $this->getPrice()) * $this->qty;
 						}
 						break;
 					case 4:
 						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() + ($this->price / 100 * $this->getParentVariant()->getPrice())) * $this->qty;
+							$discount = $this->getPrice() / 100 * ($this->getParentVariant()->getPriceCalculated());
+							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+									if ($funcRef) {
+										t3lib_div::callUserFunction($funcRef, $discount, $this);
+									}
+								}
+							}
+							$this->gross = ($this->getParentVariant()->getPriceCalculated() + $discount) * $this->qty;
 						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct()->getPrice() + ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
+							$discount = $this->getProduct()->getPrice() / 100 * ($this->getProduct()->getPrice());
+							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+									if ($funcRef) {
+										t3lib_div::callUserFunction($funcRef, $discount, $this);
+									}
+								}
+							}
+							$this->gross = ($this->getProduct()->getPrice() + $discount) * $this->qty;
 						}
 						break;
 					default:
