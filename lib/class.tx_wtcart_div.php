@@ -171,13 +171,11 @@ class tx_wtcart_div extends tslib_pibase {
 			t3lib_div::devLog('tid', $this->extKey, 0, array($tid));
 		}
 
-		$table = $pObj->conf['db.']['table'];
-
-		if ($tid != 0) {
-			if ($pObj->conf['db.']['table' . $tid]) {
-				$table = $pObj->conf['db.']['table' . $tid];
-			}
+		if (($tid != 0) && ($pObj->conf['db.'][$tid . '.'])) {
+			$pObj->conf['db.'] = $pObj->conf['db.'][$tid . '.'];
 		}
+
+		$table = $pObj->conf['db.']['table'];
 
 		if (TYPO3_DLOG) {
 			t3lib_div::devLog('table', $this->extKey, 0, array($table));

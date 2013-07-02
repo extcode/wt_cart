@@ -255,7 +255,6 @@ class Variant {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 							if ($funcRef) {
 								$params = array(
-									'pObj' => &$this,
 									'price' => &$price,
 									'parentPrice' => &$parentPrice,
 									'discount' => &$discount,
@@ -274,7 +273,6 @@ class Variant {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 							if ($funcRef) {
 								$params = array(
-									'pObj' => &$this,
 									'price' => &$price,
 									'parentPrice' => &$parentPrice,
 									'discount' => &$discount,
@@ -303,7 +301,6 @@ class Variant {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 							if ($funcRef) {
 								$params = array(
-									'pObj' => &$this,
 									'price' => &$price,
 									'parentPrice' => &$parentPrice,
 									'discount' => &$discount,
@@ -322,7 +319,6 @@ class Variant {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 							if ($funcRef) {
 								$params = array(
-									'pObj' => &$this,
 									'price' => &$price,
 									'parentPrice' => &$parentPrice,
 									'discount' => &$discount,
@@ -567,7 +563,6 @@ class Variant {
 								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 									if ($funcRef) {
 										$params = array(
-											'pObj' => &$this,
 											'price' => &$price,
 											'parentPrice' => &$parentPrice,
 											'discount' => &$discount,
@@ -586,7 +581,6 @@ class Variant {
 								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 									if ($funcRef) {
 										$params = array(
-											'pObj' => &$this,
 											'price' => &$price,
 											'parentPrice' => &$parentPrice,
 											'discount' => &$discount,
@@ -615,7 +609,6 @@ class Variant {
 								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 									if ($funcRef) {
 										$params = array(
-											'pObj' => &$this,
 											'price' => &$price,
 											'parentPrice' => &$parentPrice,
 											'discount' => &$discount,
@@ -634,7 +627,6 @@ class Variant {
 								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 									if ($funcRef) {
 										$params = array(
-											'pObj' => &$this,
 											'price' => &$price,
 											'parentPrice' => &$parentPrice,
 											'discount' => &$discount,
