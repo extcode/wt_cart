@@ -215,6 +215,18 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 		$cart->debug();
 
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartBeforeSave']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartBeforeSave'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'cart' => &$cart
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
 			// save cart to session
 		$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $this->conf['main.']['pid'], serialize($cart));
 		$GLOBALS['TSFE']->storeSessionData();
