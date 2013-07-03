@@ -209,6 +209,20 @@ class tx_wtcart_pi1 extends tslib_pibase {
 				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
 
+				$newProduct->setParentId($this->gpvar['parentId']);
+
+				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
+						if ($funcRef) {
+							$params = array(
+								'newProduct' => &$newProduct
+							);
+
+							t3lib_div::callUserFunction($funcRef, $params, $this);
+						}
+					}
+				}
+
 				$cart->addProduct($newProduct);
 			}
 		}
@@ -433,6 +447,20 @@ class tx_wtcart_pi1 extends tslib_pibase {
 				$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
 				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
+
+				$newProduct->setParentId($this->gpvar['parentId']);
+
+				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
+						if ($funcRef) {
+							$params = array(
+								'newProduct' => &$newProduct
+							);
+
+							t3lib_div::callUserFunction($funcRef, $params, $this);
+						}
+					}
+				}
 
 				$cart->addProduct($newProduct);
 			} else {

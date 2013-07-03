@@ -34,6 +34,7 @@ plugin.tx_wtcart_pi1 {
     sku                 = {$plugin.wtcart.gpvar.sku}
     variants            = {$plugin.wtcart.gpvar.variants}
     multiple            = {$plugin.wtcart.gpvar.multiple}
+    parentId            = {$plugin.wtcart.gpvar.parentId}
   }
   taxclass {
     1 {
@@ -65,6 +66,7 @@ plugin.tx_wtcart_pi1 {
     service_attribute_2   = {$plugin.wtcart.db.service_attribute_2}
     service_attribute_3   = {$plugin.wtcart.db.service_attribute_3}
     has_fe_variants       = {$plugin.wtcart.db.has_fe_variants}
+    parentId              = {$plugin.wtcart.db.parentId}
     variants {
       db {
         table = {$plugin.wtcart.db.variants.db.table}
@@ -192,6 +194,13 @@ plugin.tx_wtcart_pi1 {
     cid {
       data = GP:{$plugin.wtcart.gpvar.cid}
       intval = 1
+    }
+
+    # GET or POST param for parentId
+    parentId = TEXT
+    parentId {
+      data = GP:{$plugin.wtcart.gpvar.parentId}
+      htmlSpecialChars = 1
     }
 
     multiple = TEXT

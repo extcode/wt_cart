@@ -215,6 +215,9 @@ class tx_wtcart_div extends tslib_pibase {
 				$pObj->conf['db.']['has_fe_variants'] != '{$plugin.wtcart.db.has_fe_variants}') {
 			$select .= ', ' . $table . '.' . $pObj->conf['db.']['has_fe_variants'];
 		}
+		if ($pObj->conf['db.']['parentId'] != '' && $pObj->conf['db.']['parentId'] != '{$plugin.wtcart.db.parentId}') {
+			$select .= ', ' . $table . '.' . $pObj->conf['db.']['parentId'];
+		}
 
 		$where = ' ( ' . $table . '.uid = ' . $puid . ' OR ' . $l10nParent . ' = ' . $puid . ' )' .
 				' AND sys_language_uid = ' .$GLOBALS['TSFE']->sys_language_uid;
@@ -269,6 +272,9 @@ class tx_wtcart_div extends tslib_pibase {
 			}
 			if ($row[$pObj->conf['db.']['has_fe_variants']]) {
 				$gpvar['has_fe_variants'] = $row[$pObj->conf['db.']['has_fe_variants']];
+			}
+			if ($row[$pObj->conf['db.']['parentId']]) {
+				$gpvar['parentId'] = $row[$pObj->conf['db.']['parentId']];
 			}
 		} else {
 			$out = array(

@@ -141,6 +141,9 @@ plugin.wtcart {
   # cat=plugin.wt_cart//0243; type=text; label= Variants column: Enter the correct column name of the table where the variants are stored (e.g. variants).
   db.variants =
 
+  # cat=plugin.wt_cart//0244; type=text; label= Parent Id: Enter the correct column name of the table where the parent ids of a product are stored (e.g. parentId).
+  db.parentId =
+
   # cat=plugin.wt_cart//0250; type=text; label= Service Attribute 1 column: Enter the correct column name of the table where the service attribute 1 are stored (e.g. for weight).
   db.service_attribute_1 =
 

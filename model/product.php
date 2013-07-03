@@ -38,11 +38,30 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/variant.php');
  */
 class Product {
 	/**
+	 * $puid = Product identifier defines the unique identifier each product have
+	 *
 	 * @var integer
 	 */
 	private $puid;
 
 	/**
+	 * $parentTable = parent object association table name defines an association a
+	 * product can have if needed in a hook
+	 * @var string
+	 */
+	private $parentTable;
+
+	/**
+	 * $parentId = parent object association identifier defines an association a
+	 * product can have if needed in a hook
+	 * @var integer
+	 */
+	private $parentId;
+
+	/**
+	 * $tid = Table configuration Id is defined by TypoScript and is used to
+	 * define the table the product comes from
+	 *
 	 * @var integer
 	 */
 	private $tid;
@@ -307,6 +326,26 @@ class Product {
 		return $this->puid;
 	}
 
+	public function getProductId() {
+		return $this->puid;
+	}
+
+	public function getParentTable() {
+		return $this->parentTable;
+	}
+
+	public function setParentTable($parentTable) {
+		$this->parentTable = $parentTable;
+	}
+
+	public function getParentId() {
+		return $this->parentId;
+	}
+
+	public function setParentId($parentId) {
+		$this->parentId = $parentId;
+	}
+
 	public function getTid() {
 		return $this->tid;
 	}
@@ -461,7 +500,24 @@ class Product {
 
 	// temp function, should remove later
 	public function getProductAsArray() {
-		return array('puid' => $this->puid, 'tid' => $this->tid, 'cid' => $this->cid, 'sku' => $this->sku, 'title' => $this->title, 'price' => $this->price, 'taxclass' => $this->taxClass, 'qty' => $this->qty, 'min' => $this->min, 'max' => $this->max, 'price_total' => $this->gross, 'price_total_gross' => $this->gross, 'price_total_net' => $this->net, 'tax' => $this->tax);
+		return array(
+			'puid' => $this->puid,
+			'parentTable' => $this->parentTable,
+			'parentId' => $this->parentId,
+			'tid' => $this->tid,
+			'cid' => $this->cid,
+			'sku' => $this->sku,
+			'title' => $this->title,
+			'price' => $this->price,
+			'taxclass' => $this->taxClass,
+			'qty' => $this->qty,
+			'min' => $this->min,
+			'max' => $this->max,
+			'price_total' => $this->gross,
+			'price_total_gross' => $this->gross,
+			'price_total_net' => $this->net,
+			'tax' => $this->tax
+		);
 	}
 
 	public function debug() {
