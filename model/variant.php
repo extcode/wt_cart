@@ -114,6 +114,11 @@ class Variant {
 	private $hasFeVariants;
 
 	/**
+	 * @var array Additional
+	 */
+	private $additional;
+
+	/**
 	 * __construct
 	 *
 	 * @param $id
@@ -159,7 +164,19 @@ class Variant {
 
 	// temp function, should remove later
 	public function getVariantAsArray() {
-		return array('id' => $this->id, 'sku' => $this->sku, 'title' => $this->title, 'price_calc_method' => $this->priceCalcMethod, 'price' => $this->getPrice, 'taxclass' => $this->taxClass, 'qty' => $this->qty, 'price_total_gross' => $this->gross, 'price_total_net' => $this->net, 'tax' => $this->tax);
+		return array(
+			'id' => $this->id,
+			'sku' => $this->sku,
+			'title' => $this->title,
+			'price_calc_method' => $this->priceCalcMethod,
+			'price' => $this->getPrice,
+			'taxclass' => $this->taxClass,
+			'qty' => $this->qty,
+			'price_total_gross' => $this->gross,
+			'price_total_net' => $this->net,
+			'tax' => $this->tax,
+			'additional' => $this->additional
+		);
 	}
 
 	/**
@@ -730,6 +747,14 @@ class Variant {
 			$this->calcTax();
 			$this->calcGross();
 		}
+	}
+
+	public function getAdditional() {
+		return $this->additional;
+	}
+
+	public function setAdditional($additional) {
+		$this->additional = $additional;
 	}
 }
 

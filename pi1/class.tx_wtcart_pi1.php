@@ -211,6 +211,8 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 				$newProduct->setParentId($this->gpvar['parentId']);
 
+				$newProduct->setAdditional($this->gpvar['additional']);
+
 				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
 						if ($funcRef) {
@@ -449,6 +451,8 @@ class tx_wtcart_pi1 extends tslib_pibase {
 				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
 
 				$newProduct->setParentId($this->gpvar['parentId']);
+
+				$newProduct->setAdditional($this->gpvar['additional']);
 
 				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {

@@ -432,6 +432,22 @@ class Cart {
 	}
 
 	/**
+	 * @param $puid
+	 * @return Product
+	 */
+	public function getProductById($puid) {
+		return $this->products[$puid];
+	}
+
+	/**
+	 * @param $puid
+	 * @return Product
+	 */
+	public function getProduct($puid) {
+		return $this->getProductById($puid);
+	}
+
+	/**
 	 *
 	 */
 	public function debug() {

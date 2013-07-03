@@ -219,6 +219,12 @@ class tx_wtcart_div extends tslib_pibase {
 			$select .= ', ' . $table . '.' . $pObj->conf['db.']['parentId'];
 		}
 
+		if ($pObj->conf['db.']['additional.']) {
+			foreach ($pObj->conf['db.']['additional.'] as $additional) {
+				$select .= ', ' . $table . '.' . $additional;
+			}
+		}
+
 		$where = ' ( ' . $table . '.uid = ' . $puid . ' OR ' . $l10nParent . ' = ' . $puid . ' )' .
 				' AND sys_language_uid = ' .$GLOBALS['TSFE']->sys_language_uid;
 		$where .= tslib_cObj::enableFields($table);
@@ -276,6 +282,13 @@ class tx_wtcart_div extends tslib_pibase {
 			if ($row[$pObj->conf['db.']['parentId']]) {
 				$gpvar['parentId'] = $row[$pObj->conf['db.']['parentId']];
 			}
+
+			if ($pObj->conf['db.']['additional.']) {
+				$gpvar['additional'] = array();
+				foreach ($pObj->conf['db.']['additional.'] as $additionalKey => $additionalValue) {
+					$gpvar['additional'][$additionalKey] = $row[$additionalValue];
+				}
+			}
 		} else {
 			$out = array(
 				'select' => $select,
@@ -321,6 +334,11 @@ class tx_wtcart_div extends tslib_pibase {
 			$select .= ', ' . $table . '.' . $conf['db.']['has_fe_variants'];
 		}
 
+		if ($conf['db.']['additional.']) {
+			foreach ($conf['db.']['additional.'] as $additional) {
+				$select .= ', ' . $table . '.' . $additional;
+			}
+		}
 
 		$where = ' ( ' . $table . '.uid = ' . $variantId . ' OR ' . $l10nParent . ' = ' . $variantId . ' )' .
 				' AND sys_language_uid = ' .$GLOBALS['TSFE']->sys_language_uid;
@@ -379,6 +397,14 @@ class tx_wtcart_div extends tslib_pibase {
 
 			if ($row[$conf['db.']['has_fe_variants']]) {
 				$variant->setHasFeVariants($row[$conf['db.']['has_fe_variants']]);
+			}
+
+			if ($conf['db.']['additional.']) {
+				$additional = array();
+				foreach ($conf['db.']['additional.'] as $additionalKey => $additionalValue) {
+					$additional[$additionalKey] = $row[$additionalValue];
+				}
+				$variant->setAdditional($additional);
 			}
 		} else {
 			$out = array(

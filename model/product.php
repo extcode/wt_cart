@@ -144,6 +144,11 @@ class Product {
 	private $variants;
 
 	/**
+	 * @var array Additional
+	 */
+	private $additional;
+
+	/**
 	 * __construct
 	 *
 	 * @param $puid
@@ -253,10 +258,18 @@ class Product {
 
 	/**
 	 * @param $variantId
-	 * @return array
+	 * @return Variant
 	 */
 	public function getVariantById($variantId) {
 		return $this->variants[$variantId];
+	}
+
+	/**
+	 * @param $variantId
+	 * @return Variant
+	 */
+	public function getVariant($variantId) {
+		return $this->getVariantById($variantId);
 	}
 
 	/**
@@ -516,7 +529,8 @@ class Product {
 			'price_total' => $this->gross,
 			'price_total_gross' => $this->gross,
 			'price_total_net' => $this->net,
-			'tax' => $this->tax
+			'tax' => $this->tax,
+			'additional' => $this->additional
 		);
 	}
 
@@ -595,6 +609,14 @@ class Product {
 		$this->calcGross();
 		$this->calcTax();
 		$this->calcNet();
+	}
+
+	public function getAdditional() {
+		return $this->additional;
+	}
+
+	public function setAdditional($additional) {
+		$this->additional = $additional;
 	}
 }
 
