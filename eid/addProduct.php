@@ -132,6 +132,18 @@ class addProduct extends tslib_pibase {
 			$count += $this->parseDataToProductToCart($cart);
 		}
 
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'newProduct' => &$newProduct
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
 		$cart->debug();
 
 		// save cart to session
@@ -175,6 +187,18 @@ class addProduct extends tslib_pibase {
 			$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
 			$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 			$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
+
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'newProduct' => &$newProduct
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
 
 			$cart->addProduct($newProduct);
 		} else {
