@@ -74,6 +74,11 @@ class Product {
 	/**
 	 * @var string
 	 */
+	private $title;
+
+	/**
+	 * @var string
+	 */
 	private $sku;
 
 	/**
@@ -184,10 +189,17 @@ class Product {
 	}
 
 	/**
-	 * @param boolean
+	 * @return string
 	 */
-	public function setIsNetPrice($isNetPrice) {
-		$this->isNettoPrice = $isNetPrice;
+	public function getTitle() {
+		return $this->title;
+	}
+	/**
+	 * @param string $title
+	 * @return void
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
 	}
 
 	/**
@@ -195,6 +207,14 @@ class Product {
 	 */
 	public function getIsNetPrice() {
 		return $this->isNetPrice;
+	}
+
+	/**
+	 * @param boolean
+	 * @return void
+	 */
+	public function setIsNetPrice($isNetPrice) {
+		$this->isNettoPrice = $isNetPrice;
 	}
 
 	/**
