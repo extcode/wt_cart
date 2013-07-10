@@ -108,6 +108,18 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$cart = new Cart($this->isNetCart);
 		}
 
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'cart' => &$cart
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
 			//read variables
 		$this->div->getGPVars($this);
 

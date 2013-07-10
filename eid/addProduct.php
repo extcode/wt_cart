@@ -110,6 +110,18 @@ class addProduct extends tslib_pibase {
 			}
 		}
 
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'cart' => &$cart
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
 			//read variables
 		$this->div->getGPVars($this);
 
