@@ -255,102 +255,62 @@ class Variant {
 	 * @return float
 	 */
 	public function getPriceCalculated() {
+		$price = $this->getPrice();
+
+		if ($this->getParentVariant()) {
+			$parentPrice = $this->getParentVariant()->getPrice();
+		} elseif ($this->getProduct()) {
+			$parentPrice = $this->getProduct()->getPrice();
+		} else {
+			$parentPrice = 0;
+		}
+
 		switch ($this->priceCalcMethod) {
 			case 1:
-				if ($this->getParentVariant()) {
-					return $this->getParentVariant()->getPrice() - $this->price;
-				} elseif ($this->getProduct()) {
-					return $this->getProduct()->getPrice() - $this->price;
-				}
+				$discount = 0;
 				break;
 			case 2:
-				if ($this->getParentVariant()) {
-					$price = $this->getPrice();
-					$parentPrice = $this->getParentVariant()->getPrice();
-					$discount = ($price / 100) * ($parentPrice);
-					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-							if ($funcRef) {
-								$params = array(
-									'price' => &$price,
-									'parentPrice' => &$parentPrice,
-									'discount' => &$discount,
-								);
-
-								t3lib_div::callUserFunction($funcRef, $params, $this);
-							}
-						}
-					}
-					return $parentPrice - $discount;
-				} elseif ($this->getProduct()) {
-					$price = $this->getPrice();
-					$parentPrice = $this->getProduct()->getPrice();
-					$discount = ($price / 100) * ($parentPrice);
-					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-							if ($funcRef) {
-								$params = array(
-									'price' => &$price,
-									'parentPrice' => &$parentPrice,
-									'discount' => &$discount,
-								);
-
-								t3lib_div::callUserFunction($funcRef, $params, $this);
-							}
-						}
-					}
-					return $parentPrice - $discount;
-				}
+				$discount = -1 * (($price / 100) * ($parentPrice));
 				break;
 			case 3:
-				if ($this->getParentVariant()) {
-					return $this->getParentVariant()->getPrice() + $this->price;
-				} elseif ($this->getProduct()) {
-					return $this->getProduct->getPrice() + $this->price;
-				}
+				$discount = 0;
 				break;
 			case 4:
-				if ($this->getParentVariant()) {
-					$price = $this->getPrice();
-					$parentPrice = $this->getParentVariant()->getPrice();
-					$discount = ($price / 100) * ($parentPrice);
-					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-							if ($funcRef) {
-								$params = array(
-									'price' => &$price,
-									'parentPrice' => &$parentPrice,
-									'discount' => &$discount,
-								);
-
-								t3lib_div::callUserFunction($funcRef, $params, $this);
-							}
-						}
-					}
-					return $parentPrice + $discount;
-				} elseif ($this->getProduct()) {
-					$price = $this->getPrice();
-					$parentPrice = $this->getProduct()->getPrice();
-					$discount = ($price / 100) * ($parentPrice);
-					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-							if ($funcRef) {
-								$params = array(
-									'price' => &$price,
-									'parentPrice' => &$parentPrice,
-									'discount' => &$discount,
-								);
-
-								t3lib_div::callUserFunction($funcRef, $params, $this);
-							}
-						}
-					}
-					return $parentPrice + $discount;
-				}
+				$discount = ($price / 100) * ($parentPrice);
 				break;
 			default:
-				return $this->getPrice();
 		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'price' => &$price,
+						'parentPrice' => &$parentPrice,
+						'discount' => &$discount,
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
+		switch ($this->priceCalcMethod) {
+			case 1:
+				$price = -1 * $price;
+				break;
+			case 2:
+				$price = 0;
+				break;
+			case 3:
+				break;
+			case 4:
+				$price = 0;
+				break;
+			default:
+		}
+
+		return $parentPrice + $price + $discount;
 	}
 
 	/**
@@ -551,6 +511,9 @@ class Variant {
 		return TRUE;
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcGross() {
 		if ($this->isNetPrice == FALSE) {
 			if ($this->variants) {
@@ -560,105 +523,62 @@ class Variant {
 				}
 				$this->gross = $sum;
 			} else {
+				$price = $this->getPrice();
+				if ($this->getParentVariant()) {
+					$parentPrice = $this->getParentVariant()->getPrice();
+				} elseif ($this->getProduct()) {
+					$parentPrice = $this->getProduct()->getPrice();
+				} else {
+					$parentPrice = 0;
+				}
+
 				switch ($this->priceCalcMethod) {
 					case 1:
-						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() - $this->getPrice()) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct()->getPrice() - $this->getPrice()) * $this->qty;
-						}
+						$discount = 0;
 						break;
 					case 2:
-						if ($this->getParentVariant()) {
-							$price = $this->getPrice();
-							$parentPrice = $this->getParentVariant()->getPrice();
-							$discount = ($price / 100) * ($parentPrice);
-
-							t3lib_div::devLog('before Hook $discount', 'wt_cart', 0, array($discount));
-
-							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-									if ($funcRef) {
-										$params = array(
-											'price' => &$price,
-											'parentPrice' => &$parentPrice,
-											'discount' => &$discount,
-										);
-
-										t3lib_div::callUserFunction($funcRef, $params, $this);
-									}
-								}
-							}
-							$this->gross = ($parentPrice - $discount) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$price = $this->getPrice();
-							$parentPrice = $this->getProduct()->getPrice();
-							$discount = ($price / 100) * ($parentPrice);
-							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-									if ($funcRef) {
-										$params = array(
-											'price' => &$price,
-											'parentPrice' => &$parentPrice,
-											'discount' => &$discount,
-										);
-
-										t3lib_div::callUserFunction($funcRef, $params, $this);
-									}
-								}
-							}
-							$this->gross = ($parentPrice - $discount) * $this->qty;
-						}
+						$discount = -1 * (($price / 100) * ($parentPrice));
 						break;
 					case 3:
-						if ($this->getParentVariant()) {
-							$this->gross = ($this->getParentVariant()->getPrice() + $this->getPrice()) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$this->gross = ($this->getProduct->getPrice() + $this->getPrice()) * $this->qty;
-						}
+						$discount = 0;
 						break;
 					case 4:
-						if ($this->getParentVariant()) {
-							$price = $this->getPrice();
-							$parentPrice = $this->getParentVariant()->getPrice();
-							$discount = ($price / 100) * ($parentPrice);
-							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-									if ($funcRef) {
-										$params = array(
-											'price' => &$price,
-											'parentPrice' => &$parentPrice,
-											'discount' => &$discount,
-										);
-
-										t3lib_div::callUserFunction($funcRef, $params, $this);
-									}
-								}
-							}
-							$this->gross = ($parentPrice - $discount) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$price = $this->getPrice();
-							$parentPrice = $this->getProduct()->getPrice();
-							$discount = ($price / 100) * ($parentPrice);
-							if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
-								foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
-									if ($funcRef) {
-										$params = array(
-											'price' => &$price,
-											'parentPrice' => &$parentPrice,
-											'discount' => &$discount,
-										);
-
-										t3lib_div::callUserFunction($funcRef, $params, $this);
-									}
-								}
-							}
-							$this->gross = ($parentPrice - $discount) * $this->qty;
-						}
+						$discount = ($price / 100) * ($parentPrice);
 						break;
 					default:
-						$this->gross = $this->getPrice() * $this->qty;
 				}
+
+				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+						if ($funcRef) {
+							$params = array(
+								'price' => &$price,
+								'parentPrice' => &$parentPrice,
+								'discount' => &$discount,
+							);
+
+							t3lib_div::callUserFunction($funcRef, $params, $this);
+						}
+					}
+				}
+
+				switch ($this->priceCalcMethod) {
+					case 1:
+						$price = -1 * $price;
+						break;
+					case 2:
+						$price = 0;
+						break;
+					case 3:
+						break;
+					case 4:
+						$price = 0;
+						break;
+					default:
+				}
+
+				$this->gross = $parentPrice + $price + $discount;
+
 			}
 		} else {
 			$this->calcNet();
@@ -667,6 +587,9 @@ class Variant {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcTax() {
 		if ($this->isNetPrice == FALSE) {
 			$this->calcGross();
@@ -677,6 +600,9 @@ class Variant {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcNet() {
 		if ($this->isNetPrice == TRUE) {
 			if ($this->variants) {
@@ -686,38 +612,61 @@ class Variant {
 				}
 				$this->net = $sum;
 			} else {
+				$price = $this->getPrice();
+				if ($this->getParentVariant()) {
+					$parentPrice = $this->getParentVariant()->getPrice();
+				} elseif ($this->getProduct()) {
+					$parentPrice = $this->getProduct()->getPrice();
+				} else {
+					$parentPrice = 0;
+				}
+
 				switch ($this->priceCalcMethod) {
 					case 1:
-						if ($this->getParentVariant()) {
-							$this->net = ($this->parentVariant->getPrice() - $this->price) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$this->net = ($this->getProduct()->getPrice() - $this->price) * $this->qty;
-						}
+						$discount = 0;
 						break;
 					case 2:
-						if ($this->getParentVariant()) {
-							$this->net = ($this->getParentVariant()->getPrice() - ($this->price / 100 * $this->parentVariant->getPrice())) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$this->net = ($this->getProduct()->getPrice() - ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
-						}
+						$discount = -1 * (($price / 100) * ($parentPrice));
 						break;
 					case 3:
-						if ($this->getParentVariant()) {
-							$this->net = ($this->parentVariant->getPrice() + $this->price) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$this->net = ($this->getProduct->getPrice() + $this->price) * $this->qty;
-						}
+						$discount = 0;
 						break;
 					case 4:
-						if ($this->getParentVariant()) {
-							$this->net = ($this->getParentVariant()->getPrice() + ($this->price / 100 * $this->parentVariant->getPrice())) * $this->qty;
-						} elseif ($this->getProduct()) {
-							$this->net = ($this->getProduct()->getPrice() + ($this->price / 100 * $this->getProduct()->getPrice())) * $this->qty;
-						}
+						$discount = ($price / 100) * ($parentPrice);
 						break;
 					default:
-						$this->net = $this->getPrice() * $this->qty;
 				}
+
+				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+						if ($funcRef) {
+							$params = array(
+								'price' => &$price,
+								'parentPrice' => &$parentPrice,
+								'discount' => &$discount,
+							);
+
+							t3lib_div::callUserFunction($funcRef, $params, $this);
+						}
+					}
+				}
+
+				switch ($this->priceCalcMethod) {
+					case 1:
+						$price = -1 * $price;
+						break;
+					case 2:
+						$price = 0;
+						break;
+					case 3:
+						break;
+					case 4:
+						$price = 0;
+						break;
+					default:
+				}
+
+				$this->net = $parentPrice + $price + $discount;
 			}
 		} else {
 			$this->calcGross();
