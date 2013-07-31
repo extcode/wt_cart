@@ -156,14 +156,24 @@ class Variant {
 			}
 
 			// debug the product itself
-			$out = $this->getVariantAsArray();
+			$out = $this->toArray();
 
 			t3lib_div::devLog('variant', 'wt_cart', 0, $out);
 		}
 	}
 
-	// temp function, should remove later
+	/**
+	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use toArray instead
+	 * @return array
+	 */
 	public function getVariantAsArray() {
+		return $this->toArray();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function toArray() {
 		return array(
 			'id' => $this->id,
 			'sku' => $this->sku,
@@ -266,6 +276,9 @@ class Variant {
 		}
 
 		switch ($this->priceCalcMethod) {
+			case 0:
+				$discount = 0;
+				break;
 			case 1:
 				$discount = 0;
 				break;
@@ -285,8 +298,9 @@ class Variant {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 				if ($funcRef) {
 					$params = array(
+						'price_calc_method' => $this->priceCalcMethod,
 						'price' => &$price,
-						'parentPrice' => &$parentPrice,
+						'parent_price' => &$parentPrice,
 						'discount' => &$discount,
 					);
 
@@ -296,6 +310,9 @@ class Variant {
 		}
 
 		switch ($this->priceCalcMethod) {
+			case 0:
+				$parentPrice = 0;
+				break;
 			case 1:
 				$price = -1 * $price;
 				break;
@@ -533,6 +550,9 @@ class Variant {
 				}
 
 				switch ($this->priceCalcMethod) {
+					case 0:
+						$discount = 0;
+						break;
 					case 1:
 						$discount = 0;
 						break;
@@ -552,8 +572,9 @@ class Variant {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 						if ($funcRef) {
 							$params = array(
+								'price_calc_method' => $this->priceCalcMethod,
 								'price' => &$price,
-								'parentPrice' => &$parentPrice,
+								'parent_price' => &$parentPrice,
 								'discount' => &$discount,
 							);
 
@@ -563,6 +584,9 @@ class Variant {
 				}
 
 				switch ($this->priceCalcMethod) {
+					case 0:
+						$parentPrice = 0;
+						break;
 					case 1:
 						$price = -1 * $price;
 						break;
@@ -577,7 +601,7 @@ class Variant {
 					default:
 				}
 
-				$this->gross = $parentPrice + $price + $discount;
+				$this->gross = ($parentPrice + $price + $discount) * $this->qty;
 
 			}
 		} else {
@@ -622,6 +646,9 @@ class Variant {
 				}
 
 				switch ($this->priceCalcMethod) {
+					case 0:
+						$discount = 0;
+						break;
 					case 1:
 						$discount = 0;
 						break;
@@ -641,8 +668,9 @@ class Variant {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
 						if ($funcRef) {
 							$params = array(
+								'price_calc_method' => $this->priceCalcMethod,
 								'price' => &$price,
-								'parentPrice' => &$parentPrice,
+								'parent_price' => &$parentPrice,
 								'discount' => &$discount,
 							);
 
@@ -652,6 +680,9 @@ class Variant {
 				}
 
 				switch ($this->priceCalcMethod) {
+					case 0:
+						$parentPrice = 0;
+						break;
 					case 1:
 						$price = -1 * $price;
 						break;
@@ -666,7 +697,7 @@ class Variant {
 					default:
 				}
 
-				$this->net = $parentPrice + $price + $discount;
+				$this->net = ($parentPrice + $price + $discount) * $this->qty;
 			}
 		} else {
 			$this->calcGross();
@@ -675,6 +706,9 @@ class Variant {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function reCalc() {
 		if ($this->variants) {
 			$qty = 0;
@@ -698,12 +732,36 @@ class Variant {
 		}
 	}
 
-	public function getAdditional() {
+	/**
+	 * @return array
+	 */
+	public function getAdditionalArray() {
 		return $this->additional;
 	}
 
-	public function setAdditional($additional) {
+	/**
+	 * @param $additional
+	 * @return void
+	 */
+	public function setAdditionalArray($additional) {
 		$this->additional = $additional;
+	}
+
+	/**
+	 * @param $key
+	 * @return mixed
+	 */
+	public function getAdditional($key) {
+		return $this->additional[$key];
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setAdditional($key, $value) {
+		$this->additional[$key] = $value;
 	}
 }
 

@@ -464,7 +464,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 				$newProduct->setParentId($this->gpvar['parentId']);
 
-				$newProduct->setAdditional($this->gpvar['additional']);
+				$newProduct->setAdditionalArray($this->gpvar['additional']);
 
 				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {

@@ -400,11 +400,9 @@ class tx_wtcart_div extends tslib_pibase {
 			}
 
 			if ($conf['db.']['additional.']) {
-				$additional = array();
 				foreach ($conf['db.']['additional.'] as $additionalKey => $additionalValue) {
-					$additional[$additionalKey] = $row[$additionalValue];
+					$variant->setAdditional($additionalKey, $row[$additionalValue]);
 				}
-				$variant->setAdditional($additional);
 			}
 		} else {
 			$out = array(

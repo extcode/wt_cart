@@ -106,20 +106,32 @@ class tx_wtcart_render extends tslib_pibase {
 		unset($markerArray);
 		$productArr = $product->getProductAsArray();
 
-			// enable .field in typoscript
+		foreach($productArr['additional'] as $key => $value) {
+			$productArr[$key] = $value;
+		}
+
 		$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
 
 		foreach ((array)$obj->conf['settings.']['fields.'] as $key => $value) {
 			if (!stristr($key, '.')) {
-				if ($key != 'tax') {
-					$tsKey = $obj->conf['settings.']['fields.'][$key];
-					$tsConf = $obj->conf['settings.']['fields.'][$key . '.'];
-				} else {
+				if ($key == 'tax') {
 					$tsKey = $obj->conf['settings.']['fields.']['taxclass.'][$key];
 					$tsConf = $obj->conf['settings.']['fields.']['taxclass.'][$key . '.'];
+				} elseif ($key != 'additional') {
+					$tsKey = $obj->conf['settings.']['fields.'][$key];
+					$tsConf = $obj->conf['settings.']['fields.'][$key . '.'];
 				}
 				$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
 				$markerArray['###' . strtoupper($key) . '###'] = $tsRenderedValue;
+			}
+		}
+
+		foreach ((array)$obj->conf['settings.']['fields.']['additional.'] as $key => $value) {
+			if (!stristr($key, '.')) {
+				$tsKey = $obj->conf['settings.']['fields.']['additional.'][$key];
+				$tsConf = $obj->conf['settings.']['fields.']['additional.'][$key . '.'];
+				$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
+				$markerArray['###ADDITIONAL_' . strtoupper($key) . '###'] = $tsRenderedValue;
 			}
 		}
 
@@ -146,19 +158,33 @@ class tx_wtcart_render extends tslib_pibase {
 		unset($markerArray);
 
 		$productArr = $product->getProductAsArray();
+
+		foreach($productArr['additional'] as $key => $value) {
+			$productArr[$key] = $value;
+		}
+
 		$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
 
 		foreach ((array)$obj->conf['settings.']['fields.'] as $key => $value) {
 			if (!stristr($key, '.')) {
-				if ($key != 'tax') {
-					$tsKey = $obj->conf['settings.']['fields.'][$key];
-					$tsConf = $obj->conf['settings.']['fields.'][$key . '.'];
-				} else {
+				if ($key == 'tax') {
 					$tsKey = $obj->conf['settings.']['fields.']['taxclass.'][$key];
 					$tsConf = $obj->conf['settings.']['fields.']['taxclass.'][$key . '.'];
+				} elseif ($key != 'additional') {
+					$tsKey = $obj->conf['settings.']['fields.'][$key];
+					$tsConf = $obj->conf['settings.']['fields.'][$key . '.'];
 				}
 				$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
 				$markerArray['###' . strtoupper($key) . '###'] = $tsRenderedValue;
+			}
+		}
+
+		foreach ((array)$obj->conf['settings.']['fields.']['additional.'] as $key => $value) {
+			if (!stristr($key, '.')) {
+				$tsKey = $obj->conf['settings.']['fields.']['additional.'][$key];
+				$tsConf = $obj->conf['settings.']['fields.']['additional.'][$key . '.'];
+				$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
+				$markerArray['###ADDITIONAL_' . strtoupper($key) . '###'] = $tsRenderedValue;
 			}
 		}
 
@@ -170,6 +196,13 @@ class tx_wtcart_render extends tslib_pibase {
 		return $obj->cObj->substituteMarkerArrayCached($obj->tmpl['variantitem'], NULL, $outerMarkerArray);
 	}
 
+	/**
+	 * @param $content
+	 * @param $productArr
+	 * @param $variants
+	 * @param $obj
+	 * @return void
+	 */
 	public function renderVariant(&$content, $productArr, $variants, &$obj) {
 		$productArr['variantcount'] += 1;
 		if ($variants) {
@@ -178,9 +211,9 @@ class tx_wtcart_render extends tslib_pibase {
 				$productArr['variant'][$productArr['variantcount']] = $variant->getId();
 				$productArr['variantParam'] = '[' . join('][', $productArr['variant']) . ']';
 				$productArr['qty'] = $variant->getQty();
-				$productArr['varianttitle'.$productArr['variantcount']] = $variant->getTitle();
-				$productArr['variantsku'.$productArr['variantcount']] = $variant->getSku();
-				$productArr['variantid'.$productArr['variantcount']] = $variant->getId();
+				$productArr['varianttitle' . $productArr['variantcount']] = $variant->getTitle();
+				$productArr['variantsku' . $productArr['variantcount']] = $variant->getSku();
+				$productArr['variantid' . $productArr['variantcount']] = $variant->getId();
 				$productArr['price'] = $variant->getPrice();
 				$productArr['price_calc_method'] = $variant->getPriceCalcMethod();
 				$productArr['parent_price'] = $variant->getParentPrice();
@@ -189,6 +222,14 @@ class tx_wtcart_render extends tslib_pibase {
 				$productArr['price_total_gross'] = $variant->getGross();
 				$productArr['price_total_net'] = $variant->getNet();
 				$productArr['tax'] = $variant->getTax();
+
+				$variantAdditional = $variant->getAdditionalArray();
+				if (is_array($variantAdditional)) {
+					foreach ($variantAdditional as $key => $value) {
+						$productArr[$key] = $value;
+					}
+				}
+
 				$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
 
 				if ($variant->getVariants()) {
@@ -197,19 +238,27 @@ class tx_wtcart_render extends tslib_pibase {
 					if ($obj->conf['settings.']['fields.']) {
 						foreach ((array)$obj->conf['settings.']['fields.'] as $key => $value) {
 							if (!stristr($key, '.')) {
-								if ($key != 'tax') {
-									$tsKey = $obj->conf['settings.']['fields.'][$key];
-									$tsConf = $obj->conf['settings.']['fields.'][$key . '.'];
-								} else {
+								if ($key == 'tax') {
 									$tsKey = $obj->conf['settings.']['fields.']['taxclass.'][$key];
 									$tsConf = $obj->conf['settings.']['fields.']['taxclass.'][$key . '.'];
+								} elseif ($key != 'additional') {
+									$tsKey = $obj->conf['settings.']['fields.'][$key];
+									$tsConf = $obj->conf['settings.']['fields.'][$key . '.'];
 								}
 								$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
 								$markerArray['###' . strtoupper($key) . '###'] = $tsRenderedValue;
 							}
 						}
-					}
 
+						foreach ((array)$obj->conf['settings.']['fields.']['additional.'] as $key => $value) {
+							if (!stristr($key, '.')) {
+								$tsKey = $obj->conf['settings.']['fields.']['additional.'][$key];
+								$tsConf = $obj->conf['settings.']['fields.']['additional.'][$key . '.'];
+								$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
+								$markerArray['###ADDITIONAL_' . strtoupper($key) . '###'] = $tsRenderedValue;
+							}
+						}
+					}
 
 					$content .= $obj->cObj->substituteMarkerArrayCached($obj->tmpl['variantitemvariant'], NULL, $markerArray);
 				}

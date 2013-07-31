@@ -531,8 +531,18 @@ class Product {
 		$this->serviceAttribute3 = floatval($serviceAttribute3);
 	}
 
-	// temp function, should remove later
+	/**
+	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use toArray instead
+	 * @return array
+	 */
 	public function getProductAsArray() {
+		return $this->toArray();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function toArray() {
 		return array(
 			'puid' => $this->puid,
 			'parentTable' => $this->parentTable,
@@ -564,7 +574,7 @@ class Product {
 			}
 
 			// debug the product itself
-			$out = $this->getProductAsArray();
+			$out = $this->toArray();
 
 			t3lib_div::devLog('product', 'wt_cart', 0, $out);
 		}
@@ -631,12 +641,36 @@ class Product {
 		$this->calcNet();
 	}
 
-	public function getAdditional() {
+	/**
+	 * @return array
+	 */
+	public function getAdditionalArray() {
 		return $this->additional;
 	}
 
-	public function setAdditional($additional) {
+	/**
+	 * @param $additional
+	 * @return void
+	 */
+	public function setAdditionalArray($additional) {
 		$this->additional = $additional;
+	}
+
+	/**
+	 * @param $key
+	 * @return mixed
+	 */
+	public function getAdditional($key) {
+		return $this->additional[$key];
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setAdditional($key, $value) {
+		$this->additional[$key] = $value;
 	}
 }
 
