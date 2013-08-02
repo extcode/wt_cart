@@ -432,19 +432,19 @@ class Cart {
 	}
 
 	/**
-	 * @param $puid
+	 * @param $id
 	 * @return Product
 	 */
-	public function getProductById($puid) {
-		return $this->products[$puid];
+	public function getProductById($id) {
+		return $this->products[$id];
 	}
 
 	/**
-	 * @param $puid
+	 * @param $id
 	 * @return Product
 	 */
-	public function getProduct($puid) {
-		return $this->getProductById($puid);
+	public function getProduct($id) {
+		return $this->getProductById($id);
 	}
 
 	/**
@@ -494,12 +494,13 @@ class Cart {
 	}
 
 	/**
-	 * @param Product $newproduct
+	 * @param Product $newProduct
+	 * @internal param \Product $newproduct
 	 * @return mixed
 	 */
 	public function addProduct(Product $newProduct) {
-		$newProductPuid = intval($newProduct->getPuid());
-		$product = $this->products[$newProductPuid];
+		$newProductTidPid = $newProduct->getTidPid();
+		$product = $this->products[$newProductTidPid];
 
 		if ($product) {
 			// change $newproduct in cart
@@ -509,7 +510,7 @@ class Cart {
 			// $newproduct is not in cart
 			$newProduct->checkMin();
 			$newProduct->checkMax();
-			$this->products[$newProductPuid] = $newProduct;
+			$this->products[$newProductTidPid] = $newProduct;
 			$this->calcAll();
 
 			$this->addServiceAttributes($newProduct);

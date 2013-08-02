@@ -104,7 +104,7 @@ class tx_wtcart_render extends tslib_pibase {
 	public function renderProductItem(&$product, &$obj) {
 			// clear marker array to avoid problems with error msg etc.
 		unset($markerArray);
-		$productArr = $product->getProductAsArray();
+		$productArr = $product->toArray();
 
 		foreach($productArr['additional'] as $key => $value) {
 			$productArr[$key] = $value;
@@ -145,6 +145,20 @@ class tx_wtcart_render extends tslib_pibase {
 				$markerArray['###ERROR_MSG###'] .= sprintf($this->pi_getLL('wt_cart_ll_error_max'), $product->getMax());
 				break;
 		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItem']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItem'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'markerArray' => &$markerArray,
+						'product' => &$product
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
 		return $obj->cObj->substituteMarkerArrayCached($obj->tmpl['item'], $markerArray);
 	}
 
@@ -157,7 +171,7 @@ class tx_wtcart_render extends tslib_pibase {
 			// clear marker array to avoid problems with error msg etc.
 		unset($markerArray);
 
-		$productArr = $product->getProductAsArray();
+		$productArr = $product->toArray();
 
 		foreach($productArr['additional'] as $key => $value) {
 			$productArr[$key] = $value;
@@ -185,6 +199,19 @@ class tx_wtcart_render extends tslib_pibase {
 				$tsConf = $obj->conf['settings.']['fields.']['additional.'][$key . '.'];
 				$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
 				$markerArray['###ADDITIONAL_' . strtoupper($key) . '###'] = $tsRenderedValue;
+			}
+		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItemWithVariants']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItemWithVariants'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'markerArray' => &$markerArray,
+						'product' => &$product
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
 			}
 		}
 
@@ -256,6 +283,19 @@ class tx_wtcart_render extends tslib_pibase {
 								$tsConf = $obj->conf['settings.']['fields.']['additional.'][$key . '.'];
 								$tsRenderedValue = $GLOBALS['TSFE']->cObj->cObjGetSingle($tsKey, $tsConf);
 								$markerArray['###ADDITIONAL_' . strtoupper($key) . '###'] = $tsRenderedValue;
+							}
+						}
+					}
+
+					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderVariant']) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderVariant'] as $funcRef) {
+							if ($funcRef) {
+								$params = array(
+									'markerArray' => &$markerArray,
+									'variant' => &$variant
+								);
+
+								t3lib_div::callUserFunction($funcRef, $params, $this);
 							}
 						}
 					}

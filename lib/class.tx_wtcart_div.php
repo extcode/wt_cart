@@ -536,7 +536,7 @@ class tx_wtcart_div extends tslib_pibase {
 		$strMarker = NULL;
 			// get all variant key/value pairs from the current product
 		$array_add_gpvar = $this->get_variant_from_product($product, $pObj);
-		$array_add_gpvar['puid']  = $product->getPuid();
+		$array_add_gpvar['puid']  = $product->getTidPid();
 			// generate the marker array
 		foreach ((array) $array_add_gpvar as $key => $value) {
 			$strMarker = $strMarker . '[' . $key . '=' . $value . ']';

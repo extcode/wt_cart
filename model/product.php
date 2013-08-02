@@ -38,11 +38,11 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/variant.php');
  */
 class Product {
 	/**
-	 * $puid = Product identifier defines the unique identifier each product have
+	 * $id = Product identifier defines the unique identifier each product have
 	 *
 	 * @var integer
 	 */
-	private $puid;
+	private $id;
 
 	/**
 	 * $parentTable = parent object association table name defines an association a
@@ -156,7 +156,7 @@ class Product {
 	/**
 	 * __construct
 	 *
-	 * @param $puid
+	 * @param $id
 	 * @param int $tid
 	 * @param int $cid
 	 * @param $sku
@@ -168,8 +168,8 @@ class Product {
 	 * @internal param $boolean
 	 * @return \Product
 	 */
-	public function __construct($puid, $tid = 0, $cid = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
-		$this->puid = $puid;
+	public function __construct($id, $tid = 0, $cid = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
+		$this->id = $id;
 		$this->tid = $tid;
 		$this->cid = $cid;
 		$this->sku = $sku;
@@ -355,50 +355,96 @@ class Product {
 		$this->reCalc();
 	}
 
+	/**
+	 * @return int
+	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use Pid instead
+	 */
 	public function getPuid() {
-		return $this->puid;
+		return $this->getId();
 	}
 
-	public function getProductId() {
-		return $this->puid;
+	/**
+	 * @return int
+	 */
+	public function getId() {
+		return $this->id;
 	}
 
-	public function getParentTable() {
-		return $this->parentTable;
-	}
-
-	public function setParentTable($parentTable) {
-		$this->parentTable = $parentTable;
-	}
-
-	public function getParentId() {
-		return $this->parentId;
-	}
-
-	public function setParentId($parentId) {
-		$this->parentId = $parentId;
-	}
-
+	/**
+	 * @return int
+	 */
 	public function getTid() {
 		return $this->tid;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getTidPid() {
+		return join('_', array($this->tid, $this->id));
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getParentTable() {
+		return $this->parentTable;
+	}
+
+	/**
+	 * @param $parentTable
+	 * @return void
+	 */
+	public function setParentTable($parentTable) {
+		$this->parentTable = $parentTable;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getParentId() {
+		return $this->parentId;
+	}
+
+	/**
+	 * @param $parentId
+	 * @return void
+	 */
+	public function setParentId($parentId) {
+		$this->parentId = $parentId;
+	}
+
+	/**
+	 * @return int
+	 */
 	public function getCid() {
 		return $this->cid;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getPrice() {
 		return $this->price;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getPriceTax() {
 		return ($this->price / (1 + $this->taxClass->getCalc())) * ($this->taxClass->getCalc());
 	}
 
+	/**
+	 * @return Tax
+	 */
 	public function getTaxClass() {
 		return $this->taxClass;
 	}
 
+	/**
+	 * @param $newQty
+	 */
 	public function changeQty($newQty) {
 		if (($this->min > $newQty) && ($this->min > 0)) {
 			$newQty = $this->min;
@@ -414,41 +460,70 @@ class Product {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getQty() {
 		return $this->qty;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getGross() {
 		$this->calcGross();
 		return $this->gross;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getNet() {
 		$this->calcNet();
 		return $this->net;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getTax() {
 		$this->calcTax();
 		return array('taxclassid' => $this->taxClass->getId(), 'tax' => $this->tax);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getMin() {
 		return $this->min;
 	}
 
+	/**
+	 * @param $min
+	 * @return void
+	 */
 	public function setMin($min) {
 		$this->min = $min;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getMax() {
 		return $this->max;
 	}
 
+	/**
+	 * @param $max
+	 * @return void
+	 */
 	public function setMax($max) {
 		$this->max = $max;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function checkMin() {
 		if (($this->min > 0) && ($this->min > $this->qty)) {
 			$this->qty = $this->min;
@@ -467,6 +542,9 @@ class Product {
 		return TRUE;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function checkMax() {
 		if (($this->max > 0) && ($this->max < $this->qty)) {
 			$this->qty = $this->max;
@@ -485,6 +563,9 @@ class Product {
 		return TRUE;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getError() {
 		return $this->error;
 	}
@@ -544,7 +625,7 @@ class Product {
 	 */
 	public function toArray() {
 		return array(
-			'puid' => $this->puid,
+			'puid' => $this->id,
 			'parentTable' => $this->parentTable,
 			'parentId' => $this->parentId,
 			'tid' => $this->tid,
@@ -564,22 +645,26 @@ class Product {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function debug() {
 		if (TYPO3_DLOG) {
-			//debug all variants
 			if ($this->variants) {
 				foreach ($this->variants as $variant) {
 					$variant->debug();
 				}
 			}
 
-			// debug the product itself
 			$out = $this->toArray();
 
 			t3lib_div::devLog('product', 'wt_cart', 0, $out);
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcGross() {
 		if ($this->isNetPrice == FALSE) {
 			if ($this->variants) {
@@ -598,6 +683,9 @@ class Product {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcTax() {
 		if ($this->isNetPrice == FALSE) {
 			$this->tax = ($this->gross / (1 + $this->taxClass->getCalc())) * ($this->taxClass->getCalc());
@@ -606,6 +694,9 @@ class Product {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcNet() {
 		if ($this->isNetPrice == TRUE) {
 			if ($this->variants) {
@@ -624,6 +715,9 @@ class Product {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function reCalc() {
 		if ($this->variants) {
 			$qty = 0;
