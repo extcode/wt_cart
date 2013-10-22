@@ -334,6 +334,14 @@ class Product {
 		$this->reCalc();
 	}
 
+	/**
+	 * @param $variantId
+	 * @return array
+	 */
+	public function removeVariant($variantId) {
+		$this->removeVariantById($variantId);
+	}
+
 	private function isInRange($newQty) {
 		if (($this->min > $newQty) && ($this->min > 0)) {
 			return FALSE;

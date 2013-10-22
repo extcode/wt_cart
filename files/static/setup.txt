@@ -765,10 +765,14 @@ plugin.tx_wtcart_pi1 {
       }
     }
 
+    additional {
+    }
+
     # for the userFunc
     powermailCart {
       fields < plugin.tx_wtcart_pi1.settings.fields
       overall < plugin.tx_wtcart_pi1.settings.overall
+      additional < plugin.tx_wtcart_pi1.settings.additional
 
       overall {
         payment_note = TEXT

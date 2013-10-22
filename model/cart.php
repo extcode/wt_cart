@@ -121,6 +121,11 @@ class Cart {
 	private $orderNumber;
 
 	/**
+	 * @var array Additional
+	 */
+	private $additional;
+
+	/**
 	 * __construct
 	 *
 	 * @var boolean
@@ -160,7 +165,8 @@ class Cart {
 			'sumServiceAttr2',
 			'sumServiceAttr3',
 			'isNetCart',
-			'orderNumber'
+			'orderNumber',
+			'additional'
 		);
 	}
 
@@ -170,6 +176,7 @@ class Cart {
 
 	/**
 	 * @param boolean
+	 * @return void
 	 */
 	public function setIsNetCart($isNetCart) {
 		$this->isNetCart = $isNetCart;
@@ -184,6 +191,7 @@ class Cart {
 
 	/**
 	 * @param integer
+	 * @return void
 	 */
 	public function setOrderNumber($orderNumber) {
 		$this->orderNumber = $orderNumber;
@@ -198,6 +206,7 @@ class Cart {
 
 	/**
 	 * @param $net
+	 * @return void
 	 */
 	public function addNet($net) {
 		$this->net += $net;
@@ -212,6 +221,7 @@ class Cart {
 
 	/**
 	 * @param $net
+	 * @return void
 	 */
 	public function setNet($net) {
 		$this->net = $net;
@@ -219,6 +229,7 @@ class Cart {
 
 	/**
 	 * @param $net
+	 * @return void
 	 */
 	public function subNet($net) {
 		$this->net -= $net;
@@ -226,6 +237,7 @@ class Cart {
 
 	/**
 	 * @param $gross
+	 * @return void
 	 */
 	public function addGross($gross) {
 		$this->gross += $gross;
@@ -240,6 +252,7 @@ class Cart {
 
 	/**
 	 * @param $gross
+	 * @return void
 	 */
 	public function setGross($gross) {
 		$this->gross = $gross;
@@ -247,6 +260,7 @@ class Cart {
 
 	/**
 	 * @param $gross
+	 * @return void
 	 */
 	public function subGross($gross) {
 		$this->gross -= $gross;
@@ -254,6 +268,7 @@ class Cart {
 
 	/**
 	 * @param $tax
+	 * @return void
 	 */
 	public function addTax($tax) {
 		$this->taxes[$tax['taxclassid']] += $tax['tax'];
@@ -293,6 +308,7 @@ class Cart {
 	/**
 	 * @param $taxclass
 	 * @param $tax
+	 * @return void
 	 */
 	public function setTax($taxclass, $tax) {
 		$this->taxes[$taxclass] = $tax;
@@ -300,6 +316,7 @@ class Cart {
 
 	/**
 	 * @param $tax
+	 * @return void
 	 */
 	public function subTax($tax) {
 		$this->taxes[$tax['taxclassid']] -= $tax['tax'];
@@ -307,6 +324,7 @@ class Cart {
 
 	/**
 	 * @param $count
+	 * @return void
 	 */
 	public function addCount($count) {
 		$this->count += $count;
@@ -321,6 +339,7 @@ class Cart {
 
 	/**
 	 * @param $count
+	 * @return void
 	 */
 	public function setCount($count) {
 		$this->count = $count;
@@ -328,6 +347,7 @@ class Cart {
 
 	/**
 	 * @param $count
+	 * @return void
 	 */
 	public function subCount($count) {
 		$this->count -= $count;
@@ -342,6 +362,7 @@ class Cart {
 
 	/**
 	 * @param $shipping
+	 * @return void
 	 */
 	public function setShipping($shipping) {
 		$this->shipping = $shipping;
@@ -356,6 +377,7 @@ class Cart {
 
 	/**
 	 * @param $payment
+	 * @return void
 	 */
 	public function setPayment($payment) {
 		$this->payment = $payment;
@@ -370,6 +392,7 @@ class Cart {
 
 	/**
 	 * @param $newspecial
+	 * @return void
 	 */
 	public function addSpecial($newspecial) {
 		$this->specials[$newspecial->getId()] = $newspecial;
@@ -377,6 +400,7 @@ class Cart {
 
 	/**
 	 * @param $special
+	 * @return void
 	 */
 	public function removeSpecial($special) {
 		unset($this->specials[$special->getId()]);
@@ -448,7 +472,7 @@ class Cart {
 	}
 
 	/**
-	 *
+	 * @return void
 	 */
 	public function debug() {
 		if (TYPO3_DLOG) {
@@ -487,6 +511,7 @@ class Cart {
 				'payment' => $paymentName,
 				'shipping' => $shippingName,
 				'specials' => $specials,
+				'additional' => $this->additional
 			);
 
 			t3lib_div::devLog('cart', 'wt_cart', 0, $out);
@@ -496,7 +521,7 @@ class Cart {
 	/**
 	 * @param Product $newProduct
 	 * @internal param \Product $newproduct
-	 * @return mixed
+	 * @return void
 	 */
 	public function addProduct(Product $newProduct) {
 		$newProductTidPid = $newProduct->getTidPid();
@@ -522,6 +547,7 @@ class Cart {
 	 * @param $newProduct
 	 * @internal param $id
 	 * @internal param $newQty
+	 * @return void
 	 */
 	public function changeProduct($product, $newProduct) {
 		$newQty = $product->getQty() + $newProduct->getQty();
@@ -549,8 +575,10 @@ class Cart {
 	}
 
 	/**
-	 * @param $id
-	 * @param $newQty
+	 * @param $productQtyArray
+	 * @internal param $id
+	 * @internal param $newQty
+	 * @return void
 	 */
 	public function changeProductsQty($productQtyArray) {
 		foreach ($productQtyArray as $productPuid => $qty) {
@@ -627,11 +655,12 @@ class Cart {
 		return TRUE;
 	}
 
-	/*
-	* recalculates the service attributes when an products was added to cart
-	*
-	* params: Product $newproduct
-	*/
+	/**
+	 * recalculates the service attributes when an products was added to cart
+	 *
+	 * @param $newproduct
+	 * @return void
+	 */
 	private function addServiceAttributes($newproduct) {
 		$this->maxServiceAttr1 =
 				$this->maxServiceAttr1 > $newproduct->getServiceAttribute1() ? $this->maxServiceAttr1 : $newproduct->getServiceAttribute1();
@@ -645,11 +674,11 @@ class Cart {
 		$this->sumServiceAttr3 += $newproduct->getServiceAttribute3() * $newproduct->getQty;
 	}
 
-	/*
-	* recalculates the service attributes for all products in cart
-	*
-	* params:
-	*/
+	/**
+	 * recalculates the service attributes for all products in cart
+	 *
+	 * @return void
+	 */
 	private function updateServiceAttributes() {
 		$this->maxServiceAttr1 = 0.0;
 		$this->maxServiceAttr2 = 0.0;
@@ -714,19 +743,33 @@ class Cart {
 		return $this->sumServiceAttr3;
 	}
 
+	/**
+	 * @param $shipping
+	 * @return void
+	 */
 	public function changeShipping($shipping) {
 		$this->shipping = $shipping;
 	}
 
+	/**
+	 * @param $payment
+	 * @return void
+	 */
 	public function changePayment($payment) {
 		$this->payment = $payment;
 	}
 
+	/**
+	 * @param $special
+	 * @return void
+	 */
 	public function changeSpecial($special) {
 		$this->special = $special;
 	}
 
-		// private functions
+	/**
+	 * @return void
+	 */
 	private function calcAll() {
 		$this->calcCount();
 		$this->calcGross();
@@ -734,6 +777,9 @@ class Cart {
 		$this->calcNet();
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcCount() {
 		$this->count = 0;
 		if ($this->products) {
@@ -743,6 +789,9 @@ class Cart {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcGross() {
 		$this->gross = 0.0;
 		if ($this->products) {
@@ -752,6 +801,9 @@ class Cart {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcNet() {
 		$this->net = 0.0;
 		if ($this->products) {
@@ -761,12 +813,73 @@ class Cart {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function calcTax() {
 		$this->taxes = array();
 		if ($this->products) {
 			foreach ($this->products as $product) {
 				$this->addTax($product->getTax());
 			}
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function reCalc() {
+		$this->calcGross();
+		$this->calcNet();
+		$this->calcTax();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAdditionalArray() {
+		return $this->additional;
+	}
+
+	/**
+	 * @param $additional
+	 * @return void
+	 */
+	public function setAdditionalArray($additional) {
+		$this->additional = $additional;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function unsetAdditionalArray() {
+		$this->additional = array();
+	}
+
+	/**
+	 * @param $key
+	 * @return mixed
+	 */
+	public function getAdditional($key) {
+		return $this->additional[$key];
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setAdditional($key, $value) {
+		$this->additional[$key] = $value;
+	}
+
+	/**
+	 * @param string $key
+	 * @return void
+	 */
+	public function unsetAdditional($key) {
+		if ($this->additional[$key]) {
+			unset($this->additional[$key]);
 		}
 	}
 }

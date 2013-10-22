@@ -98,6 +98,13 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$GLOBALS['TSFE']->storeSessionData();
 		}
 
+		$back_pid = t3lib_div::_POST("tx_wtcartevent_back_pid");
+
+		if (intval($back_pid)) {
+			$params = array('back_pid' => intval($back_pid));
+			$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $this->conf['main.']['pid'], $params);
+		}
+
 			// read cart from session
 		$session = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $this->conf['main.']['pid']);
 		if ($session) {
@@ -157,7 +164,33 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 			// remove product from session
 		if (isset($this->piVars['del'])) {
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartBeforeDeleteProduct']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartBeforeDeleteProduct'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'cart' => &$cart,
+							'del' => $this->piVars['del']
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
+
 			$cart->removeProducts($this->piVars['del']);
+
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterDeleteProduct']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterDeleteProduct'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'cart' => &$cart,
+							'del' => $this->piVars['del']
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
 		}
 
 		if (isset($this->piVars['update_from_cart'])) {
@@ -278,6 +311,10 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$this->render->renderServiceList($cart, $specials, $cart->getSpecials(), $this);
 
 			$this->render->renderClearCartLink($this);
+
+			$this->render->renderBackPageLink($this);
+
+			$this->render->renderAdditional($cart, $this);
 		} else {
 			$this->render->renderEmptyCart($this);
 		}

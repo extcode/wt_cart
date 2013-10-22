@@ -221,7 +221,9 @@ class tx_wtcart_div extends tslib_pibase {
 
 		if ($pObj->conf['db.']['additional.']) {
 			foreach ($pObj->conf['db.']['additional.'] as $additional) {
-				$select .= ', ' . $table . '.' . $additional;
+				if ($additional['field']) {
+					$select .= ', ' . $table . '.' . $additional['field'];
+				}
 			}
 		}
 
@@ -286,7 +288,11 @@ class tx_wtcart_div extends tslib_pibase {
 			if ($pObj->conf['db.']['additional.']) {
 				$gpvar['additional'] = array();
 				foreach ($pObj->conf['db.']['additional.'] as $additionalKey => $additionalValue) {
-					$gpvar['additional'][$additionalKey] = $row[$additionalValue];
+					if ($additionalValue['field']) {
+						$gpvar['additional'][rtrim($additionalKey, '.')] = $row[$additionalValue['field']];
+					} elseif ($additionalValue['value']) {
+						$gpvar['additional'][rtrim($additionalKey, '.')] = $additionalValue['value'];
+					}
 				}
 			}
 		} else {
@@ -336,7 +342,9 @@ class tx_wtcart_div extends tslib_pibase {
 
 		if ($conf['db.']['additional.']) {
 			foreach ($conf['db.']['additional.'] as $additional) {
-				$select .= ', ' . $table . '.' . $additional;
+				if ($additional['field']) {
+					$select .= ', ' . $table . '.' . $additional['field'];
+				}
 			}
 		}
 
@@ -401,7 +409,11 @@ class tx_wtcart_div extends tslib_pibase {
 
 			if ($conf['db.']['additional.']) {
 				foreach ($conf['db.']['additional.'] as $additionalKey => $additionalValue) {
-					$variant->setAdditional($additionalKey, $row[$additionalValue]);
+					if ($additionalValue['field']) {
+						$variant->setAdditional(rtrim($additionalKey, '.'),  $row[$additionalValue['field']]);
+					} elseif ($additionalValue['value']) {
+						$variant->setAdditional(rtrim($additionalKey, '.'),  $additionalValue['value']);
+					}
 				}
 			}
 		} else {

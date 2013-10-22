@@ -68,6 +68,9 @@ class tx_wtcart_render extends tslib_pibase {
 		$obj->tmpl['special_condition_all'] = $obj->cObj->getSubpart($obj->cObj->fileResource($obj->conf['main.']['template']), '###WTCART_SPECIAL_CONDITIONS###');
 		$obj->tmpl['special_condition_item'] = $obj->cObj->getSubpart($obj->tmpl['special_condition_all'], '###ITEM###');
 
+		$obj->tmpl['additional_all'] = $obj->cObj->getSubpart($obj->cObj->fileResource($obj->conf['main.']['template']), '###WTCART_ADDITIONAL###');
+		$obj->tmpl['additional_item'] = $obj->cObj->getSubpart($obj->tmpl['additional_all'], '###ITEM###');
+
 		return NULL;
 	}
 
@@ -104,10 +107,25 @@ class tx_wtcart_render extends tslib_pibase {
 	public function renderProductItem(&$product, &$obj) {
 			// clear marker array to avoid problems with error msg etc.
 		unset($markerArray);
+		unset($productArr);
+
 		$productArr = $product->toArray();
 
 		foreach($productArr['additional'] as $key => $value) {
 			$productArr[$key] = $value;
+		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderProductItem']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderProductItem'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'productArr' => &$productArr,
+						'product' => &$product
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
 		}
 
 		$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
@@ -146,8 +164,8 @@ class tx_wtcart_render extends tslib_pibase {
 				break;
 		}
 
-		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItem']) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItem'] as $funcRef) {
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderProductItem']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderProductItem'] as $funcRef) {
 				if ($funcRef) {
 					$params = array(
 						'markerArray' => &$markerArray,
@@ -170,11 +188,25 @@ class tx_wtcart_render extends tslib_pibase {
 	public function renderProductItemWithVariants(&$product, &$obj) {
 			// clear marker array to avoid problems with error msg etc.
 		unset($markerArray);
+		unset($productArr);
 
 		$productArr = $product->toArray();
 
 		foreach($productArr['additional'] as $key => $value) {
 			$productArr[$key] = $value;
+		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderProductItemWithVariants']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderProductItemWithVariants'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'productArr' => &$productArr,
+						'product' => &$product
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
 		}
 
 		$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
@@ -202,12 +234,15 @@ class tx_wtcart_render extends tslib_pibase {
 			}
 		}
 
-		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItemWithVariants']) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderProductItemWithVariants'] as $funcRef) {
+		$isToBeDisplayed  = TRUE;
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderProductItemWithVariants']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderProductItemWithVariants'] as $funcRef) {
 				if ($funcRef) {
 					$params = array(
 						'markerArray' => &$markerArray,
-						'product' => &$product
+						'product' => &$product,
+						'isToBeDisplayed' => &$isToBeDisplayed
 					);
 
 					t3lib_div::callUserFunction($funcRef, $params, $this);
@@ -215,8 +250,11 @@ class tx_wtcart_render extends tslib_pibase {
 			}
 		}
 
-		$outerMarkerArray['###VARIANTITEMALL###'] = $obj->cObj->substituteMarkerArrayCached($obj->tmpl['variantitemall'], NULL, $markerArray);
-
+		if ($isToBeDisplayed) {
+			$outerMarkerArray['###VARIANTITEMALL###'] = $obj->cObj->substituteMarkerArrayCached($obj->tmpl['variantitemall'], NULL, $markerArray);
+		} else {
+			$outerMarkerArray['###VARIANTITEMALL###'] = '';
+		}
 		$productArr['variantcount'] = 0;
 		$this->renderVariant($outerMarkerArray['###VARIANTITEMVARIANT###'], $productArr, $product->getVariants(), $obj);
 
@@ -230,37 +268,50 @@ class tx_wtcart_render extends tslib_pibase {
 	 * @param $obj
 	 * @return void
 	 */
-	public function renderVariant(&$content, $productArr, $variants, &$obj) {
-		$productArr['variantcount'] += 1;
+	public function renderVariant(&$content, $variantArr, $variants, &$obj) {
+		$variantArr['variantcount'] += 1;
 		if ($variants) {
 			foreach ($variants as $variant) {
 					// enable .field in typoscript
-				$productArr['variant'][$productArr['variantcount']] = $variant->getId();
-				$productArr['variantParam'] = '[' . join('][', $productArr['variant']) . ']';
-				$productArr['qty'] = $variant->getQty();
-				$productArr['varianttitle' . $productArr['variantcount']] = $variant->getTitle();
-				$productArr['variantsku' . $productArr['variantcount']] = $variant->getSku();
-				$productArr['variantid' . $productArr['variantcount']] = $variant->getId();
-				$productArr['price'] = $variant->getPrice();
-				$productArr['price_calc_method'] = $variant->getPriceCalcMethod();
-				$productArr['parent_price'] = $variant->getParentPrice();
-				$productArr['calculated_price'] = $variant->getPriceCalculated();
-				$productArr['price_total'] = $variant->getGross();
-				$productArr['price_total_gross'] = $variant->getGross();
-				$productArr['price_total_net'] = $variant->getNet();
-				$productArr['tax'] = $variant->getTax();
+				$variantArr['variant'][$variantArr['variantcount']] = $variant->getId();
+				$variantArr['variantParam'] = '[' . join('][', $variantArr['variant']) . ']';
+				$variantArr['qty'] = $variant->getQty();
+				$variantArr['varianttitle' . $variantArr['variantcount']] = $variant->getTitle();
+				$variantArr['variantsku' . $variantArr['variantcount']] = $variant->getSku();
+				$variantArr['variantid' . $variantArr['variantcount']] = $variant->getId();
+				$variantArr['price'] = $variant->getPrice();
+				$variantArr['price_calc_method'] = $variant->getPriceCalcMethod();
+				$variantArr['parent_price'] = $variant->getParentPrice();
+				$variantArr['calculated_price'] = $variant->getPriceCalculated();
+				$variantArr['price_total'] = $variant->getGross();
+				$variantArr['price_total_gross'] = $variant->getGross();
+				$variantArr['price_total_net'] = $variant->getNet();
+				$variantArr['tax'] = $variant->getTax();
 
 				$variantAdditional = $variant->getAdditionalArray();
 				if (is_array($variantAdditional)) {
 					foreach ($variantAdditional as $key => $value) {
-						$productArr[$key] = $value;
+						$variantArr[$key] = $value;
 					}
 				}
 
-				$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
+				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderVariant']) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderVariant'] as $funcRef) {
+						if ($funcRef) {
+							$params = array(
+								'variantArr' => &$variantArr,
+								'variant' => &$variant
+							);
+
+							t3lib_div::callUserFunction($funcRef, $params, $this);
+						}
+					}
+				}
+
+				$GLOBALS['TSFE']->cObj->start($variantArr, $obj->conf['db.']['table']);
 
 				if ($variant->getVariants()) {
-					$this->renderVariant($content, $productArr, $variant->getVariants(), $obj);
+					$this->renderVariant($content, $variantArr, $variant->getVariants(), $obj);
 				} else {
 					if ($obj->conf['settings.']['fields.']) {
 						foreach ((array)$obj->conf['settings.']['fields.'] as $key => $value) {
@@ -287,8 +338,8 @@ class tx_wtcart_render extends tslib_pibase {
 						}
 					}
 
-					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderVariant']) {
-						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerBeforeRenderVariant'] as $funcRef) {
+					if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderVariant']) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderVariant'] as $funcRef) {
 							if ($funcRef) {
 								$params = array(
 									'markerArray' => &$markerArray,
@@ -301,7 +352,16 @@ class tx_wtcart_render extends tslib_pibase {
 					}
 
 					$content .= $obj->cObj->substituteMarkerArrayCached($obj->tmpl['variantitemvariant'], NULL, $markerArray);
+
+					if (is_array($variantAdditional)) {
+						foreach ($variantAdditional as $key => $value) {
+							unset($variantArr[$key]);
+						}
+					}
+
 				}
+
+				unset($variantArr['hint1']);
 			}
 		}
 	}
@@ -531,6 +591,47 @@ class tx_wtcart_render extends tslib_pibase {
 		}
 
 		return NULL;
+	}
+
+	/**
+	 * @param $cart
+	 * @param $obj
+	 * @return void
+	 */
+	public function renderAdditional(&$cart, &$obj) {
+		$additional['###CONTENT###'] = '';
+
+		$cartArr = array();
+
+		foreach($cart->getAdditionalArray() as $additional_key => $additional_val) {
+			$cartArr[$additional_key] = $additional_val;
+		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderCartAdditional']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderCartAdditional'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'cartArr' => &$cartArr,
+						'cart' => &$cart
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
+		$GLOBALS['TSFE']->cObj->start($cartArr, $obj->conf['db.']['table']);
+
+		foreach ($cart->getAdditionalArray() as $additional_key => $additional_val) {
+			$obj->markerArray['###ADDITIONAL_TITLE###'] = $GLOBALS['TSFE']->cObj->cObjGetSingle($obj->conf['settings.']['additional.'][$additional_key], $obj->conf['settings.']['additional.'][$additional_key . '.']);
+			$additional['###CONTENT###'] .= $obj->cObj->substituteMarkerArrayCached($obj->tmpl['additional_item'], $obj->markerArray);
+		}
+
+		if ($additional['###CONTENT###']) {
+			$obj->outerMarkerArray['###ADDITIONAL_LIST###'] = $obj->cObj->substituteMarkerArrayCached($obj->tmpl['additional_all'], NULL, $additional);
+		} else {
+			$obj->outerMarkerArray['###ADDITIONAL_LIST###'] = '';
+		}
 	}
 
 	/**

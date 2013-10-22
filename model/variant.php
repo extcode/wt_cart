@@ -498,6 +498,22 @@ class Variant {
 	}
 
 	/**
+	 * @param $variantId
+	 * @return Variant
+	 */
+	public function getVariantById($variantId) {
+		return $this->variants[$variantId];
+	}
+
+	/**
+	 * @param $variantId
+	 * @return Variant
+	 */
+	public function getVariant($variantId) {
+		return $this->getVariantById($variantId);
+	}
+
+	/**
 	 * @param $variantsArray
 	 * @internal param $productPuid
 	 * @internal param null $variantId

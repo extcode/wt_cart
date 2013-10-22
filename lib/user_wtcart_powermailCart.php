@@ -62,12 +62,13 @@ class user_wtcart_powermailCart extends tslib_pibase {
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 		$this->conf = array_merge((array) $this->conf, (array) $conf);
 
-
 		$this->tmpl['all'] = $this->cObj->getSubpart($this->cObj->fileResource($this->conf['main.']['template']), '###WTCART_POWERMAIL###');
 		$this->tmpl['item'] = $this->cObj->getSubpart($this->tmpl['all'], '###ITEM###');
 		$this->tmpl['variantitem'] = $this->cObj->getSubpart($this->tmpl['all'], '###VARIANTITEM###');
 		$this->tmpl['variantitemall'] = $this->cObj->getSubpart($this->tmpl['variantitem'], '###VARIANTITEMALL###');
 		$this->tmpl['variantitemvariant'] = $this->cObj->getSubpart($this->tmpl['variantitem'], '###VARIANTITEMVARIANT###');
+		$this->tmpl['additional_all'] = $this->cObj->getSubpart($this->cObj->fileResource($this->conf['main.']['template']), '###WTCART_ADDITIONAL###');
+		$this->tmpl['additional_item'] = $this->cObj->getSubpart($this->tmpl['additional_all'], '###ITEM###');
 
 		$this->div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
 		$this->render = t3lib_div::makeInstance('tx_wtcart_render'); // Create new instance for render functions
@@ -87,6 +88,8 @@ class user_wtcart_powermailCart extends tslib_pibase {
 			$this->render->renderServiceItem($cart, $cart->getPayment(), $this);
 
 			$this->render->renderServiceItem($cart, $cart->getSpecials(), $this);
+
+			$this->render->renderAdditional($cart, $this);
 
 			$outerArr = array(
 				'ordernumber' => $cart->getOrderNumber()
