@@ -584,32 +584,34 @@ class Cart {
 		foreach ($productQtyArray as $productPuid => $qty) {
 			$product = $this->products[$productPuid];
 
-			if (is_array($qty)) {
-				$this->subCount($product->getQty());
-				$this->subGross($product->getGross());
-				$this->subNet($product->getNet());
-				$this->subTax($product->getTax());
-
-				$product->changeVariantsQty($qty);
-
-				$this->addCount($product->getQty());
-				$this->addGross($product->getGross());
-				$this->addNet($product->getNet());
-				$this->addTax($product->getTax());
-			} else {
-					// only run, if qty was realy changed
-				if ($product->getQty() != $qty) {
+			if ($product) {
+				if (is_array($qty)) {
 					$this->subCount($product->getQty());
 					$this->subGross($product->getGross());
 					$this->subNet($product->getNet());
 					$this->subTax($product->getTax());
 
-					$product->changeQty($qty);
+					$product->changeVariantsQty($qty);
 
 					$this->addCount($product->getQty());
 					$this->addGross($product->getGross());
 					$this->addNet($product->getNet());
 					$this->addTax($product->getTax());
+				} else {
+						// only run, if qty was realy changed
+					if ($product->getQty() != $qty) {
+						$this->subCount($product->getQty());
+						$this->subGross($product->getGross());
+						$this->subNet($product->getNet());
+						$this->subTax($product->getTax());
+
+						$product->changeQty($qty);
+
+						$this->addCount($product->getQty());
+						$this->addGross($product->getGross());
+						$this->addNet($product->getNet());
+						$this->addTax($product->getTax());
+					}
 				}
 			}
 
