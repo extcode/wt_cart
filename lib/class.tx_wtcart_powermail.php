@@ -76,7 +76,7 @@ class tx_wtcart_powermail extends tslib_pibase {
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 
 		// read cart from session
-		$cart = unserialize($GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $this->conf['main.']['pid']));
+		$cart = unserialize($GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $conf['main.']['pid']));
 
 		if ($cart) {
 			if (!$cart->getOrderNumber()) {
