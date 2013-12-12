@@ -34,7 +34,6 @@ plugin.tx_wtcart_pi1 {
     sku                 = {$plugin.wtcart.gpvar.sku}
     variants            = {$plugin.wtcart.gpvar.variants}
     multiple            = {$plugin.wtcart.gpvar.multiple}
-    parentId            = {$plugin.wtcart.gpvar.parentId}
     additional          = additional
   }
   taxclass {
@@ -61,13 +60,10 @@ plugin.tx_wtcart_pi1 {
     price = {$plugin.wtcart.db.price}
     taxclass = {$plugin.wtcart.db.taxclass}
     sku   = {$plugin.wtcart.db.sku}
-    min   = {$plugin.wtcart.db.min}
-    max   = {$plugin.wtcart.db.max}
     service_attribute_1   = {$plugin.wtcart.db.service_attribute_1}
     service_attribute_2   = {$plugin.wtcart.db.service_attribute_2}
     service_attribute_3   = {$plugin.wtcart.db.service_attribute_3}
     has_fe_variants       = {$plugin.wtcart.db.has_fe_variants}
-    parentId              = {$plugin.wtcart.db.parentId}
     additional {
 
     }
@@ -124,20 +120,6 @@ plugin.tx_wtcart_pi1 {
     sku = TEXT
     sku {
       data = GP:{$plugin.wtcart.gpvar.sku}
-      htmlSpecialChars = 1
-    }
-
-    # GET or POST param for min
-    min = TEXT
-    min {
-      data = GP:{$plugin.wtcart.gpvar.min}
-      htmlSpecialChars = 1
-    }
-
-    # GET or POST param for max
-    max = TEXT
-    max {
-      data = GP:{$plugin.wtcart.gpvar.max}
       htmlSpecialChars = 1
     }
 
@@ -200,13 +182,6 @@ plugin.tx_wtcart_pi1 {
       intval = 1
     }
 
-    # GET or POST param for parentId
-    parentId = TEXT
-    parentId {
-      data = GP:{$plugin.wtcart.gpvar.parentId}
-      htmlSpecialChars = 1
-    }
-
     multiple = TEXT
     multiple {
       data = GP:{$plugin.wtcart.gpvar.multiple}
@@ -252,12 +227,6 @@ plugin.tx_wtcart_pi1 {
 
       qty = TEXT
       qty.field = qty
-
-      min = TEXT
-      min.field = min
-
-      max = TEXT
-      max.field = max
 
       sku = TEXT
       sku.field = sku
@@ -846,8 +815,6 @@ plugin.tx_wtcart_pi2 {
     taxclass = taxclass
     sku = sku
     attributes {
-      min = min
-      max = max
       service_attribute_1 = service_attribute_1
       service_attribute_2 = service_attribute_2
       service_attribute_3 = service_attribute_3

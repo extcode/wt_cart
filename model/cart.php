@@ -533,8 +533,6 @@ class Cart {
 			$this->calcAll();
 		} else {
 			// $newproduct is not in cart
-			$newProduct->checkMin();
-			$newProduct->checkMax();
 			$this->products[$newProductTidPid] = $newProduct;
 			$this->calcAll();
 

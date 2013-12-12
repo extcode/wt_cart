@@ -80,6 +80,14 @@ class tx_wtcart_render extends tslib_pibase {
 		return NULL;
 	}
 
+	public function renderBackPageLink(&$obj) {
+		$session = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $this->conf['main.']['pid']);
+
+		$obj->subpartMarkerArray['###BACKPAGELINK###'] = $session;
+
+		return NULL;
+	}
+
 	/**
 	 * @param $cart
 	 * @param $obj
@@ -154,15 +162,6 @@ class tx_wtcart_render extends tslib_pibase {
 		}
 
 		$markerArray['###ERROR_MSG###'] = '';
-		$error = $product->getError();
-		switch ($error) {
-			case 'check_min':
-				$markerArray['###ERROR_MSG###'] .= sprintf($this->pi_getLL('wt_cart_ll_error_min'), $product->getMin());
-				break;
-			case 'check_max':
-				$markerArray['###ERROR_MSG###'] .= sprintf($this->pi_getLL('wt_cart_ll_error_max'), $product->getMax());
-				break;
-		}
 
 		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderProductItem']) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeMarkerArrayBeforeRenderProductItem'] as $funcRef) {

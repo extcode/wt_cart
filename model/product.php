@@ -45,20 +45,6 @@ class Product {
 	private $id;
 
 	/**
-	 * $parentTable = parent object association table name defines an association a
-	 * product can have if needed in a hook
-	 * @var string
-	 */
-	private $parentTable;
-
-	/**
-	 * $parentId = parent object association identifier defines an association a
-	 * product can have if needed in a hook
-	 * @var integer
-	 */
-	private $parentId;
-
-	/**
 	 * $tid = Table configuration Id is defined by TypoScript and is used to
 	 * define the table the product comes from
 	 *
@@ -95,16 +81,6 @@ class Product {
 	 * @var integer
 	 */
 	private $qty;
-
-	/**
-	 * @var integer
-	 */
-	private $min;
-
-	/**
-	 * @var integer
-	 */
-	private $max;
 
 	/**
 	 * @var float
@@ -177,9 +153,6 @@ class Product {
 		$this->price = floatval(str_replace(',', '.', $price));
 		$this->taxClass = $taxclass;
 		$this->qty = $qty;
-
-		$this->min = 0;
-		$this->max = 0;
 
 		$this->isNetPrice = $isNetPrice;
 
@@ -342,17 +315,6 @@ class Product {
 		$this->removeVariantById($variantId);
 	}
 
-	private function isInRange($newQty) {
-		if (($this->min > $newQty) && ($this->min > 0)) {
-			return FALSE;
-		}
-		if (($this->max < $newQty) && ($this->max > 0)) {
-			return FALSE;
-		}
-
-		return TRUE;
-	}
-
 	/**
 	 * @param $id
 	 * @param $newQty
@@ -368,7 +330,8 @@ class Product {
 	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use Pid instead
 	 */
 	public function getPuid() {
-		return $this->getId();
+		return join('_', array($this->tid, $this->id));
+		//return $this->getId();
 	}
 
 	/**
@@ -389,37 +352,7 @@ class Product {
 	 * @return string
 	 */
 	public function getTidPid() {
-		return join('_', array($this->tid, $this->id));
-	}
 
-	/**
-	 * @return string
-	 */
-	public function getParentTable() {
-		return $this->parentTable;
-	}
-
-	/**
-	 * @param $parentTable
-	 * @return void
-	 */
-	public function setParentTable($parentTable) {
-		$this->parentTable = $parentTable;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getParentId() {
-		return $this->parentId;
-	}
-
-	/**
-	 * @param $parentId
-	 * @return void
-	 */
-	public function setParentId($parentId) {
-		$this->parentId = $parentId;
 	}
 
 	/**
@@ -454,13 +387,6 @@ class Product {
 	 * @param $newQty
 	 */
 	public function changeQty($newQty) {
-		if (($this->min > $newQty) && ($this->min > 0)) {
-			$newQty = $this->min;
-		}
-		if (($this->max < $newQty) && ($this->max > 0)) {
-			$newQty = $this->max;
-		}
-
 		if ($this->qty != $newQty) {
 			$this->qty = $newQty;
 
@@ -497,78 +423,6 @@ class Product {
 	public function getTax() {
 		$this->calcTax();
 		return array('taxclassid' => $this->taxClass->getId(), 'tax' => $this->tax);
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getMin() {
-		return $this->min;
-	}
-
-	/**
-	 * @param $min
-	 * @return void
-	 */
-	public function setMin($min) {
-		$this->min = $min;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getMax() {
-		return $this->max;
-	}
-
-	/**
-	 * @param $max
-	 * @return void
-	 */
-	public function setMax($max) {
-		$this->max = $max;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function checkMin() {
-		if (($this->min > 0) && ($this->min > $this->qty)) {
-			$this->qty = $this->min;
-
-			if ($this->variants) {
-				foreach ($this->variants as $variant) {
-					$variant->changeQty($this->min);
-				}
-			}
-
-			$this->reCalc();
-			$this->error = 'check_min';
-			return FALSE;
-		}
-
-		return TRUE;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function checkMax() {
-		if (($this->max > 0) && ($this->max < $this->qty)) {
-			$this->qty = $this->max;
-
-			if ($this->variants) {
-				foreach ($this->variants as $variant) {
-					$variant->changeQty($this->max);
-				}
-			}
-
-			$this->reCalc();
-			$this->error = 'check_max';
-			return FALSE;
-		}
-
-		return TRUE;
 	}
 
 	/**
@@ -634,8 +488,6 @@ class Product {
 	public function toArray() {
 		return array(
 			'puid' => $this->id,
-			'parentTable' => $this->parentTable,
-			'parentId' => $this->parentId,
 			'tid' => $this->tid,
 			'cid' => $this->cid,
 			'sku' => $this->sku,
@@ -643,8 +495,6 @@ class Product {
 			'price' => $this->price,
 			'taxclass' => $this->taxClass,
 			'qty' => $this->qty,
-			'min' => $this->min,
-			'max' => $this->max,
 			'price_total' => $this->gross,
 			'price_total_gross' => $this->gross,
 			'price_total_net' => $this->net,

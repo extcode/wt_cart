@@ -190,12 +190,6 @@ class tx_wtcart_div extends tslib_pibase {
 		if ($pObj->conf['db.']['sku'] != '' && $pObj->conf['db.']['sku'] != '{$plugin.wtcart.db.sku}') {
 			$select .= ', ' . $table . '.' . $pObj->conf['db.']['sku'];
 		}
-		if ($pObj->conf['db.']['min'] != '' && $pObj->conf['db.']['min'] != '{$plugin.wtcart.db.min}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['min'];
-		}
-		if ($pObj->conf['db.']['max'] != '' && $pObj->conf['db.']['max'] != '{$plugin.wtcart.db.max}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['max'];
-		}
 		if ($pObj->conf['db.']['variants'] != '' && $pObj->conf['db.']['variants'] != '{$plugin.wtcart.db.variants}') {
 			$select .= ', ' . $table . '.' . $pObj->conf['db.']['variants'];
 		}
@@ -214,9 +208,6 @@ class tx_wtcart_div extends tslib_pibase {
 		if ($pObj->conf['db.']['has_fe_variants'] != '' &&
 				$pObj->conf['db.']['has_fe_variants'] != '{$plugin.wtcart.db.has_fe_variants}') {
 			$select .= ', ' . $table . '.' . $pObj->conf['db.']['has_fe_variants'];
-		}
-		if ($pObj->conf['db.']['parentId'] != '' && $pObj->conf['db.']['parentId'] != '{$plugin.wtcart.db.parentId}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['parentId'];
 		}
 
 		if ($pObj->conf['db.']['additional.']) {
@@ -263,12 +254,6 @@ class tx_wtcart_div extends tslib_pibase {
 			if ($row[$pObj->conf['db.']['sku']]) {
 				$gpvar['sku'] = $row[$pObj->conf['db.']['sku']];
 			}
-			if ($row[$pObj->conf['db.']['min']]) {
-				$gpvar['min'] = $row[$pObj->conf['db.']['min']];
-			}
-			if ($row[$pObj->conf['db.']['max']]) {
-				$gpvar['max'] = $row[$pObj->conf['db.']['max']];
-			}
 			if ($row[$pObj->conf['db.']['service_attribute_1']]) {
 				$gpvar['service_attribute_1'] = $row[$pObj->conf['db.']['service_attribute_1']];
 			}
@@ -280,9 +265,6 @@ class tx_wtcart_div extends tslib_pibase {
 			}
 			if ($row[$pObj->conf['db.']['has_fe_variants']]) {
 				$gpvar['has_fe_variants'] = $row[$pObj->conf['db.']['has_fe_variants']];
-			}
-			if ($row[$pObj->conf['db.']['parentId']]) {
-				$gpvar['parentId'] = $row[$pObj->conf['db.']['parentId']];
 			}
 
 			if ($pObj->conf['db.']['additional.']) {
@@ -311,7 +293,6 @@ class tx_wtcart_div extends tslib_pibase {
 	}
 
 	public function getVariantDetails(&$variant, &$conf) {
-
 		$variantId = $variant->getId();
 
 		$table = $conf['db.']['table'];
@@ -772,7 +753,7 @@ class tx_wtcart_div extends tslib_pibase {
 	}
 
 	public function getGPVars(&$obj) {
-		$params = array('puid', 'tid', 'cid', 'title', 'price', 'qty', 'sku', 'taxclass', 'service_attribute_1', 'service_attribute_2', 'service_attribute_3', 'min', 'max');
+		$params = array('puid', 'tid', 'cid', 'title', 'price', 'qty', 'sku', 'taxclass', 'service_attribute_1', 'service_attribute_2', 'service_attribute_3');
 
 		$obj->gpvar['multiple'] = $obj->cObj->cObjGetSingle($obj->conf['settings.']['multiple'], $obj->conf['settings.']['multiple.']);
 

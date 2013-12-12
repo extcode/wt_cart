@@ -193,9 +193,6 @@ class addProduct extends tslib_pibase {
 		if ($this->gpvar['puid']) {
 			$newProduct = $this->div->createProduct($this);
 
-			$newProduct->setMin($this->gpvar['min']);
-			$newProduct->setMax($this->gpvar['max']);
-
 			$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
 			$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 			$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);

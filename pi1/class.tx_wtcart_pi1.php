@@ -98,13 +98,6 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$GLOBALS['TSFE']->storeSessionData();
 		}
 
-		$back_pid = t3lib_div::_POST("tx_wtcartevent_back_pid");
-
-		if (intval($back_pid)) {
-			$params = array('back_pid' => intval($back_pid));
-			$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $this->conf['main.']['pid'], $params);
-		}
-
 			// read cart from session
 		$session = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $this->conf['main.']['pid']);
 		if ($session) {
@@ -247,14 +240,9 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			if ($this->gpvar['puid']) {
 				$newProduct = $this->div->createProduct($this);
 
-				$newProduct->setMin($this->gpvar['min']);
-				$newProduct->setMax($this->gpvar['max']);
-
 				$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
 				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
-
-				$newProduct->setParentId($this->gpvar['parentId']);
 
 				$newProduct->setAdditional($this->gpvar['additional']);
 
@@ -439,12 +427,6 @@ class tx_wtcart_pi1 extends tslib_pibase {
 				case 'service_attribute_3':
 					$this->gpvar['service_attribute_3'] = floatval($value);
 					break;
-				case 'min':
-					$this->gpvar['min'] = intval($value);
-					break;
-				case 'max':
-					$this->gpvar['max'] = intval($value);
-					break;
 				default:
 			}
 		}
@@ -457,14 +439,12 @@ class tx_wtcart_pi1 extends tslib_pibase {
 	 */
 	private function parseDataFromOwnForm() {
 		$gpvarArr = array(
-			'sku', 'min', 'max', 'title', 'price', 'qty', 'taxclass',
+			'sku', 'title', 'price', 'qty', 'taxclass',
 			'service_attribute_1', 'service_attribute_2', 'service_attribute_3'
 		);
 		foreach ($gpvarArr as $gpvarVal) {
 			switch ($gpvarVal) {
 				case 'qty':
-				case 'min':
-				case 'max':
 					$this->gpvar[$gpvarVal] =
 							intval($this->cObj->cObjGetSingle($this->conf['settings.'][$gpvarVal], $this->conf['settings.'][$gpvarVal . '.']));
 					break;
@@ -492,14 +472,9 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			if ($this->gpvar['puid']) {
 				$newProduct = $this->div->createProduct($this);
 
-				$newProduct->setMin($this->gpvar['min']);
-				$newProduct->setMax($this->gpvar['max']);
-
 				$newProduct->setServiceAttribute1($this->gpvar['service_attribute_1']);
 				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
-
-				$newProduct->setParentId($this->gpvar['parentId']);
 
 				$newProduct->setAdditionalArray($this->gpvar['additional']);
 

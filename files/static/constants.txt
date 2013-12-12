@@ -132,17 +132,8 @@ plugin.wtcart {
   # cat=plugin.wt_cart//0240; type=text; label= SKU column: Enter the correct column name of the table where the SKUs are stored (e.g. sku).
   db.sku =
 
-  # cat=plugin.wt_cart//0241; type=text; label= MIN column: Enter the correct column name of the table where the MIN order quantities are stored (e.g. min).
-  db.min =
-
-  # cat=plugin.wt_cart//0242; type=text; label= MAX column: Enter the correct column name of the table where the MAX order quantities are stored (e.g. max).
-  db.max =
-
   # cat=plugin.wt_cart//0243; type=text; label= Variants column: Enter the correct column name of the table where the variants are stored (e.g. variants).
   db.variants =
-
-  # cat=plugin.wt_cart//0244; type=text; label= Parent Id: Enter the correct column name of the table where the parent ids of a product are stored (e.g. parentId).
-  db.parentId =
 
   # cat=plugin.wt_cart//0250; type=text; label= Service Attribute 1 column: Enter the correct column name of the table where the service attribute 1 are stored (e.g. for weight).
   db.service_attribute_1 =
