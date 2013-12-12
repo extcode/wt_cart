@@ -524,8 +524,8 @@ class Cart {
 	 * @return void
 	 */
 	public function addProduct(Product $newProduct) {
-		$newProductTidPid = $newProduct->getTidPid();
-		$product = $this->products[$newProductTidPid];
+		$tableProductId = $newProduct->getTableProductId();
+		$product = $this->products[$tableProductId];
 
 		if ($product) {
 			// change $newproduct in cart
@@ -533,7 +533,7 @@ class Cart {
 			$this->calcAll();
 		} else {
 			// $newproduct is not in cart
-			$this->products[$newProductTidPid] = $newProduct;
+			$this->products[$tableProductId] = $newProduct;
 			$this->calcAll();
 
 			$this->addServiceAttributes($newProduct);

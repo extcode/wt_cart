@@ -30,7 +30,7 @@ plugin.tx_wtcart_pi1 {
     service_attribute_2 = {$plugin.wtcart.gpvar.service_attribute_2}
     service_attribute_3 = {$plugin.wtcart.gpvar.service_attribute_3}
     puid                = {$plugin.wtcart.gpvar.puid}
-    tid                 = {$plugin.wtcart.gpvar.tid}
+    tableId             = {$plugin.wtcart.gpvar.tableId}
     sku                 = {$plugin.wtcart.gpvar.sku}
     variants            = {$plugin.wtcart.gpvar.variants}
     multiple            = {$plugin.wtcart.gpvar.multiple}
@@ -168,10 +168,10 @@ plugin.tx_wtcart_pi1 {
       intval = 1
     }
 
-    # GET or POST param for product tid
-    tid = TEXT
-    tid {
-      data = GP:{$plugin.wtcart.gpvar.tid}
+    # GET or POST param for product tableId
+    tableId = TEXT
+    tableId {
+      data = GP:{$plugin.wtcart.gpvar.tableId}
       intval = 1
     }
 
@@ -222,8 +222,14 @@ plugin.tx_wtcart_pi1 {
       puid = TEXT
       puid.field = puid
 
-      tid = TEXT
-      tid.field = tid
+      productId = TEXT
+      productId.field = productId
+
+      tableId = TEXT
+      tableId.field = tableId
+
+      tableProductId = Text
+      tableProductId.field = tableId
 
       qty = TEXT
       qty.field = qty
@@ -458,14 +464,14 @@ plugin.tx_wtcart_pi1 {
         imageLinkWrap {
           enable = 1
           typolink.parameter.data = page:alias//TSFE:id
-          typolink.additionalParams = &tx_wtcart_pi1[del][{field:puid}]{field:variantParam}=1
+          typolink.additionalParams = &tx_wtcart_pi1[del][{field:tableProductId}]{field:variantParam}=1
           typolink.additionalParams.insertData = 1
         }
       }
 
       qty_name = TEXT
       qty_name {
-        value = tx_wtcart_pi1[qty][{field:puid}]{field:variantParam}
+        value = tx_wtcart_pi1[qty][{field:tableProductId}]{field:variantParam}
         insertData = 1
       }
 

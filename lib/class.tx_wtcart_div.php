@@ -165,14 +165,14 @@ class tx_wtcart_div extends tslib_pibase {
 			return FALSE;
 		}
 
-		$tid = intval($gpvar['tid']);
+		$tableId = intval($gpvar['tableId']);
 
 		if (TYPO3_DLOG) {
-			t3lib_div::devLog('tid', $this->extKey, 0, array($tid));
+			t3lib_div::devLog('tableId', $this->extKey, 0, array($tableId));
 		}
 
-		if (($tid != 0) && ($pObj->conf['db.'][$tid . '.'])) {
-			$pObj->conf['db.'] = $pObj->conf['db.'][$tid . '.'];
+		if (($tableId != 0) && ($pObj->conf['db.'][$tableId . '.'])) {
+			$pObj->conf['db.'] = $pObj->conf['db.'][$tableId . '.'];
 		}
 
 		$table = $pObj->conf['db.']['table'];
@@ -519,7 +519,7 @@ class tx_wtcart_div extends tslib_pibase {
 	 */
 	public function add_qtyname_marker($product, $markerArray, $pObj) {
 			// default name for QTY. It is compatible with version 1.2.1
-		$markerArray['###QTY_NAME###'] = 'tx_wtcart_pi1[qty][' . $product->getPuid() . ']';
+		$markerArray['###QTY_NAME###'] = 'tx_wtcart_pi1[qty][' . $product->getTableProductId() . ']';
 
 			// return there isn't any variant
 		if (!is_array($pObj->conf['settings.']['variant.'])) {
@@ -529,7 +529,7 @@ class tx_wtcart_div extends tslib_pibase {
 		$strMarker = NULL;
 			// get all variant key/value pairs from the current product
 		$array_add_gpvar = $this->get_variant_from_product($product, $pObj);
-		$array_add_gpvar['puid']  = $product->getTidPid();
+		$array_add_gpvar['puid']  = $product->getTableProductId();
 			// generate the marker array
 		foreach ((array) $array_add_gpvar as $key => $value) {
 			$strMarker = $strMarker . '[' . $key . '=' . $value . ']';
@@ -753,7 +753,7 @@ class tx_wtcart_div extends tslib_pibase {
 	}
 
 	public function getGPVars(&$obj) {
-		$params = array('puid', 'tid', 'cid', 'title', 'price', 'qty', 'sku', 'taxclass', 'service_attribute_1', 'service_attribute_2', 'service_attribute_3');
+		$params = array('puid', 'tableId', 'cid', 'title', 'price', 'qty', 'sku', 'taxclass', 'service_attribute_1', 'service_attribute_2', 'service_attribute_3');
 
 		$obj->gpvar['multiple'] = $obj->cObj->cObjGetSingle($obj->conf['settings.']['multiple'], $obj->conf['settings.']['multiple.']);
 
@@ -857,7 +857,7 @@ class tx_wtcart_div extends tslib_pibase {
 
 	public function createProduct(&$obj) {
 
-		$newProduct = new Product($obj->gpvar['puid'], $obj->gpvar['tid'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+		$newProduct = new Product($obj->gpvar['puid'], $obj->gpvar['tableId'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 
 		if ($obj->gpvar['variants']) {
 			$price_calc_method = $obj->gpvar['price_calc_method'];

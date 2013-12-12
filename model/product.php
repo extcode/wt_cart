@@ -38,24 +38,24 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/variant.php');
  */
 class Product {
 	/**
-	 * $id = Product identifier defines the unique identifier each product have
+	 * $productId = Product identifier defines the unique identifier each product have
 	 *
 	 * @var integer
 	 */
-	private $id;
+	private $productId;
 
 	/**
-	 * $tid = Table configuration Id is defined by TypoScript and is used to
+	 * $tableId = Table configuration Id is defined by TypoScript and is used to
 	 * define the table the product comes from
 	 *
 	 * @var integer
 	 */
-	private $tid;
+	private $tableId;
 
 	/**
 	 * @var integer
 	 */
-	private $cid;
+	private $contentId;
 
 	/**
 	 * @var string
@@ -133,8 +133,8 @@ class Product {
 	 * __construct
 	 *
 	 * @param $id
-	 * @param int $tid
-	 * @param int $cid
+	 * @param int $tableId
+	 * @param int $contentId
 	 * @param $sku
 	 * @param $title
 	 * @param $price
@@ -144,10 +144,10 @@ class Product {
 	 * @internal param $boolean
 	 * @return \Product
 	 */
-	public function __construct($id, $tid = 0, $cid = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
-		$this->id = $id;
-		$this->tid = $tid;
-		$this->cid = $cid;
+	public function __construct($id, $tableId = 0, $contentId = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
+		$this->productId = $id;
+		$this->tableId = $tableId;
+		$this->contentId = $contentId;
 		$this->sku = $sku;
 		$this->title = $title;
 		$this->price = floatval(str_replace(',', '.', $price));
@@ -327,39 +327,46 @@ class Product {
 
 	/**
 	 * @return int
-	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use Pid instead
+	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use getProductId instead
 	 */
 	public function getPuid() {
-		return join('_', array($this->tid, $this->id));
-		//return $this->getId();
+		return $this->getProductId();
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getId() {
-		return $this->id;
+	public function getProductId() {
+		return $this->productId;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getTid() {
-		return $this->tid;
+	public function getTableId() {
+		return $this->tableId;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getTidPid() {
+	public function getTableProductId() {
+		return join( '_', array( $this->getTableId(), $this->getProductId() ) );
+	}
 
+	/**
+	 * @return int
+	 * @deprecated since wt_cart 2.1; will be removed in wt_cart 3.0; use getContentId instead
+	 */
+	public function getCid() {
+		return $this->getContentId();
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getCid() {
-		return $this->cid;
+	public function getContentId() {
+		return $this->contentId;
 	}
 
 	/**
@@ -487,9 +494,9 @@ class Product {
 	 */
 	public function toArray() {
 		return array(
-			'puid' => $this->id,
-			'tid' => $this->tid,
-			'cid' => $this->cid,
+			'puid' => $this->productId,
+			'tableId' => $this->tableId,
+			'cid' => $this->contentId,
 			'sku' => $this->sku,
 			'title' => $this->title,
 			'price' => $this->price,
