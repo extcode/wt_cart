@@ -115,7 +115,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	private $isNetCart;
 
 	/**
-	 * @var integer
+	 * @var string
 	 */
 	private $orderNumber;
 
@@ -189,7 +189,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
-	 * @param integer
+	 * @param string
 	 * @return void
 	 */
 	public function setOrderNumber($orderNumber) {
@@ -197,7 +197,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
-	 * @return integer
+	 * @return string
 	 */
 	public function getOrderNumber() {
 		return $this->orderNumber;

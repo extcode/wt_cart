@@ -109,6 +109,12 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 						$registry =  t3lib_div::makeInstance('t3lib_Registry');
 						$registry->set('tx_wtcart', 'lastOrder_'.$conf['main.']['pid'],  $orderNumber);
 					}
+
+					$orderNumberConf = $conf['settings.']['fields.'];
+					$this->cObj = t3lib_div::makeInstance( 'tslib_cObj' );
+					$this->cObj->start( array('ordernumber' => $orderNumber), $orderNumberConf['ordernumber'] );
+					$orderNumber = $this->cObj->cObjGetSingle( $orderNumberConf['ordernumber'], $orderNumberConf['ordernumber.'] );
+
 					$cart->setOrderNumber($orderNumber);
 				}
 

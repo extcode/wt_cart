@@ -72,7 +72,7 @@ class addProduct extends tslib_pibase {
 		$GLOBALS['TSFE']->getConfigArray();
 
 		$this->cObj = t3lib_div::makeInstance('tslib_cObj');
-    	$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
+		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 
 			// create new instance for function
 		$this->div = t3lib_div::makeInstance('tx_wtcart_div');
