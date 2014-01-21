@@ -31,10 +31,25 @@
  * @subpackage    tx_wtcart
  * @version    1.5.0
  */
-class Tax {
+class Tx_WtCart_Domain_Model_Tax {
+	/**
+	 * @var integer
+	 */
 	private $id;
+
+	/**
+	 * @var string
+	 */
 	private $value;
+
+	/**
+	 * @var integer
+	 */
 	private $calc;
+
+	/**
+	 * @var string
+	 */
 	private $name;
 
 	/**
@@ -44,7 +59,7 @@ class Tax {
 	 * @param $value
 	 * @param $calc
 	 * @param $name
-	 * @return \Tax
+	 * @return \Tx_WtCart_Domain_Model_Tax
 	 */
 	public function __construct($id, $value, $calc, $name) {
 		$this->id = $id;
@@ -53,18 +68,30 @@ class Tax {
 		$this->name = $name;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId() {
 		return $this->id;
 	}
 
+	/**
+	 * @return mixed|string
+	 */
 	public function getValue() {
 		return $this->value;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getCalc() {
 		return $this->calc;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return $this->name;
 	}

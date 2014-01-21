@@ -27,7 +27,7 @@ if (!defined ('PATH_typo3conf'))	 die ('Could not access this script directly!')
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/cart.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php');
 
 require_once(PATH_site . 'typo3/sysext/css_styled_content/pi1/class.tx_cssstyledcontent_pi1.php');
 
@@ -93,7 +93,7 @@ class addProduct extends tslib_pibase {
 
 			$this->isNetCart = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
 
-			$cart = new Cart($this->isNetCart);
+			$cart = new Tx_WtCart_Domain_Model_Cart($this->isNetCart);
 
 				// preset shipping for new cart
 			if (!$cart->getShipping()) {

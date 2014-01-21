@@ -495,7 +495,7 @@ class tx_wtcart_render extends tslib_pibase {
 				}
 
 				if (!$option->isFree($cart->getGross())) {
-					if ($option->getisNetPrice()) {
+					if ($option->getIsNetPrice()) {
 						$price = $option->getNet($cart);
 					} else {
 						$price = $option->getGross($cart);

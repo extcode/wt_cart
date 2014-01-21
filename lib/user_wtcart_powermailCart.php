@@ -59,9 +59,16 @@ class user_wtcart_powermailCart extends tslib_pibase {
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;
 
-		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
-		$this->conf = array_merge((array) $this->conf, (array) $conf);
+		if ( $this->cObj == null ) {
+			$this->cObj = t3lib_div::makeInstance('tslib_cObj');
+		}
 
+		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
+		$this->conf = array_merge_recursive((array) $this->conf, (array) $conf);
+
+		if (is_array($this->conf['main.']['template'])) {
+			$this->conf['main.']['template'] = end($this->conf['main.']['template']);
+		}
 		$this->tmpl['all'] = $this->cObj->getSubpart($this->cObj->fileResource($this->conf['main.']['template']), '###WTCART_POWERMAIL###');
 		$this->tmpl['item'] = $this->cObj->getSubpart($this->tmpl['all'], '###ITEM###');
 		$this->tmpl['variantitem'] = $this->cObj->getSubpart($this->tmpl['all'], '###VARIANTITEM###');

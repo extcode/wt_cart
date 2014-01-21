@@ -23,8 +23,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 * ************************************************************* */
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/extra.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/tax.php');
+
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Extra.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Tax.php');
 
 /**
  * Plugin 'Cart' for the 'wt_cart' extension.
@@ -34,7 +35,7 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/tax.php');
  * @subpackage    tx_wtcart
  * @version    1.5.0
  */
-abstract class Service {
+abstract class Tx_WtCart_Domain_Model_Service {
 	/**
 	 * @var integer
 	 */
@@ -46,7 +47,7 @@ abstract class Service {
 	private $name;
 
 	/**
-	 * @var Tax
+	 * @var Tx_WtCart_Domain_Model_Tax
 	 */
 	private $taxClass;
 
@@ -61,7 +62,7 @@ abstract class Service {
 	private $extratype;
 
 	/**
-	 * @var Extra
+	 * @var Tx_WtCart_Domain_Model_Extra
 	 */
 	private $extras;
 
@@ -91,9 +92,19 @@ abstract class Service {
 	private $isNetPrice;
 
 	/**
+	 * @var boolean
+	 */
+	private $isPreset;
+
+	/**
+	 * @var array Additional
+	 */
+	private $additional;
+
+	/**
 	 * __construct
 	 */
-	public function __construct($id, $name, Tax $taxclass, $note, $isNetPrice) {
+	public function __construct($id, $name, Tx_WtCart_Domain_Model_Tax $taxclass, $note, $isNetPrice) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->taxClass = $taxclass;
@@ -104,21 +115,42 @@ abstract class Service {
 	/**
 	 * @param boolean
 	 */
-	public function setisNetPrice($isNetPrice) {
+	public function setIsNetPrice($isNetPrice) {
 		$this->isNetPrice = $isNetPrice;
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function getisNetPrice() {
+	public function getIsNetPrice() {
 		return $this->isNetPrice;
 	}
 
+	/**
+	 * @param boolean
+	 */
+	public function setIsPreset($isPreset) {
+		$this->isPreset = $isPreset;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIsPreset() {
+		return $this->isPreset;
+	}
+
+	/**
+	 * @return int
+	 */
 	public function getId() {
 		return $this->id;
 	}
 
+	/**
+	 * @param $cart
+	 * @return float
+	 */
 	public function getGross($cart) {
 		$gross = 0.0;
 
@@ -142,10 +174,17 @@ abstract class Service {
 		return $gross;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return $this->name;
 	}
 
+	/**
+	 * @param $cart
+	 * @return float
+	 */
 	public function getNet($cart) {
 		$net = 0.0;
 
@@ -169,10 +208,17 @@ abstract class Service {
 		return $net;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getNote() {
 		return $this->note;
 	}
 
+	/**
+	 * @param $cart
+	 * @return float
+	 */
 	public function getTax($cart) {
 		$tax = 0.0;
 
@@ -195,73 +241,120 @@ abstract class Service {
 		return $tax;
 	}
 
+	/**
+	 * @return Tx_WtCart_Domain_Model_Tax
+	 */
 	public function getTaxClass() {
 		return $this->taxClass;
 	}
 
+	/**
+	 * @return Tx_WtCart_Domain_Model_Extra
+	 */
 	public function getExtras() {
 		return $this->extras;
 	}
 
-	public function addExtra(Extra $newextra) {
+	/**
+	 * @param Tx_WtCart_Domain_Model_Extra $newextra
+	 */
+	public function addExtra(Tx_WtCart_Domain_Model_Extra $newextra) {
 		$this->extras[] = $newextra;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getExtraType() {
 		return $this->extratype;
 	}
 
+	/**
+	 * @param $extratype
+	 */
 	public function setExtraType($extratype) {
 		$this->extratype = $extratype;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getFreeFrom() {
 		return $this->freeFrom;
 	}
 
+	/**
+	 * @param $freeFrom
+	 */
 	public function setFreeFrom($freeFrom) {
 		$this->freeFrom = $freeFrom;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getFreeUntil() {
 		return $this->freeUntil;
 	}
 
+	/**
+	 * @param $freeUntil
+	 */
 	public function setFreeUntil($freeUntil) {
 		$this->freeUntil = $freeUntil;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getAvailableFrom() {
 		return $this->availableFrom;
 	}
 
+	/**
+	 * @param $availableFrom
+	 */
 	public function setAvailableFrom($availableFrom) {
 		$this->availableFrom = $availableFrom;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getAvailableUntil() {
 		return $this->availableUntil;
 	}
 
+	/**
+	 * @param $availableUntil
+	 */
 	public function setAvailableUntil($availableUntil) {
 		$this->availableUntil = $availableUntil;
 	}
 
+	/**
+	 * @param $price
+	 * @return bool
+	 */
 	public function isFree($price) {
 		if (isset($this->freeFrom) || isset($this->freeUntil)) {
 			if (isset($this->freeFrom) && $price < $this->freeFrom) {
-				return 0;
+				return FALSE;
 			}
 			if (isset($this->freeUntil) && $price > $this->freeUntil) {
-				return 0;
+				return FALSE;
 			}
 
 			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 	}
 
+	/**
+	 * @param $price
+	 * @return bool
+	 */
 	public function isAvailable($price) {
 		if (isset($this->availableFrom) && $price < $this->availableFrom) {
 			return FALSE;
@@ -273,6 +366,10 @@ abstract class Service {
 		return TRUE;
 	}
 
+	/**
+	 * @param $cart
+	 * @return null
+	 */
 	private function getConditionFromCart($cart) {
 		$condition = NULL;
 
@@ -307,6 +404,55 @@ abstract class Service {
 		}
 
 		return $condition;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAdditionalArray() {
+		return $this->additional;
+	}
+
+	/**
+	 * @param array $additional
+	 * @return void
+	 */
+	public function setAdditionalArray($additional) {
+		$this->additional = $additional;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function unsetAdditionalArray() {
+		$this->additional = array();
+	}
+
+	/**
+	 * @param $key
+	 * @return mixed
+	 */
+	public function getAdditional($key) {
+		return $this->additional[$key];
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setAdditional($key, $value) {
+		$this->additional[$key] = $value;
+	}
+
+	/**
+	 * @param string $key
+	 * @return void
+	 */
+	public function unsetAdditional($key) {
+		if ($this->additional[$key]) {
+			unset($this->additional[$key]);
+		}
 	}
 }
 

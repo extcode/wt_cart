@@ -31,15 +31,15 @@
  * @subpackage    tx_wtcart
  * @version    1.5.0
  */
-class Variant {
+class Tx_WtCart_Domain_Model_Variant {
 
 	/**
-	 * @var Product
+	 * @var Tx_WtCart_Domain_Model_Product
 	 */
 	private $product;
 
 	/**
-	 * @var Variant
+	 * @var Tx_WtCart_Domain_Model_Variant
 	 */
 	private $parentVariant;
 
@@ -69,7 +69,7 @@ class Variant {
 	private $price;
 
 	/**
-	 * @var Tax
+	 * @var Tx_WtCart_Domain_Model_Tax
 	 */
 	private $taxClass;
 
@@ -79,7 +79,7 @@ class Variant {
 	private $qty;
 
 	/**
-	 * @var array Variants
+	 * @var array Tx_WtCart_Domain_Model_Variant
 	 */
 	private $variants;
 
@@ -98,7 +98,7 @@ class Variant {
 	 */
 	private $tax;
 
-	/*+
+	/**
 	 * @var boolean
 	 */
 	private $isNetPrice;
@@ -126,13 +126,13 @@ class Variant {
 	 * @param $sku
 	 * @param $priceCalcMethod
 	 * @param $price
-	 * @param Tax $taxclass
+	 * @param Tx_WtCart_Domain_Model_Tax $taxclass
 	 * @param $qty
 	 * @param bool $isNetPrice
 	 * @internal param $name
-	 * @return Variant
+	 * @return Tx_WtCart_Domain_Model_Variant
 	 */
-	public function __construct($id, $title, $sku, $priceCalcMethod, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
+	public function __construct($id, $title, $sku, $priceCalcMethod, $price, Tx_WtCart_Domain_Model_Tax $taxclass, $qty, $isNetPrice = FALSE) {
 		$this->id = $id;
 		$this->title = $title;
 		$this->sku = $sku;
@@ -146,6 +146,9 @@ class Variant {
 		$this->reCalc();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function debug() {
 		if (TYPO3_DLOG) {
 			//debug all variants
@@ -190,28 +193,28 @@ class Variant {
 	}
 
 	/**
-	 * @param Product
+	 * @param Tx_WtCart_Domain_Model_Product
 	 */
 	public function setProduct($product) {
 		$this->product = $product;
 	}
 
 	/**
-	 * @return Product
+	 * @return Tx_WtCart_Domain_Model_Product
 	 */
 	public function getProduct() {
 		return $this->product;
 	}
 
 	/**
-	 * @param Variant
+	 * @param Tx_WtCart_Domain_Model_Variant
 	 */
-	public function setParentVariant($parentVariant) {
+	public function setParentVariant(Tx_WtCart_Domain_Model_Variant $parentVariant) {
 		$this->parentVariant = $parentVariant;
 	}
 
 	/**
-	 * @return Variant
+	 * @return Tx_WtCart_Domain_Model_Variant
 	 */
 	public function getParentVariant() {
 		return $this->parentVariant;
@@ -398,34 +401,55 @@ class Variant {
 		$this->hasFeVariants = $hasFeVariants;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getQty() {
 		return $this->qty;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getGross() {
 		$this->calcGross();
 		return $this->gross;
 	}
 
+	/**
+	 * @return float
+	 */
 	public function getNet() {
 		$this->calcNet();
 		return $this->net;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getTax() {
 		return array('taxclassid' => $this->taxClass->getId(), 'tax' => $this->tax);
 	}
 
+	/**
+	 * @return Tx_WtCart_Domain_Model_Tax
+	 */
 	public function getTaxClass() {
 		return $this->taxClass;
 	}
 
+	/**
+	 * @param $newQty
+	 */
 	public function setQty($newQty) {
 		$this->qty = $newQty;
 
 		$this->reCalc();
 	}
 
+	/**
+	 * @param $newQty
+	 */
 	public function changeQty($newQty) {
 		$this->qty = $newQty;
 
@@ -468,10 +492,10 @@ class Variant {
 	}
 
 	/**
-	 * @param Variant $newVariant
+	 * @param Tx_WtCart_Domain_Model_Variant $newVariant
 	 * @return mixed
 	 */
-	public function addVariant(Variant $newVariant) {
+	public function addVariant(Tx_WtCart_Domain_Model_Variant $newVariant) {
 		$newVariantId = $newVariant->getId();
 		$variant = $this->variants[$newVariantId];
 
@@ -499,7 +523,7 @@ class Variant {
 
 	/**
 	 * @param $variantId
-	 * @return Variant
+	 * @return Tx_WtCart_Domain_Model_Variant
 	 */
 	public function getVariantById($variantId) {
 		return $this->variants[$variantId];
@@ -507,7 +531,7 @@ class Variant {
 
 	/**
 	 * @param $variantId
-	 * @return Variant
+	 * @return Tx_WtCart_Domain_Model_Variant
 	 */
 	public function getVariant($variantId) {
 		return $this->getVariantById($variantId);
@@ -515,9 +539,7 @@ class Variant {
 
 	/**
 	 * @param $variantsArray
-	 * @internal param $productPuid
-	 * @internal param null $variantId
-	 * @internal param $id
+	 * @return bool|int
 	 */
 	public function removeVariants($variantsArray) {
 		foreach ($variantsArray as $variantId => $value) {

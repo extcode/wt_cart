@@ -25,8 +25,8 @@
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/tax.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/variant.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Tax.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Variant.php');
 
 /**
  * Plugin 'Cart' for the 'wt_cart' extension.
@@ -36,7 +36,7 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/variant.php');
  * @subpackage    tx_wtcart
  * @version    1.5.0
  */
-class Product {
+class Tx_WtCart_Domain_Model_Product {
 	/**
 	 * $productId = Product identifier defines the unique identifier each product have
 	 *
@@ -73,7 +73,7 @@ class Product {
 	private $price;
 
 	/**
-	 * @var Tax
+	 * @var Tx_WtCart_Domain_Model_Tax
 	 */
 	private $taxClass;
 
@@ -114,13 +114,13 @@ class Product {
 	 */
 	private $serviceAttribute3;
 
-	/*+
+	/**
 	 * @var boolean
 	 */
 	private $isNetPrice;
 
 	/**
-	 * @var array Variants
+	 * @var array Tx_WtCart_Domain_Model_Variant
 	 */
 	private $variants;
 
@@ -138,13 +138,13 @@ class Product {
 	 * @param $sku
 	 * @param $title
 	 * @param $price
-	 * @param Tax $taxclass
+	 * @param Tx_WtCart_Domain_Model_Tax $taxclass
 	 * @param $qty
 	 * @param bool $isNetPrice
 	 * @internal param $boolean
-	 * @return \Product
+	 * @return \Tx_WtCart_Domain_Model_Product
 	 */
-	public function __construct($id, $tableId = 0, $contentId = 0, $sku, $title, $price, Tax $taxclass, $qty, $isNetPrice = FALSE) {
+	public function __construct($id, $tableId = 0, $contentId = 0, $sku, $title, $price, Tx_WtCart_Domain_Model_Tax $taxclass, $qty, $isNetPrice = FALSE) {
 		$this->productId = $id;
 		$this->tableId = $tableId;
 		$this->contentId = $contentId;
@@ -159,6 +159,22 @@ class Product {
 		$this->calcGross();
 		$this->calcTax();
 		$this->calcNet();
+	}
+
+	/**
+	 * @param string $sku
+	 */
+	public function setSku($sku)
+	{
+		$this->sku = $sku;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSku()
+	{
+		return $this->sku;
 	}
 
 	/**
@@ -201,10 +217,10 @@ class Product {
 	}
 
 	/**
-	 * @param Variant $newVariant
+	 * @param Tx_WtCart_Domain_Model_Variant $newVariant
 	 * @return mixed
 	 */
-	public function addVariant(Variant $newVariant) {
+	public function addVariant(Tx_WtCart_Domain_Model_Variant $newVariant) {
 		$newVariantId = $newVariant->getId();
 		$variant = $this->variants[$newVariantId];
 
@@ -316,8 +332,9 @@ class Product {
 	}
 
 	/**
-	 * @param $id
+	 * @param $variantId
 	 * @param $newQty
+	 * @internal param $id
 	 */
 	public function changeVariantById($variantId, $newQty) {
 		$this->variants[$variantId]->changeQty($newQty);
@@ -384,7 +401,7 @@ class Product {
 	}
 
 	/**
-	 * @return Tax
+	 * @return Tx_WtCart_Domain_Model_Tax
 	 */
 	public function getTaxClass() {
 		return $this->taxClass;

@@ -56,7 +56,7 @@ class tx_wtcart_div extends tslib_pibase {
 	 *
 	 * @return integer Error number
 	 */
-	public function beforeClearSessionHook(array $field = array(), $form, $mail = NULL, Tx_Powermail_Controller_FormsController $controller = NULL, Tx_WtCart_Forms $cartController = NULL, Tx_Powermail_Domain_Repository_MailsRepository $mailsRepository = NULL){
+	public function beforeClearSessionHook(array $field = array(), $form, $mail = NULL, Tx_Powermail_Controller_FormsController $controller = NULL, Tx_WtCart_Hooks_Forms $cartController = NULL, Tx_Powermail_Domain_Repository_MailsRepository $mailsRepository = NULL){
 		$errorNumber = 0;
 		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['beforeClearSession'])) {
 			$session = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $GLOBALS['TSFE']->id);
@@ -801,10 +801,14 @@ class tx_wtcart_div extends tslib_pibase {
 		}
 	}
 
+	/**
+	 * @param $obj
+	 * @return array
+	 */
 	public function parseTaxes(&$obj) {
 		$taxes = array();
 		foreach ($obj->conf['taxclass.'] as $key => $value) {
-			$taxes[rtrim($key, '.')] = new Tax(rtrim($key, '.'), $value['value'], $value['calc'], $value['name']);
+			$taxes[rtrim($key, '.')] = new Tx_WtCart_Domain_Model_Tax(rtrim($key, '.'), $value['value'], $value['calc'], $value['name']);
 		}
 
 		if (TYPO3_DLOG) {
@@ -816,7 +820,8 @@ class tx_wtcart_div extends tslib_pibase {
 
 	/**
 	 * @param $class
-	 * @param $taxes
+	 * @param $obj
+	 * @internal param $taxes
 	 * @return array
 	 */
 	public function parseServices($class, &$obj) {
@@ -824,26 +829,43 @@ class tx_wtcart_div extends tslib_pibase {
 		$type = strtolower($class);
 		if ($obj->conf[$type . '.']['options.']) {
 			foreach ($obj->conf[$type . '.']['options.'] as $key => $value) {
-				$service = new $class(rtrim($key, '.'), $value['title'], $obj->taxes[$value['taxclass']], $value['note'], $obj->gpvar['isNetPrice']);
+				$className = 'Tx_WtCart_Domain_Model_' . $class;
+				$service = new $className(rtrim($key, '.'), $value['title'], $obj->taxes[$value['taxclass']], $value['note'], $obj->gpvar['isNetPrice']);
 				if (isset($value['extra.'])) {
 					$service->setExtratype($value['extra']);
 					foreach ($value['extra.'] as $extrakey => $extravalue) {
-						$extra = new Extra(rtrim($extrakey, '.'), $extravalue['value'], $extravalue['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
+						$extra = new Tx_WtCart_Domain_Model_Extra(rtrim($extrakey, '.'), $extravalue['value'], $extravalue['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 						$service->addExtra($extra);
 					}
 				} elseif (! floatval($value['extra'])) {
 					$service->setExtratype($value['extra']);
-					$extra = new Extra(0, 0, 0, $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
+					$extra = new Tx_WtCart_Domain_Model_Extra(0, 0, 0, $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 					$service->addExtra($extra);
 				} else {
 					$service->setExtratype('simple');
-					$extra = new Extra(0, 0, $value['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
+					$extra = new Tx_WtCart_Domain_Model_Extra(0, 0, $value['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 					$service->addExtra($extra);
 				}
 				$service->setFreeFrom($value['free_from']);
 				$service->setFreeUntil($value['free_until']);
 				$service->setAvailableFrom($value['available_from']);
 				$service->setAvailableUntil($value['available_until']);
+
+				if ( $value['preset'] == 1 ) {
+					$service->setIsPreset( TRUE );
+				}
+
+				if ($value['additional.']) {
+					$additional = array();
+					foreach ($value['additional.'] as $additionalKey => $additionalValue) {
+						if ($additionalValue['value']) {
+							$additional[rtrim($additionalKey, '.')] = $additionalValue['value'];
+						}
+					}
+				}
+
+				$service->setAdditionalArray($additional);
+
 				$services[rtrim($key, '.')] = $service;
 			}
 		}
@@ -857,7 +879,7 @@ class tx_wtcart_div extends tslib_pibase {
 
 	public function createProduct(&$obj) {
 
-		$newProduct = new Product($obj->gpvar['puid'], $obj->gpvar['tableId'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+		$newProduct = new Tx_WtCart_Domain_Model_Product($obj->gpvar['puid'], $obj->gpvar['tableId'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 
 		if ($obj->gpvar['variants']) {
 			$price_calc_method = $obj->gpvar['price_calc_method'];
@@ -866,7 +888,7 @@ class tx_wtcart_div extends tslib_pibase {
 				if ($obj->gpvar['variants'][$key]) {
 					if ($key == 1) {
 						if ($obj->gpvar['has_fe_variants']) {
-							$newVariant[$key] = new Variant(sha1($value), '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+							$newVariant[$key] = new Tx_WtCart_Domain_Model_Variant(sha1($value), '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 							$newVariant[$key]->setHasFeVariants($obj->gpvar['has_fe_variants']-1);
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
@@ -875,8 +897,8 @@ class tx_wtcart_div extends tslib_pibase {
 
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
-								// creating a new Variant and using Price and Taxclass form Product
-								$newVariant[$key] = new Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+								// creating a new Tx_WtCart_Domain_Model_Variant and using Price and Taxclass form Product
+								$newVariant[$key] = new Tx_WtCart_Domain_Model_Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 								// get further data of variant
 								$obj->div->getVariantDetails($newVariant[$key], $dbconf);
 							} else {
@@ -890,7 +912,7 @@ class tx_wtcart_div extends tslib_pibase {
 					} elseif ($key > 1) {
 						// check if variant key-1 has fe_variants defined then use input as fe variant
 						if ($newVariant[$key - 1]->getHasFeVariants()) {
-							$newVariant[$key] = new Variant(sha1($value), '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+							$newVariant[$key] = new Tx_WtCart_Domain_Model_Variant(sha1($value), '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 							$newVariant[$key]->setHasFeVariants($newVariant[$key-1]->getHasFeVariants()-1);
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
@@ -899,8 +921,8 @@ class tx_wtcart_div extends tslib_pibase {
 
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
-								// creating a new Variant and using Price and Taxclass form Product
-								$newVariant[$key] = new Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
+								// creating a new Tx_WtCart_Domain_Model_Variant and using Price and Taxclass form Product
+								$newVariant[$key] = new Tx_WtCart_Domain_Model_Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 								// get further data of variant
 								$obj->div->getVariantDetails($newVariant[$key], $dbconf);
 							} else {

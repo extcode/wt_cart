@@ -25,11 +25,10 @@
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/payment.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/product.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/tax.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/shipping.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/special.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Payment.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Product.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Tax.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Special.php');
 
 /**
 * Plugin 'Cart' for the 'wt_cart' extension.
@@ -39,7 +38,7 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/special.php');
 * @subpackage	tx_wtcart
 * @version	1.5.0
 */
-class Cart {
+class Tx_WtCart_Domain_Model_Cart {
 	/**
 	 * @var float
 	 */
@@ -51,7 +50,7 @@ class Cart {
 	private $gross;
 
 	/**
-	 * @var Tax
+	 * @var Tx_WtCart_Domain_Model_Tax
 	 */
 	private $taxes;
 
@@ -61,22 +60,22 @@ class Cart {
 	private $count;
 
 	/**
-	 * @var array Products
+	 * @var array Tx_WtCart_Domain_Model_Product
 	 */
 	private $products;
 
 	/**
-	 * @var Shipping
+	 * @var Tx_WtCart_Domain_Model_Shipping
 	 */
 	private $shipping;
 
 	/**
-	 * @var Payment
+	 * @var Tx_WtCart_Domain_Model_Payment
 	 */
 	private $payment;
 
 	/**
-	 * @var array Specials
+	 * @var array Tx_WtCart_Domain_Model_Special
 	 */
 	private $specials;
 
@@ -129,7 +128,7 @@ class Cart {
 	 * __construct
 	 *
 	 * @var boolean
-	 * @return Cart
+	 * @return Tx_WtCart_Domain_Model_Cart
 	 */
 	public function __construct($isNetCart = FALSE) {
 		$this->net = 0.0;
@@ -457,7 +456,7 @@ class Cart {
 
 	/**
 	 * @param $id
-	 * @return Product
+	 * @return Tx_WtCart_Domain_Model_Product
 	 */
 	public function getProductById($id) {
 		return $this->products[$id];
@@ -465,7 +464,7 @@ class Cart {
 
 	/**
 	 * @param $id
-	 * @return Product
+	 * @return Tx_WtCart_Domain_Model_Product
 	 */
 	public function getProduct($id) {
 		return $this->getProductById($id);
@@ -519,11 +518,11 @@ class Cart {
 	}
 
 	/**
-	 * @param Product $newProduct
+	 * @param Tx_WtCart_Domain_Model_Product $newProduct
 	 * @internal param \Product $newproduct
 	 * @return void
 	 */
-	public function addProduct(Product $newProduct) {
+	public function addProduct(Tx_WtCart_Domain_Model_Product $newProduct) {
 		$tableProductId = $newProduct->getTableProductId();
 		$product = $this->products[$tableProductId];
 
@@ -541,8 +540,8 @@ class Cart {
 	}
 
 	/**
-	 * @param $product
-	 * @param $newProduct
+	 * @param Tx_WtCart_Domain_Model_Product $product
+	 * @param Tx_WtCart_Domain_Model_Product $newProduct
 	 * @internal param $id
 	 * @internal param $newQty
 	 * @return void
@@ -658,7 +657,7 @@ class Cart {
 	/**
 	 * recalculates the service attributes when an products was added to cart
 	 *
-	 * @param $newproduct
+	 * @param Tx_WtCart_Domain_Model_Product $newproduct
 	 * @return void
 	 */
 	private function addServiceAttributes($newproduct) {

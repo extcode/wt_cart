@@ -24,7 +24,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/cart.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
@@ -36,7 +36,7 @@ define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class Tx_WtCart_Forms extends Tx_Powermail_Controller_FormsController {
+class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 
 	/**
 	 * @param Tx_Extbase_MVC_Controller_ActionController $controller
@@ -50,6 +50,7 @@ class Tx_WtCart_Forms extends Tx_Powermail_Controller_FormsController {
 	/**
 	 * @param Array $payload
 	 * @param Tx_Powermail_Controller_FormsController $controller
+	 * @return bool
 	 */
 	public function checkTemplate($payload, $controller) {
 
@@ -131,6 +132,107 @@ class Tx_WtCart_Forms extends Tx_Powermail_Controller_FormsController {
 		$div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
 		$div->beforeClearSessionHook($field, $form, $mail, $controller, $this, $this->mailsRepository);
 		$div->removeAllProductsFromSession(); // clear cart now
+	}
+
+	/**
+	 * @param array $field
+	 * @param int $form
+	 * @param null $mail
+	 * @param Tx_Powermail_Controller_FormsController $controller
+	 * @throws Exception
+	 */
+	public function slotCreateActionBeforeRenderView(array $field = array(), $form = 0, $mail = NULL, Tx_Powermail_Controller_FormsController $controller = NULL) {
+		if($this->validateController($controller) && $this->validateForm($form) && $this->validateField($field)) {
+			$this->field = $field;
+			$this->controller = $controller;
+
+			$files = array();
+
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['addAttachment']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['addAttachment'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'mail' => $mail,
+							'files' => &$files
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
+
+			if( !empty( $files ) ) {
+				/**
+				 * @see powermail/Classes/Utility/Div.php:431
+				 */
+				$powermailSession = $GLOBALS['TSFE']->fe_user->getKey('ses', 'powermail');
+
+				if (isset($powermailSession['upload'])) {
+					$powermailSession['upload'] = array();
+				}
+
+				foreach ($files as $key => $file) {
+					$powermailSession['upload']['wt_cart_orderpdf' . $key] = $file;
+				}
+
+				$GLOBALS['TSFE']->fe_user->setKey('ses', 'powermail', $powermailSession);
+			}
+		}
+		return;
+	}
+
+	/**
+	 * @param Tx_Powermail_Controller_FormsController $controller
+	 * @return bool
+	 */
+	protected function validateController(Tx_Powermail_Controller_FormsController $controller = NULL) {
+		if($controller) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * @param array $field
+	 * @return bool TRUE when valid
+	 */
+	protected function validateField(array $field = array()) {
+		if(count($field) > 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Validate that PDF should be appended to this Form
+	 *
+	 * @param $form
+	 * @return bool TRUE when PDF is needed
+	 */
+	protected function validateForm($form) {
+		$retval = FALSE;
+
+		//check if PDF is needed for this form
+		$formObject = $this->getFormObject($form);
+		if($formObject->getTitle() == 'Warenkorb') {
+			$retval = TRUE;
+		}
+		return $retval;
+	}
+
+	/**
+	 * Retrive Form Object
+	 *
+	 * @param int $form Number of form to load
+	 * @return null|Tx_Pmpdf_Domain_Model_Forms
+	 */
+	protected function getFormObject($form = 0) {
+		if(!$this->formObject) {
+			if($form > 0) {
+				$this->formObject = $this->formsRepository->findByUid($form);
+			}
+		}
+		return $this->formObject;
 	}
 }
 

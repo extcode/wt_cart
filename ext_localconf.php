@@ -22,7 +22,7 @@ $TYPO3_CONF_VARS['FE']['eID_include']['addProduct'] = 'EXT:wt_cart/eid/addProduc
 
 if(version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.0.0') >= 0) {
 	$pmForms = 'Tx_Powermail_Controller_FormsController';
-	$wtForms = 'Tx_WtCart_Forms';
+	$wtForms = 'Tx_WtCart_Hooks_Forms';
 	/*
 	  //won't work due to caching: http://typo3blogger.de/signal-slot-pattern/#comment_template
 	$signalSlotDispatcher = t3lib_div::makeInstance('Tx_Extbase_Object_Manager')
@@ -36,7 +36,11 @@ if(version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.0.0') >= 0
 		$pmForms, 'createActionBeforeRenderView', $wtForms, 'setOrderNumber'
 	);
 	$signalSlotDispatcher->connect(
+		$pmForms, 'createActionBeforeRenderView', $wtForms, 'slotCreateActionBeforeRenderView'
+	);
+	$signalSlotDispatcher->connect(
 		$pmForms, 'createActionAfterSubmitView', $wtForms, 'clearSession'
 	);
-}
+
+	}
 ?>

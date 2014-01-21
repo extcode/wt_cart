@@ -26,7 +26,7 @@
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/cart.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php');
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
@@ -105,7 +105,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		} else {
 			$this->isNetCart = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
 
-			$cart = new Cart($this->isNetCart);
+			$cart = new Tx_WtCart_Domain_Model_Cart($this->isNetCart);
 		}
 
 		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad']) {
@@ -263,6 +263,21 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		}
 
 		$cart->debug();
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeServicesBeforeSave']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeServicesBeforeSave'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'shippings' => &$shippings,
+						'payments' => &$payments,
+						'specials' => &$specials,
+						'cart' => &$cart
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
 
 		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartBeforeSave']) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartBeforeSave'] as $funcRef) {

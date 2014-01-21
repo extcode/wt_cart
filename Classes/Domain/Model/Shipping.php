@@ -23,7 +23,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 * ************************************************************* */
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'model/service.php');
+require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Service.php');
 
 /**
 * Plugin 'Cart' for the 'wt_cart' extension.
@@ -33,7 +33,7 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'model/service.php');
 * @subpackage	tx_wtcart
 * @version	1.5.0
 */
-class Shipping extends Service {
+class Tx_WtCart_Domain_Model_Shipping extends Tx_WtCart_Domain_Model_Service {
 
 }
 
