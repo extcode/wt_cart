@@ -54,6 +54,11 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	/**
 	 * @var string
 	 */
+	private $status = 0;
+
+	/**
+	 * @var string
+	 */
 	private $note;
 
 	/**
@@ -104,10 +109,11 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	/**
 	 * __construct
 	 */
-	public function __construct($id, $name, Tx_WtCart_Domain_Model_Tax $taxclass, $note, $isNetPrice) {
+	public function __construct($id, $name, Tx_WtCart_Domain_Model_Tax $taxclass, $status, $note, $isNetPrice) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->taxClass = $taxclass;
+		$this->status = $status;
 		$this->note = $note;
 		$this->isNetPrice = $isNetPrice;
 	}
@@ -453,6 +459,20 @@ abstract class Tx_WtCart_Domain_Model_Service {
 		if ($this->additional[$key]) {
 			unset($this->additional[$key]);
 		}
+	}
+
+	/**
+	 * @param string $status
+	 */
+	public function setStatus($status) {
+		$this->status = $status;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStatus() {
+		return $this->status;
 	}
 }
 

@@ -830,7 +830,7 @@ class tx_wtcart_div extends tslib_pibase {
 		if ($obj->conf[$type . '.']['options.']) {
 			foreach ($obj->conf[$type . '.']['options.'] as $key => $value) {
 				$className = 'Tx_WtCart_Domain_Model_' . $class;
-				$service = new $className(rtrim($key, '.'), $value['title'], $obj->taxes[$value['taxclass']], $value['note'], $obj->gpvar['isNetPrice']);
+				$service = new $className(rtrim($key, '.'), $value['title'], $obj->taxes[$value['taxclass']], $value['status'], $value['note'], $obj->gpvar['isNetPrice']);
 				if (isset($value['extra.'])) {
 					$service->setExtratype($value['extra']);
 					foreach ($value['extra.'] as $extrakey => $extravalue) {
