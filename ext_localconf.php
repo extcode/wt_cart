@@ -33,9 +33,6 @@ if(version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.0.0') >= 0
 		$pmForms, 'formActionBeforeRenderView', $wtForms, 'checkTemplate'
 	);
 	$signalSlotDispatcher->connect(
-		$pmForms, 'createActionBeforeRenderView', $wtForms, 'setOrderNumber'
-	);
-	$signalSlotDispatcher->connect(
 		$pmForms, 'createActionBeforeRenderView', $wtForms, 'slotCreateActionBeforeRenderView'
 	);
 	$signalSlotDispatcher->connect(

@@ -85,46 +85,70 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 	}
 
 	/**
-	 * @param array Field Values
-	 * @param integer Form UID
-	 * @param object Mail object (normally empty, filled when mail already exists via double-optin)
-	 * @param Tx_Powermail_Controller_FormsController $controller
+	 * @param $cart Tx_WtCart_Domain_Model_Cart
 	 */
-	public function setOrderNumber(array $field = array(), $form, $mail = NULL, $controller) {
+	protected function setOrderNumber( $cart ) {
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 
-		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $controller->cObj->data['uid']) {
-			// read cart from session
-			$cart = unserialize($GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $conf['main.']['pid']));
-			if ($cart) {
-				if (!$cart->getOrderNumber()) {
-					$registry =  t3lib_div::makeInstance('t3lib_Registry');
-					$orderNumber =  $registry->get('tx_wtcart', 'lastOrder_'.$conf['main.']['pid']);
-					if ($orderNumber) {
-						$orderNumber += 1;
-						$registry =  t3lib_div::makeInstance('t3lib_Registry');
-						$registry->set('tx_wtcart', 'lastOrder_'.$conf['main.']['pid'],  $orderNumber);
-					} else {
-						$orderNumber = 1;
-						$registry =  t3lib_div::makeInstance('t3lib_Registry');
-						$registry->set('tx_wtcart', 'lastOrder_'.$conf['main.']['pid'],  $orderNumber);
-					}
-
-					$orderNumberConf = $conf['settings.']['fields.'];
-					$this->cObj = t3lib_div::makeInstance( 'tslib_cObj' );
-					$this->cObj->start( array('ordernumber' => $orderNumber), $orderNumberConf['ordernumber'] );
-					$orderNumber = $this->cObj->cObjGetSingle( $orderNumberConf['ordernumber'], $orderNumberConf['ordernumber.'] );
-
-					$cart->setOrderNumber($orderNumber);
+		if ($cart) {
+			if (!$cart->getOrderNumber()) {
+				$registry =  t3lib_div::makeInstance('t3lib_Registry');
+				$orderNumber =  $registry->get( 'tx_wtcart', 'lastOrder_'.$conf['main.']['pid'] );
+				if ($orderNumber) {
+					$orderNumber += 1;
+				} else {
+					$orderNumber = 1;
 				}
+				$registry->set('tx_wtcart', 'lastOrder_'.$conf['main.']['pid'],  $orderNumber);
 
-				if (TYPO3_DLOG) {
-					t3lib_div::devLog('ordernumber', 'wt_cart', 0, array($cart->getOrderNumber()));
-				}
+				$orderNumberConf = $conf['settings.']['fields.'];
+				$this->cObj = t3lib_div::makeInstance( 'tslib_cObj' );
+				$this->cObj->start( array( 'ordernumber' => $orderNumber ), $orderNumberConf['ordernumber'] );
+				$orderNumber = $this->cObj->cObjGetSingle( $orderNumberConf['ordernumber'], $orderNumberConf['ordernumber.'] );
 
-				$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $conf['main.']['pid'], serialize($cart));
-				$GLOBALS['TSFE']->storeSessionData();
+				$cart->setOrderNumber($orderNumber);
 			}
+
+			if (TYPO3_DLOG) {
+				t3lib_div::devLog( 'ordernumber', 'wt_cart', 0, array( $cart->getOrderNumber() ) );
+			}
+
+			$GLOBALS['TSFE']->fe_user->setKey( 'ses', 'wt_cart_' . $conf['main.']['pid'], serialize( $cart ) );
+			$GLOBALS['TSFE']->storeSessionData();
+		}
+	}
+
+	/**
+	 * @param $cart Tx_WtCart_Domain_Model_Cart
+	 */
+	protected function setInvoiceNumber( $cart ) {
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
+
+		if ( $cart ) {
+			if ( !$cart->getInvoiceNumber() ) {
+				$registry =  t3lib_div::makeInstance('t3lib_Registry');
+				$invoiceNumber =  $registry->get( 'tx_wtcart', 'lastInvoice_'.$conf['main.']['pid'] );
+				if ( $invoiceNumber ) {
+					$invoiceNumber += 1;
+				} else {
+					$invoiceNumber = 1;
+				}
+				$registry->set('tx_wtcart', 'lastInvoice_'.$conf['main.']['pid'],  $invoiceNumber);
+
+				$invoiceNumberConf = $conf['settings.']['fields.'];
+				$this->cObj = t3lib_div::makeInstance( 'tslib_cObj' );
+				$this->cObj->start( array( 'invoicenumber' => $invoiceNumber ), $invoiceNumberConf['invoicenumber'] );
+				$invoiceNumber = $this->cObj->cObjGetSingle( $invoiceNumberConf['invoicenumber'], $invoiceNumberConf['invoicenumber.'] );
+
+				$cart->setInvoiceNumber( $invoiceNumber );
+			}
+
+			if (TYPO3_DLOG) {
+				t3lib_div::devLog( 'invoicenumber', 'wt_cart', 0, array( $cart->getInvoiceNumber() ) );
+			}
+
+			$GLOBALS['TSFE']->fe_user->setKey( 'ses', 'wt_cart_' . $conf['main.']['pid'], serialize( $cart ) );
+			$GLOBALS['TSFE']->storeSessionData();
 		}
 	}
 
@@ -148,9 +172,19 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 	 * @throws Exception
 	 */
 	public function slotCreateActionBeforeRenderView(array $field = array(), $form = 0, $mail = NULL, Tx_Powermail_Controller_FormsController $controller = NULL) {
-		if($this->validateController($controller) && $this->validateForm($form) && $this->validateField($field)) {
-			$this->field = $field;
-			$this->controller = $controller;
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
+
+		/**
+		 * @var $cart Tx_WtCart_Domain_Model_Cart
+		 */
+		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
+
+		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $controller->cObj->data['uid']) {
+			$this->setOrderNumber( $cart );
+
+			// TODO: add some payment magic here
+
+			$this->setInvoiceNumber( $cart );
 
 			$files = array();
 
@@ -185,60 +219,6 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 			}
 		}
 		return;
-	}
-
-	/**
-	 * @param Tx_Powermail_Controller_FormsController $controller
-	 * @return bool
-	 */
-	protected function validateController(Tx_Powermail_Controller_FormsController $controller = NULL) {
-		if($controller) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/**
-	 * @param array $field
-	 * @return bool TRUE when valid
-	 */
-	protected function validateField(array $field = array()) {
-		if(count($field) > 0) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/**
-	 * Validate that PDF should be appended to this Form
-	 *
-	 * @param $form
-	 * @return bool TRUE when PDF is needed
-	 */
-	protected function validateForm($form) {
-		$retval = FALSE;
-
-		//check if PDF is needed for this form
-		$formObject = $this->getFormObject($form);
-		if($formObject->getTitle() == 'Warenkorb') {
-			$retval = TRUE;
-		}
-		return $retval;
-	}
-
-	/**
-	 * Retrive Form Object
-	 *
-	 * @param int $form Number of form to load
-	 * @return null|Tx_Pmpdf_Domain_Model_Forms
-	 */
-	protected function getFormObject($form = 0) {
-		if(!$this->formObject) {
-			if($form > 0) {
-				$this->formObject = $this->formsRepository->findByUid($form);
-			}
-		}
-		return $this->formObject;
 	}
 }
 
