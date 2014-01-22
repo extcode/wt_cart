@@ -125,6 +125,16 @@ class Tx_WtCart_Domain_Model_Cart {
 	private $additional;
 
 	/**
+	 * @var int OrderId
+	 */
+	private $orderId;
+
+	/**
+	 * @var int InvoiceId
+	 */
+	private $invoiceId;
+
+	/**
 	 * __construct
 	 *
 	 * @var boolean
@@ -880,6 +890,34 @@ class Tx_WtCart_Domain_Model_Cart {
 		if ($this->additional[$key]) {
 			unset($this->additional[$key]);
 		}
+	}
+
+	/**
+	 * @param int $orderId
+	 */
+	public function setOrderId($orderId) {
+		$this->orderId = $orderId;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getOrderId() {
+		return $this->orderId;
+	}
+
+	/**
+	 * @param int $invoiceId
+	 */
+	public function setInvoiceId($invoiceId) {
+		$this->invoiceId = $invoiceId;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getInvoiceId() {
+		return $this->invoiceId;
 	}
 }
 
