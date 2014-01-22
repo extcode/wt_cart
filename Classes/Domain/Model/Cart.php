@@ -120,6 +120,11 @@ class Tx_WtCart_Domain_Model_Cart {
 	private $orderNumber;
 
 	/**
+	 * @var string
+	 */
+	private $invoiceNumber;
+
+	/**
 	 * @var array Additional
 	 */
 	private $additional;
@@ -128,11 +133,6 @@ class Tx_WtCart_Domain_Model_Cart {
 	 * @var int OrderId
 	 */
 	private $orderId;
-
-	/**
-	 * @var int InvoiceId
-	 */
-	private $invoiceId;
 
 	/**
 	 * __construct
@@ -211,6 +211,20 @@ class Tx_WtCart_Domain_Model_Cart {
 	 */
 	public function getOrderNumber() {
 		return $this->orderNumber;
+	}
+
+	/**
+	 * @param string $invoiceNumber
+	 */
+	public function setInvoiceNumber($invoiceNumber) {
+		$this->invoiceNumber = $invoiceNumber;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInvoiceNumber() {
+		return $this->invoiceNumber;
 	}
 
 	/**
@@ -904,20 +918,6 @@ class Tx_WtCart_Domain_Model_Cart {
 	 */
 	public function getOrderId() {
 		return $this->orderId;
-	}
-
-	/**
-	 * @param int $invoiceId
-	 */
-	public function setInvoiceId($invoiceId) {
-		$this->invoiceId = $invoiceId;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getInvoiceId() {
-		return $this->invoiceId;
 	}
 }
 
