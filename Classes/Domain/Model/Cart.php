@@ -379,7 +379,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
-	 * @return Shipping
+	 * @return Tx_WtCart_Domain_Model_Shipping
 	 */
 	public function getShipping() {
 		return $this->shipping;
@@ -394,7 +394,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
-	 * @return Payment
+	 * @return Tx_WtCart_Domain_Model_Payment
 	 */
 	public function getPayment() {
 		return $this->payment;
