@@ -38,6 +38,7 @@
             <label index="wt_cart_ll_delete">Remove this product from cart.</label>
             <label index="wt_cart_ll_clear_cart">Remove all products from cart.</label>
             <label index="wtcart_ll_ordernumber">Order number</label>
+            <label index="wtcart_ll_invoicenumber">Invoice number</label>
         </languageKey>
         <languageKey index="de" type="array">
             <label index="wtcart_ll_title">Produkt</label>
@@ -72,6 +73,7 @@
             <label index="wt_cart_ll_delete">Dieses Produkt aus dem Warenkorb entfernen.</label>
             <label index="wt_cart_ll_clear_cart">Alle Produkte aus dem Warenkorb entfernen.</label>
             <label index="wtcart_ll_ordernumber">Bestellnummer</label>
+            <label index="wtcart_ll_invoicenumber">Rechnungsnummer</label>
         </languageKey>
         <languageKey index="fr" type="array">
             <label index="wtcart_ll_title">Article</label>

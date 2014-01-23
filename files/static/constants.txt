@@ -153,11 +153,20 @@ plugin.wtcart {
   # cat=plugin.wt_cart//0600; type=text; label= Prefix (prepend) for order number (e.g. DE).
   ordernumber.prefix =
 
-  # cat=plugin.wt_cart//0610; type=text; label= Suffix (append) for order number (e.g. K).
+  # cat=plugin.wt_cart//0610; type=text; label= Suffix (append) for order number (e.g. O).
   ordernumber.suffix =
 
   # cat=plugin.wt_cart//0620; type=int+; label= Offset for order number: The offset is added to the order number (e.g. if the offset is 999 the first order number will be 1000).
   ordernumber.offset =
+
+  # cat=plugin.wt_cart//0630; type=text; label= Prefix (prepend) for invoice number (e.g. DE).
+  invoicenumber.prefix =
+
+  # cat=plugin.wt_cart//0640; type=text; label= Suffix (append) for invoice number (e.g. I).
+  invoicenumber.suffix =
+
+  # cat=plugin.wt_cart//0650; type=int+; label= Offset for invoice number: The offset is added to the invoice number (e.g. if the offset is 999 the first invoice number will be 1000).
+  invoicenumber.offset =
 }
 
 #clear powermail session data
