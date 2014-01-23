@@ -174,7 +174,9 @@ class Tx_WtCart_Domain_Model_Cart {
 			'sumServiceAttr2',
 			'sumServiceAttr3',
 			'isNetCart',
+			'orderId',
 			'orderNumber',
+			'invoiceNumber',
 			'additional'
 		);
 	}
