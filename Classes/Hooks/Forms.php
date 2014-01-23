@@ -183,72 +183,64 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 
 			$files = array();
 
+			$params = array(
+				'cart' => $cart,
+				'mail' => &$mail,
+				'files' => &$files
+			);
+
 			$this->setOrderNumber( $cart );
 
-			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetOrderNumber']) {
-				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetOrderNumber'] as $funcRef) {
-					if ($funcRef) {
-						$params = array(
-							'cart' => $cart,
-							'mail' => &$mail,
-							'files' => &$files
-						);
-
-						t3lib_div::callUserFunction($funcRef, $params, $this);
-					}
-				}
-			}
+			$this->callHook( 'afterSetOrderNumber', $params );
 
 			// TODO: add some payment magic here
 
 			$this->setInvoiceNumber( $cart );
 
-			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetInvoiceNumber']) {
-				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetInvoiceNumber'] as $funcRef) {
-					if ($funcRef) {
-						$params = array(
-							'cart' => $cart,
-							'mail' => &$mail,
-							'files' => &$files
-						);
+			$this->callHook( 'afterSetInvoiceNumber', $params );
 
-						t3lib_div::callUserFunction($funcRef, $params, $this);
-					}
-				}
-			}
+			$this->callHook( 'beforeAddAttachmentToMail', $params );
 
-			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['addAttachment']) {
-				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['addAttachment'] as $funcRef) {
-					if ($funcRef) {
-						$params = array(
-							'cart' => $cart,
-							'mail' => &$mail,
-							'files' => &$files
-						);
+			$this->addAttachments( $params );
 
-						t3lib_div::callUserFunction($funcRef, $params, $this);
-					}
-				}
-			}
-
-			if( !empty( $files ) ) {
-				/**
-				 * @see powermail/Classes/Utility/Div.php:431
-				 */
-				$powermailSession = $GLOBALS['TSFE']->fe_user->getKey('ses', 'powermail');
-
-				if (isset($powermailSession['upload'])) {
-					$powermailSession['upload'] = array();
-				}
-
-				foreach ($files as $key => $file) {
-					$powermailSession['upload']['wt_cart_orderpdf' . $key] = $file;
-				}
-
-				$GLOBALS['TSFE']->fe_user->setKey('ses', 'powermail', $powermailSession);
-			}
 		}
 		return;
+	}
+
+	/**
+	 * @param string $hookName
+	 * @param array $params
+	 */
+	protected function callHook( $hookName, &$params ) {
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart'][$hookName]) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart'][$hookName] as $funcRef) {
+				if ($funcRef) {
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param array $params
+	 */
+	protected function addAttachments( &$params ) {
+		if( !empty( $params['files'] ) ) {
+			/**
+			 * @see powermail/Classes/Utility/Div.php:431
+			 */
+			$powermailSession = $GLOBALS['TSFE']->fe_user->getKey('ses', 'powermail');
+
+			if (isset($powermailSession['upload'])) {
+				$powermailSession['upload'] = array();
+			}
+
+			foreach ($params['files'] as $key => $file) {
+				$powermailSession['upload']['wt_cart_orderpdf' . $key] = $file;
+			}
+
+			$GLOBALS['TSFE']->fe_user->setKey('ses', 'powermail', $powermailSession);
+		}
 	}
 }
 
