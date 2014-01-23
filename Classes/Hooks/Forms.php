@@ -180,19 +180,49 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
 
 		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $controller->cObj->data['uid']) {
+
+			$files = array();
+
 			$this->setOrderNumber( $cart );
+
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetOrderNumber']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetOrderNumber'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'cart' => $cart,
+							'mail' => &$mail,
+							'files' => &$files
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
 
 			// TODO: add some payment magic here
 
 			$this->setInvoiceNumber( $cart );
 
-			$files = array();
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetInvoiceNumber']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['afterSetInvoiceNumber'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'cart' => $cart,
+							'mail' => &$mail,
+							'files' => &$files
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
 
 			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['addAttachment']) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['addAttachment'] as $funcRef) {
 					if ($funcRef) {
 						$params = array(
-							'mail' => $mail,
+							'cart' => $cart,
+							'mail' => &$mail,
 							'files' => &$files
 						);
 
