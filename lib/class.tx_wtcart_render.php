@@ -447,8 +447,9 @@ class tx_wtcart_render extends tslib_pibase {
 		$content = '';
 
 		if (is_array($options)) {
-			$type = strtolower(get_class(array_shift(array_values($options))));
-			$upperType = strtoupper($type);
+			$class = get_class( array_shift( array_values( $options ) ) );
+			$type = strtolower( substr( strrchr( $class, '_' ), 1 ) );
+			$upperType = strtoupper( $type );
 		} else {
 			return NULL;
 		}
