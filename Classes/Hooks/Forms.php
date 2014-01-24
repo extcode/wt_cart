@@ -194,6 +194,11 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 			$this->callHook( 'afterSetOrderNumber', $params );
 
 			// TODO: add some payment magic here
+			$paymentService = $cart->getPayment()->getAdditional( 'payment_service' );
+			if ( $paymentService ) {
+				$paymentServiceHook = 'callPaymentGateway' . ucwords(strtolower($paymentService));
+				$this->callHook( $paymentServiceHook, $params );
+			}
 
 			$this->setInvoiceNumber( $cart );
 
