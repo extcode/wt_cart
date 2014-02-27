@@ -158,7 +158,7 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 	 * @param object Mail object (normally empty, filled when mail already exists via double-optin)
 	 * @param Tx_Powermail_Controller_FormsController $controller
 	 */
-	public function clearSession(array $field = array(), $form, $mail = NULL, $controller) {
+	public function clearSession(array $field = array(), $form, $mail = NULL, $controller, $newMail = NULL) {
 		$div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
 		$div->beforeClearSessionHook($field, $form, $mail, $controller, $this, $this->mailsRepository);
 		$div->removeAllProductsFromSession(); // clear cart now
@@ -182,27 +182,39 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $controller->cObj->data['uid']) {
 
 			$files = array();
+			$errors = array();
 
 			$params = array(
 				'cart' => $cart,
 				'mail' => &$mail,
-				'files' => &$files
+				'files' => &$files,
+				'errors' => &$errors,
+				'skipInvoice' => FALSE
 			);
 
 			$this->setOrderNumber( $cart );
 
 			$this->callHook( 'afterSetOrderNumber', $params );
 
-			// TODO: add some payment magic here
 			$paymentService = $cart->getPayment()->getAdditional( 'payment_service' );
 			if ( $paymentService ) {
 				$paymentServiceHook = 'callPaymentGateway' . ucwords(strtolower($paymentService));
 				$this->callHook( $paymentServiceHook, $params );
 			}
 
-			$this->setInvoiceNumber( $cart );
+			if ( $params['skipInvoice'] == FALSE ) {
+				$this->setInvoiceNumber( $cart );
 
-			$this->callHook( 'afterSetInvoiceNumber', $params );
+				$this->callHook( 'afterSetInvoiceNumber', $params );
+			}
+
+			if ( $params['preventEmailToSender'] == TRUE ) {
+				$controller->settings['sender']['enable'] = 0;
+			}
+
+			if ( $params['preventEmailToReceiver'] == TRUE ) {
+				$controller->settings['receiver']['enable'] = 0;
+			}
 
 			$this->callHook( 'beforeAddAttachmentToMail', $params );
 
