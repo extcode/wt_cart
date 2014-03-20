@@ -192,6 +192,8 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 				'skipInvoice' => FALSE
 			);
 
+			$this->callHook( 'orderSubmitted', $params );
+
 			$this->setOrderNumber( $cart );
 
 			$this->callHook( 'afterSetOrderNumber', $params );
