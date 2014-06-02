@@ -270,6 +270,19 @@ class tx_wtcart_render extends tslib_pibase {
 	public function renderVariant(&$content, $variantArr, $variants, &$obj) {
 		$variantArr['variantcount'] += 1;
 		if ($variants) {
+
+			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['sortVariantsBeforeRenderVariant']) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['sortVariantsBeforeRenderVariant'] as $funcRef) {
+					if ($funcRef) {
+						$params = array(
+							'variants' => &$variants
+						);
+
+						t3lib_div::callUserFunction($funcRef, $params, $this);
+					}
+				}
+			}
+
 			foreach ($variants as $variant) {
 					// enable .field in typoscript
 				$variantArr['variant'][$variantArr['variantcount']] = $variant->getId();
