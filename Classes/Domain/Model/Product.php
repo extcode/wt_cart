@@ -127,7 +127,7 @@ class Tx_WtCart_Domain_Model_Product {
 	/**
 	 * @var array Additional
 	 */
-	private $additional;
+	private $additional = array();
 
 	/**
 	 * __construct
@@ -510,7 +510,7 @@ class Tx_WtCart_Domain_Model_Product {
 	 * @return array
 	 */
 	public function toArray() {
-		return array(
+		$productArr = array(
 			'puid' => $this->productId,
 			'tableId' => $this->tableId,
 			'cid' => $this->contentId,
@@ -525,6 +525,26 @@ class Tx_WtCart_Domain_Model_Product {
 			'tax' => $this->tax,
 			'additional' => $this->additional
 		);
+
+		if ($this->variants) {
+			$variantArr = array();
+
+			foreach ($this->variants as $variant) {
+				/** @var $variant Tx_WtCart_Domain_Model_Variant */
+				array_push( $variantArr, array( $variant->getId() => $variant->toArray() ) );
+			}
+
+			array_push( $productArr, array('variants' => $variantArr) );
+		}
+
+		return $productArr;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function toJson() {
+		json_encode( $this->toArray() );
 	}
 
 	/**
@@ -538,9 +558,7 @@ class Tx_WtCart_Domain_Model_Product {
 				}
 			}
 
-			$out = $this->toArray();
-
-			t3lib_div::devLog('product', 'wt_cart', 0, $out);
+			t3lib_div::devLog('product', 'wt_cart', 0, $this->toArray());
 		}
 	}
 

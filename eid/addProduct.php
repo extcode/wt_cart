@@ -197,6 +197,8 @@ class addProduct extends tslib_pibase {
 			$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 			$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
 
+			$newProduct->setAdditionalArray($this->gpvar['additional']);
+
 			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
 					if ($funcRef) {

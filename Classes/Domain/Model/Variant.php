@@ -116,7 +116,7 @@ class Tx_WtCart_Domain_Model_Variant {
 	/**
 	 * @var array Additional
 	 */
-	private $additional;
+	private $additional = array();
 
 	/**
 	 * __construct
@@ -177,7 +177,7 @@ class Tx_WtCart_Domain_Model_Variant {
 	 * @return array
 	 */
 	public function toArray() {
-		return array(
+		$variantArr = array(
 			'id' => $this->id,
 			'sku' => $this->sku,
 			'title' => $this->title,
@@ -190,6 +190,19 @@ class Tx_WtCart_Domain_Model_Variant {
 			'tax' => $this->tax,
 			'additional' => $this->additional
 		);
+
+		if ($this->variants) {
+			$innerVariantArr = array();
+
+			foreach ($this->variants as $variant) {
+				/** @var $variant Tx_WtCart_Domain_Model_Variant */
+				array_push( $innerVariantArr, array( $variant->getId() => $variant->toArray() ) );
+			}
+
+			array_push( $variantArr, array('variants' => $innerVariantArr) );
+		}
+
+		return $variantArr;
 	}
 
 	/**
@@ -262,6 +275,58 @@ class Tx_WtCart_Domain_Model_Variant {
 	 */
 	public function getPrice() {
 		return $this->price;
+	}
+
+
+	/**
+	 * @return float
+	 */
+	public function getDiscount() {
+		$price = $this->getPrice();
+
+		if ($this->getParentVariant()) {
+			$parentPrice = $this->getParentVariant()->getPrice();
+		} elseif ($this->getProduct()) {
+			$parentPrice = $this->getProduct()->getPrice();
+		} else {
+			$parentPrice = 0;
+		}
+
+		switch ($this->priceCalcMethod) {
+			case 0:
+				$discount = 0;
+				break;
+			case 1:
+				$discount = 0;
+				break;
+			case 2:
+				$discount = -1 * (($price / 100) * ($parentPrice));
+				break;
+			case 3:
+				$discount = 0;
+				break;
+			case 4:
+				$discount = ($price / 100) * ($parentPrice);
+				break;
+			default:
+		}
+
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount']) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeVariantDiscount'] as $funcRef) {
+				if ($funcRef) {
+					$params = array(
+						'price_calc_method' => $this->priceCalcMethod,
+						'price' => &$price,
+						'parent_price' => &$parentPrice,
+						'discount' => &$discount,
+					);
+
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
+
+		return $discount;
 	}
 
 	/**
@@ -399,6 +464,20 @@ class Tx_WtCart_Domain_Model_Variant {
 	 */
 	public function setHasFeVariants($hasFeVariants) {
 		$this->hasFeVariants = $hasFeVariants;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIsFeVariant() {
+		return $this->isFeVariant;
+	}
+
+	/**
+	 * @param boolean $isFeVariant
+	 */
+	public function setIsFeVariant($isFeVariant) {
+		$this->isFeVariant = $isFeVariant;
 	}
 
 	/**

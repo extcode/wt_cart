@@ -127,7 +127,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	/**
 	 * @var array Additional
 	 */
-	private $additional;
+	private $additional = array();
 
 	/**
 	 * @var int OrderId
@@ -497,6 +497,48 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function toArray() {
+		if ($this->payment) {
+			$paymentName = $this->payment->getName();
+		}
+		if ($this->shipping) {
+			$shippingName = $this->shipping->getName();
+		}
+		$specials = array();
+		if ($this->specials) {
+			foreach ($this->specials as $special) {
+				$specials[] = $special->getName();
+			}
+		}
+
+		return array(
+			'net' => $this->net,
+			'gross' => $this->gross,
+			'count' => $this->count,
+			'taxes' => $this->taxes,
+			'maxServiceAttribute1' => $this->maxServiceAttr1,
+			'maxServiceAttribute2' => $this->maxServiceAttr2,
+			'maxServiceAttribute3' => $this->maxServiceAttr3,
+			'sumServiceAttribute1' => $this->sumServiceAttr1,
+			'sumServiceAttribute2' => $this->sumServiceAttr2,
+			'sumServiceAttribute3' => $this->sumServiceAttr3,
+			'payment' => $paymentName,
+			'shipping' => $shippingName,
+			'specials' => $specials,
+			'additional' => $this->additional
+		);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function toJson() {
+		json_encode( $this->toArray() );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function debug() {
@@ -509,37 +551,7 @@ class Tx_WtCart_Domain_Model_Cart {
 			}
 
 			// debug the cart itself
-			if ($this->payment) {
-				$paymentName = $this->payment->getName();
-			}
-			if ($this->shipping) {
-				$shippingName = $this->shipping->getName();
-			}
-			$specials = array();
-			if ($this->specials) {
-				foreach ($this->specials as $special) {
-					$specials[] = $special->getName();
-				}
-			}
-
-			$out = array(
-				'net' => $this->net,
-				'gross' => $this->gross,
-				'count' => $this->count,
-				'taxes' => $this->taxes,
-				'maxServiceAttribute1' => $this->maxServiceAttr1,
-				'maxServiceAttribute2' => $this->maxServiceAttr2,
-				'maxServiceAttribute3' => $this->maxServiceAttr3,
-				'sumServiceAttribute1' => $this->sumServiceAttr1,
-				'sumServiceAttribute2' => $this->sumServiceAttr2,
-				'sumServiceAttribute3' => $this->sumServiceAttr3,
-				'payment' => $paymentName,
-				'shipping' => $shippingName,
-				'specials' => $specials,
-				'additional' => $this->additional
-			);
-
-			t3lib_div::devLog('cart', 'wt_cart', 0, $out);
+			t3lib_div::devLog('cart', 'wt_cart', 0, $this->toArray());
 		}
 	}
 
