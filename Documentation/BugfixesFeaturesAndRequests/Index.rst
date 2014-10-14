@@ -1,0 +1,30 @@
+﻿
+
+.. ==================================================
+.. FOR YOUR INFORMATION
+.. --------------------------------------------------
+.. -*- coding: utf-8 -*- with BOM.
+
+.. ==================================================
+.. DEFINE SOME TEXTROLES
+.. --------------------------------------------------
+.. role::   underline
+.. role::   typoscript(code)
+.. role::   ts(typoscript)
+   :class:  typoscript
+.. role::   php(code)
+
+
+Bugfixes, Features and Requests
+-------------------------------
+
+
+.. toctree::
+   :maxdepth: 5
+   :titlesonly:
+   :glob:
+
+   Bugfixes/Index
+   Features/Index
+   FeatureRequest/Index
+

@@ -1,0 +1,20 @@
+.. |logo-1|      image:: ../../Images/wt_cart_orders_logo.png
+   :height: 200
+   :width: 200
+.. :align: left
+.. :border: 0
+.. :name: Logo wt_cart_order
+
+.. |logo-2|      image:: ../../Images/wt_cart_paypal_logo.png
+   :height: 200
+   :width: 200
+.. :align: left
+.. :border: 0
+.. :name: Logo wt_cart_paypal
+
+.. |logo-3|      image:: ../../Images/wt_cart_pdf_logo.png
+   :height: 200
+   :width: 200
+.. :align: left
+.. :border: 0
+.. :name: Logo wt_cart_pdf

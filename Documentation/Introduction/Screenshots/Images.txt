@@ -1,0 +1,17 @@
+﻿.. |screenshot-1|      image:: ../../Images/screenshot_dietuevakademie.jpg
+.. :width: 100%
+   :align: left
+   :border: 0
+   :name: Screenshot Die TÜV Akademie
+
+.. |screenshot-2|      image:: ../../Images/screenshot_kulturstadtlev1.png
+.. :width: 100%
+   :align: left
+   :border: 0
+   :name: Screenshot Kulturstadt Lev
+
+.. |screenshot-3|      image:: ../../Images/screenshot_kulturstadtlev2.png
+.. :width: 100%
+   :align: left
+   :border: 0
+   :name: Screenshot Kulturstadt Lev

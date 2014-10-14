@@ -1,0 +1,12 @@
+﻿.. |usermanual-1|      image:: ../../Images/manual_html_554b209f.png
+.. :width: 100%
+   :align: left
+   :border: 0
+   :name: usermanual1
+
+.. |usermanual-2|      image:: ../../Images/manual_html_powermail2.png
+.. :width: 100%
+   :align: left
+   :border: 0
+   :name: usermanual2
+

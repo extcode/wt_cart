@@ -1,0 +1,6 @@
+﻿.. |img-1|      image:: Images/wt_cart_logo.png
+   :height: 200
+   :width: 200
+.. :align: left
+.. :border: 0
+.. :name: Logo wt_cart
