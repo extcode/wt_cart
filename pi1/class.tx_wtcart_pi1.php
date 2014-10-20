@@ -244,7 +244,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 				$newProduct->setServiceAttribute2($this->gpvar['service_attribute_2']);
 				$newProduct->setServiceAttribute3($this->gpvar['service_attribute_3']);
 
-				$newProduct->setAdditional($this->gpvar['additional']);
+				$newProduct->setAdditionalArray($this->gpvar['additional']);
 
 				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart']) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeProductBeforeAddToCart'] as $funcRef) {
