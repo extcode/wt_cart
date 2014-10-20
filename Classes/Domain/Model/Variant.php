@@ -427,8 +427,6 @@ class Tx_WtCart_Domain_Model_Variant {
 	 */
 	public function getPriceCalcMethod() {
 		return $this->priceCalcMethod;
-
-		$this->reCalc();
 	}
 
 	/**
