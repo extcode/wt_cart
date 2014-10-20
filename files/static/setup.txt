@@ -228,8 +228,8 @@ plugin.tx_wtcart_pi1 {
       tableId = TEXT
       tableId.field = tableId
 
-      tableProductId = Text
-      tableProductId.field = tableId
+      tableProductId = TEXT
+      tableProductId.field = tableProductId
 
       qty = TEXT
       qty.field = qty
@@ -461,6 +461,12 @@ plugin.tx_wtcart_pi1 {
         titleText.data = LLL:EXT:wt_cart/pi1/locallang.xml:wt_cart_ll_delete
         params = class="wt_cart_delete"
         imageLinkWrap = 1
+#        imageLinkWrap {
+#          enable = 1
+#          typolink.parameter.data = page:alias//TSFE:id
+#          typolink.additionalParams = &tx_wtcart_pi1[del][{field:tableProductId}]{field:variantParam}=1
+#          typolink.additionalParams.insertData = 1
+#        }
         imageLinkWrap {
           enable = 1
           typolink.parameter.data = page:alias//TSFE:id

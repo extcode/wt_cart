@@ -513,6 +513,7 @@ class Tx_WtCart_Domain_Model_Product {
 		$productArr = array(
 			'puid' => $this->productId,
 			'tableId' => $this->tableId,
+			'tableProductId' => $this->getTableProductId(),
 			'cid' => $this->contentId,
 			'sku' => $this->sku,
 			'title' => $this->title,
