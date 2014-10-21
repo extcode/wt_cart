@@ -43,51 +43,6 @@ class tx_wtcart_div extends tslib_pibase {
 	public $extKey = 'wt_cart';
 
 	/**
-	 * Hook issued before session gets an empty cart
-	 *
-	 * @since 2.0.0 alpha 12
-	 *
-	 * @param array Field Values
-	 * @param integer Form UID
-	 * @param object Mail object (normally empty, filled when mail already exists via double-optin)
-	 * @param Tx_Powermail_Controller_FormsController $controller
-	 * @param Tx_WtCart_Forms $cartController
-	 * @param Tx_Powermail_Domain_Repository_MailsRepository $mailsRepository
-	 *
-	 * @return integer Error number
-	 */
-	public function beforeClearSessionHook(array $field = array(), $form, $mail = NULL, Tx_Powermail_Controller_FormsController $controller = NULL, Tx_WtCart_Hooks_Forms $cartController = NULL, Tx_Powermail_Domain_Repository_MailsRepository $mailsRepository = NULL){
-		$errorNumber = 0;
-		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['beforeClearSession'])) {
-			$session = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $GLOBALS['TSFE']->id);
-			if ($session) {
-				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['beforeClearSession'] as $userFunc) {
-					$params = array(
-						'field' => $field,
-						'form'  => $form,
-						'mail'  => $mail,
-						'mailController' => $controller,
-						'mailsRepository' => $mailsRepository,
-						'cart'  => unserialize($session),
-						'cartController' => $cartController
-					);
-					$errorNumber = t3lib_div::callUserFunction($userFunc, $params, $this);
-					//ignore class/method/function not found debug message
-					if($errorNumber === FALSE) $errorNumber = 0;
-					if ($errorNumber > 0) {
-						if (TYPO3_DLOG) {
-							$msg = sprintf("Aborting clear session because \"%s\" threw error(%d).", $userFunc, $errorNumber);
-							t3lib_div::devLog($msg, $this->extKey);
-						}
-						break;
-					}
-				}
-			}
-		}
-		return $errorNumber;
-	}
-
-	/**
 	 * Clear complete session
 	 *
 	 * @return  void

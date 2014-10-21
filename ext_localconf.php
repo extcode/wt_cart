@@ -20,14 +20,14 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['tx_wtcart_evalpri
 
 $TYPO3_CONF_VARS['FE']['eID_include']['addProduct'] = 'EXT:wt_cart/eid/addProduct.php';
 
-if(version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.0.0') >= 0) {
+$version20 = version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.0.0');
+$version21 = version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.1.0');
+$version22 = version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.2.0');
+
+if ( ( $version20 >= 0 ) && ( $version21 < 0 ) ) {
 	$pmForms = 'Tx_Powermail_Controller_FormsController';
-	$wtForms = 'Tx_WtCart_Hooks_Forms';
-	/*
-	  //won't work due to caching: http://typo3blogger.de/signal-slot-pattern/#comment_template
-	$signalSlotDispatcher = t3lib_div::makeInstance('Tx_Extbase_Object_Manager')
-			->get('Tx_Extbase_SignalSlot_Dispatcher');
-	*/
+	$wtForms = 'Tx_WtCart_Hooks_Forms20';
+
 	$signalSlotDispatcher = t3lib_div::makeInstance('Tx_Extbase_SignalSlot_Dispatcher');
 	$signalSlotDispatcher->connect(
 		$pmForms, 'formActionBeforeRenderView', $wtForms, 'checkTemplate'
@@ -38,6 +38,22 @@ if(version_compare(t3lib_extMgm::getExtensionVersion('powermail'), '2.0.0') >= 0
 	$signalSlotDispatcher->connect(
 		$pmForms, 'createActionAfterSubmitView', $wtForms, 'clearSession'
 	);
+}
 
-	}
+if ( ( $version21 >= 0 ) && ( $version22 < 0 ) ) {
+	$pmForms = 'In2code\Powermail\Controller\FormController';
+	$wtForms = 'Tx_WtCart_Hooks_Forms21';
+
+	$signalSlotDispatcher = t3lib_div::makeInstance('Tx_Extbase_SignalSlot_Dispatcher');
+	$signalSlotDispatcher->connect(
+		$pmForms, 'formActionBeforeRenderView', $wtForms, 'checkTemplate'
+	);
+	$signalSlotDispatcher->connect(
+		$pmForms, 'createActionBeforeRenderView', $wtForms, 'slotCreateActionBeforeRenderView'
+	);
+	$signalSlotDispatcher->connect(
+		$pmForms, 'createActionAfterSubmitView', $wtForms, 'clearSession'
+	);
+}
+
 ?>

@@ -36,53 +36,7 @@ define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
-
-	/**
-	 * @param Tx_Extbase_MVC_Controller_ActionController $controller
-	 * @param String $template Template Path and Filename
-	 */
-	protected function switchTemplate($controller, $template){
-		$template = t3lib_extMgm::extPath('wt_cart', $template);
-		$controller->view->setTemplatePathAndFilename($template);
-	}
-
-	/**
-	 * @param Array $payload
-	 * @param Tx_Powermail_Controller_FormsController $controller
-	 * @return bool
-	 */
-	public function checkTemplate($payload, $controller) {
-
-		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
-		$piVars = t3lib_div::_GP('tx_powermail_pi1');
-
-		if ($piVars['mailID'] > 0 || $piVars['sendNow'] > 0) {
-			return false; // stop
-		}
-
-		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $controller->cObj->data['uid'])
-		{ // if powermail uid isset and fits to current CE
-			$emptyTmpl = 'files/fluid_templates/powermail_empty.html';
-
-			// read cart from session
-			$cart = unserialize($GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $conf['main.']['pid']));
-			if (!$cart) {
-				$cart = new Cart();
-			}
-			if ($cart->getCount() == 0) { // if there are no products in the session
-				$this->switchTemplate($controller, $emptyTmpl);
-			}
-
-			$sesArray = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_cart_' . $conf['main.']['pid']);
-			$cartmin = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['cart.']['cartmin.'];
-			if ((floatval($sesArray['cart_gross_no_service']) < floatval($cartmin['value'])) && ($cartmin['hideifnotreached.']['powermail']))
-			{
-				$this->switchTemplate($controller, $emptyTmpl);
-			}
-		}
-
-	}
+class Tx_WtCart_Utility_Cart {
 
 	/**
 	 * @param $cart Tx_WtCart_Domain_Model_Cart
@@ -153,25 +107,11 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 	}
 
 	/**
-	 * @param array Field Values
-	 * @param integer Form UID
-	 * @param object Mail object (normally empty, filled when mail already exists via double-optin)
-	 * @param Tx_Powermail_Controller_FormsController $controller
+	 * @param \In2code\Powermail\Domain\Model\Mail $mail
+	 * @param string $hash
+	 * @param $obj
 	 */
-	public function clearSession(array $field = array(), $form, $mail = NULL, $controller, $newMail = NULL) {
-		$div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
-		$div->beforeClearSessionHook($field, $form, $mail, $controller, $this, $this->mailsRepository);
-		$div->removeAllProductsFromSession(); // clear cart now
-	}
-
-	/**
-	 * @param array $field
-	 * @param int $form
-	 * @param null $mail
-	 * @param Tx_Powermail_Controller_FormsController $controller
-	 * @throws Exception
-	 */
-	public function slotCreateActionBeforeRenderView(array $field = array(), $form = 0, $mail = NULL, Tx_Powermail_Controller_FormsController $controller = NULL) {
+	public function clearSession($mail, $hash = NULL, $obj) {
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 
 		/**
@@ -179,7 +119,48 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 		 */
 		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
 
-		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $controller->cObj->data['uid']) {
+		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $obj->cObj->data['uid']) {
+			$errors = array();
+
+			$params = array(
+				'cart' => $cart,
+				'mail' => &$mail,
+				'errors' => &$errors
+			);
+			$this->callHook( 'beforeClearSession', $params );
+		}
+
+		$div = t3lib_div::makeInstance('tx_wtcart_div');
+		$div->removeAllProductsFromSession();
+
+		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
+
+		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $obj->cObj->data['uid']) {
+			$errors = array();
+
+			$params = array(
+				'cart' => $cart,
+				'mail' => &$mail,
+				'errors' => &$errors
+			);
+			$this->callHook( 'afterClearSession', $params );
+		}
+	}
+
+	/**
+	 * @param \In2code\Powermail\Domain\Model\Mail $mail
+	 * @param $hash
+	 * @param $obj
+	 */
+	public function slotCreateActionBeforeRenderView($mail, $hash, $obj) {
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
+
+		/**
+		 * @var $cart Tx_WtCart_Domain_Model_Cart
+		 */
+		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
+
+		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $obj->cObj->data['uid']) {
 
 			$files = array();
 			$errors = array();
@@ -213,11 +194,11 @@ class Tx_WtCart_Hooks_Forms extends Tx_Powermail_Controller_FormsController {
 			}
 
 			if ( $params['preventEmailToSender'] == TRUE ) {
-				$controller->settings['sender']['enable'] = 0;
+				$obj->settings['sender']['enable'] = 0;
 			}
 
 			if ( $params['preventEmailToReceiver'] == TRUE ) {
-				$controller->settings['receiver']['enable'] = 0;
+				$obj->settings['receiver']['enable'] = 0;
 			}
 
 			$this->callHook( 'beforeAddAttachmentToMail', $params );
