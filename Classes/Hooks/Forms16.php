@@ -36,7 +36,7 @@ define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
  * @package	TYPO3
  * @subpackage	tx_wtcart_powermail
  */
-class tx_wtcart_powermail extends tslib_pibase {
+class Tx_WtCart_Hooks_Forms16 extends tslib_pibase {
 
 	/**
 	 * Don't show powermail form if session is empty
@@ -130,9 +130,10 @@ class tx_wtcart_powermail extends tslib_pibase {
 		$piVars = t3lib_div::_GPmerged('tx_powermail_pi1');
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 
-		if ($piVars['mailID'] == $conf['powermailContent.']['uid']) { // current content uid fits to given uid in constants
-			$div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
-			$div->removeAllProductsFromSession(); // clear complete cart
+		if ($piVars['mailID'] == $conf['powermailContent.']['uid']) {
+			/** @var Tx_WtCart_Utility_Cart $utilityCart */
+			$utilityCart = t3lib_div::makeInstance('Tx_WtCart_Utility_Cart');
+			$utilityCart->removeAllProductsFromSession();
 		}
 	}
 

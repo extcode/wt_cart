@@ -67,10 +67,10 @@ class user_wtcart_userfuncs extends tslib_pibase
 	 *
 	 * @return	void
 	 */
-	public function user_wtcart_clearCart($content = '', $conf = array())
-	{
-		$div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
-		$div->removeAllProductsFromSession(); // clear cart now
+	public function user_wtcart_clearCart($content = '', $conf = array()) {
+		/** @var Tx_WtCart_Utility_Cart $utilityCart */
+		$utilityCart = t3lib_div::makeInstance('Tx_WtCart_Utility_Cart');
+		$utilityCart->removeAllProductsFromSession();
 	}
 }
 

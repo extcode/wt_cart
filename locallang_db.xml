@@ -6,9 +6,9 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tt_content.list_type_pi1">wt_cart : cart</label>
-			<label index="tt_content.list_type_pi2">wt_cart : add to cart</label>
-			<label index="tt_content.list_type_pi3">wt_cart : minicart</label>
+			<label index="tt_content.list_type_pi1">wt_cart : Cart</label>
+			<label index="tt_content.list_type_pi2">wt_cart : Add Product to Cart</label>
+			<label index="tt_content.list_type_pi3">wt_cart : Mini-Cart</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.list_type_pi1">wt_cart : Warenkorb</label>

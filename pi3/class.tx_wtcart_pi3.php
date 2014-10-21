@@ -29,7 +29,6 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php')
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_render.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_dynamicmarkers.php');
 
 /**
@@ -68,7 +67,7 @@ class tx_wtcart_pi3 extends tslib_pibase {
 
 			// create new instance for function
 		$this->div = t3lib_div::makeInstance('tx_wtcart_div');
-		$this->render = t3lib_div::makeInstance('tx_wtcart_render');
+		$this->render = t3lib_div::makeInstance('Tx_WtCart_Utility_Renderer');
 		$this->dynamicMarkers = t3lib_div::makeInstance('tx_wtcart_dynamicmarkers', $this->scriptRelPath);
 
 		$this->tmpl['minicart'] = $this->cObj->getSubpart($this->cObj->fileResource($this->conf['main.']['template']), '###WTCART_MINICART###'); // Load FORM HTML Template
@@ -79,7 +78,13 @@ class tx_wtcart_pi3 extends tslib_pibase {
 		$flexformData = t3lib_div::xml2array($row['pi_flexform']);
 		$pid = $this->pi_getFFvalue($flexformData, 'pid', 'sDEF');
 
-		$cart = unserialize($GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $pid));
+		$session = $GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $pid);
+
+		if ( empty( $session ) ) {
+			return '';
+		}
+
+		$cart = unserialize( $session );
 		if (!$cart) {
 			$cart = new Tx_WtCart_Domain_Model_Cart();
 		}

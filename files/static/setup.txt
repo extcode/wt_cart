@@ -777,6 +777,15 @@ plugin.tx_wtcart_pi1 {
         if.isTrue.field = cart_tax_3
         10.userFunc.number.field = cart_tax_3
       }
+
+      shipping_option = TEXT
+      shipping_option.field = shipping_option
+
+      payment_option = TEXT
+      payment_option.field = payment_option
+
+      special_option = TEXT
+      special_option.field = special_option
     }
 
     additional {

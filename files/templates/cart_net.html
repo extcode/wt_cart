@@ -69,6 +69,73 @@
 </div>
 <!-- ###WTCART### end -->
 
+<!-- ###WTCART_CONFIRMATION### begin -->
+<div class="wtcart_cart">
+	<form name="cart" id="cart" action="###TARGET###" method="post">
+		###VARIANTS###
+		<div class="wtcart_cart_header">
+			<div class="wtcart_cart_col wtcart_cart_col_qty">###WTCART_LL_QTY###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_sku">###WTCART_LL_SKU###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_title">###WTCART_LL_TITLE###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">###WTCART_LL_PRICE###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">###WTCART_LL_PRICE_TOTAL###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+		</div>
+		<div class="wtcart_cart_product">
+			<!-- ###CONTENT### begin -->
+			<!-- ###ITEM### begin -->
+			<div class="wtcart_cart_col wtcart_cart_col_qty">###QTY###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_sku">###SKU###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_title">###TITLE###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">###PRICE###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">###PRICE_TOTAL###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col_error">###ERROR_MSG###</div>
+			<!-- ###ITEM### end -->
+			<!-- ###VARIANTITEM### begin -->
+			<!-- ###VARIANTITEMVARIANT### begin -->
+			<div class="wtcart_cart_col wtcart_cart_col_qty">###QTY###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_sku">###SKU_WITH_VARIANTS###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_title">###TITLE_WITH_VARIANTS###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">###PRICE###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">###PRICE_TOTAL###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col_error">###ERROR_MSG###</div>
+			<!-- ###VARIANTITEMVARIANT### end -->
+			<!-- ###VARIANTITEMALL### begin -->
+			<div class="wtcart_cart_col wtcart_cart_col_qty">###QTY###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_sku"><!-- --></div>
+			<div class="wtcart_cart_col wtcart_cart_col_title">###TITLE###</div>
+			<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right"><!-- --></div>
+			<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">###PRICE_TOTAL###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col_error">###ERROR_MSG###</div>
+			<!-- ###VARIANTITEMALL### end -->
+			<!-- ###VARIANTITEM### end -->
+			<!-- ###CONTENT### end -->
+		</div>
+		<div class="wtcart_cart_footer">
+			<div class="wtcart_cart_col wtcart_cart_foot_col1">###WTCART_LL_CART_NET###</div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col2">###CART_NET_NO_SERVICE###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col1">###WTCART_LL_SERVICE_COST###</div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col2">###SERVICE_COST_NET###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col1">###WTCART_LL_TAX###</div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col2"></div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col1">###TAXCLASS_1_STRING###<br/>###TAXCLASS_2_STRING###<br/>###TAXCLASS_3_STRING###</div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col2">###CART_TAX_1###<br/>###CART_TAX_2###<br/>###CART_TAX_3###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col1">###WTCART_LL_GROSS_TOTAL###</div>
+			<div class="wtcart_cart_col wtcart_cart_foot_col2">###CART_GROSS###</div>
+			<div class="wt_cart_cleaner"><!-- --></div>
+		</div>
+		<div>###WTCART_LL_SHIPPING### ###TX_WTCART_DOMAIN_MODEL_SHIPPING_OPTION###</div>
+		<div>###WTCART_LL_PAYMENT### ###TX_WTCART_DOMAIN_MODEL_PAYMENT_OPTION###</div>
+	</form>
+</div>
+<!-- ###WTCART_CONFIRMATION### end -->
 
 <!-- ###WTCART_SHIPPING### begin -->
 <div id="wtcart_shipping">

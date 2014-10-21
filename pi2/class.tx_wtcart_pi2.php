@@ -61,7 +61,7 @@ class tx_wtcart_pi2 extends tslib_pibase {
 
 			// create new instance for function
 		$this->div = t3lib_div::makeInstance('tx_wtcart_div');
-		$this->render = t3lib_div::makeInstance('tx_wtcart_render');
+		$this->render = t3lib_div::makeInstance('Tx_WtCart_Utility_Renderer');
 		$this->dynamicMarkers = t3lib_div::makeInstance('tx_wtcart_dynamicmarkers', $this->scriptRelPath);
 
 		$this->tmpl['form'] = $this->cObj->getSubpart($this->cObj->fileResource($this->conf['main.']['template']), '###WTCART_FORM###'); // Load FORM HTML Template
@@ -86,8 +86,8 @@ class tx_wtcart_pi2 extends tslib_pibase {
 				}
 			}
 		}
-		$GLOBALS['TSFE']->cObj->start($product, $this->conf['flexfields.']);
-		$GLOBALS['TSFE']->cObj->start($product, $this->conf['flexfields.']['attributes.']);
+		$GLOBALS['TSFE']->cObj->start($product, $this->conf['flexfields']);
+		$GLOBALS['TSFE']->cObj->start($product, $this->conf['flexfields.']['attributes']);
 
 			// get marker for all fields defined in plugin pi from wt_cart
 		$conf_pi1 = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
@@ -98,7 +98,6 @@ class tx_wtcart_pi2 extends tslib_pibase {
 				$this->formMarkerArray['###' . strtoupper($key) . '###'] = $productOut[$key];
 			}
 		}
-
 		$this->formMarkerArray['###WTCART_FORM_ACTION_PID###'] = $this->conf['main.']['pid'];
 		$this->formMarkerArray['###WTCART_FORM_ACTION###'] = $this->pi_getPageLink($this->conf['main.']['pid']);
 		$this->formMarkerArray['###WTCART_FORM_CONTENTUID###'] = $this->cObj->data['uid'];

@@ -25,7 +25,6 @@
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php'); // file for div functions
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_render.php'); // file for render functions
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_dynamicmarkers.php'); // file for dynamicmarker functions
 
 /**
@@ -78,7 +77,7 @@ class user_wtcart_powermailCart extends tslib_pibase {
 		$this->tmpl['additional_item'] = $this->cObj->getSubpart($this->tmpl['additional_all'], '###ITEM###');
 
 		$this->div = t3lib_div::makeInstance('tx_wtcart_div'); // Create new instance for div functions
-		$this->render = t3lib_div::makeInstance('tx_wtcart_render'); // Create new instance for render functions
+		$this->render = t3lib_div::makeInstance('Tx_WtCart_Utility_Renderer'); // Create new instance for render functions
 		$this->dynamicMarkers = t3lib_div::makeInstance('tx_wtcart_dynamicmarkers'); // Create new instance for dynamicmarker function
 
 		// get cart from the session

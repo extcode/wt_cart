@@ -32,7 +32,6 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php')
 require_once(PATH_site . 'typo3/sysext/css_styled_content/pi1/class.tx_cssstyledcontent_pi1.php');
 
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_render.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_dynamicmarkers.php');
 
 /**

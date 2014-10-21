@@ -30,7 +30,6 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php')
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_render.php');
 require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_dynamicmarkers.php');
 
 
@@ -72,7 +71,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 			// create new instance for function
 		$this->div = t3lib_div::makeInstance('tx_wtcart_div');
-		$this->render = t3lib_div::makeInstance('tx_wtcart_render');
+		$this->render = t3lib_div::makeInstance('Tx_WtCart_Utility_Renderer');
 		$this->dynamicMarkers = t3lib_div::makeInstance('tx_wtcart_dynamicmarkers');
 
 		// parse all taxclasses
@@ -312,6 +311,14 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			$this->render->renderServiceList($cart, $payments, $cart->getPayment(), $this);
 
 			$this->render->renderServiceList($cart, $specials, $cart->getSpecials(), $this);
+
+			$this->render->renderOverall($cart, $this);
+
+			$this->render->renderServiceItem($cart, $cart->getShipping(), $this);
+
+			$this->render->renderServiceItem($cart, $cart->getPayment(), $this);
+
+			$this->render->renderServiceItem($cart, $cart->getSpecials(), $this);
 
 			$this->render->renderClearCartLink($this);
 

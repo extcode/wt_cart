@@ -43,64 +43,6 @@ class tx_wtcart_div extends tslib_pibase {
 	public $extKey = 'wt_cart';
 
 	/**
-	 * Clear complete session
-	 *
-	 * @return  void
-	 */
-	public function getAllProductsFromSession() {
-		// HOOK for clearSession
-		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['getAllProductsFromSession'])) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['getAllProductsFromSession'] as $userFunc) {
-				$params = array(
-				);
-				$errorNumber = t3lib_div::callUserFunction($userFunc, $params, $this);
-				//ignore class/method/function not found debug message
-				if ($errorNumber === FALSE) {
-					$errorNumber = 0;
-				}
-				if ($errorNumber > 0) {
-					if (TYPO3_DLOG) {
-						$msg = sprintf("Aborting get all products from session because \"%s\" threw error(%d).", $userFunc, $errorNumber);
-						t3lib_div::devLog($msg, $this->extKey);
-					}
-					break;
-				}
-			}
-		}
-	}
-
-	/**
-	* Clear complete session
-	*
-	* @return  void
-	*/
-	public function removeAllProductsFromSession() {
-		// HOOK for clearSession
-		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['clearSession'])) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->extKey]['clearSession'] as $userFunc) {
-					$params = array(
-				);
-				$errorNumber = t3lib_div::callUserFunction($userFunc, $params, $this);
-				//ignore class/method/function not found debug message
-				if ($errorNumber === FALSE) {
-					$errorNumber = 0;
-				}
-				if ($errorNumber > 0) {
-					if (TYPO3_DLOG) {
-						$msg = sprintf("Aborting clear session because \"%s\" threw error(%d).", $userFunc, $errorNumber);
-						t3lib_div::devLog($msg, $this->extKey);
-					}
-					break;
-				}
-			}
-		}
-		//TODO: check for $errorNumber to be Zero*/
-		$pid = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['main.']['pid'];
-		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->extKey . '_' . $pid, array()); // Generate new session with empty array
-		$GLOBALS['TSFE']->storeSessionData(); // Save session
-	}
-
-	/**
 	 * read product details (title, price from table)
 	 *
 	 * @param array   $gpvar: array with product uid, title, taxclass, etc...

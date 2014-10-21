@@ -23,8 +23,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 * ************************************************************* */
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-
 /**
 * Plugin 'Cart' for the 'wt_cart' extension.
 *
@@ -33,17 +31,38 @@ require_once(PATH_tslib . 'class.tslib_pibase.php');
 * @subpackage	tx_wtcart
 * @version	1.4.0
 */
-class tx_wtcart_render extends tslib_pibase {
+class Tx_WtCart_Utility_Renderer {
 	public $prefixId = 'tx_wtcart_pi1';
 	public $scriptRelPath = 'pi1/class.tx_wtcart_pi1.php';
 	public $extKey = 'wt_cart';
+
+	/**
+	 * powermailAction
+	 *
+	 * @var string
+	 */
+	protected $powermailAction = '';
 
 	/**
 	 * @param $obj
 	 * @return null
 	 */
 	public function loadTemplate(&$obj) {
+
+		$powermailValues = t3lib_div::_GET('tx_powermail_pi1');
+		if ( $powermailValues && $powermailValues['action'] ) {
+			$this->powermailAction = $powermailValues['action'];
+		}
+
 		$obj->tmpl['all'] = $obj->cObj->getSubpart($obj->cObj->fileResource($obj->conf['main.']['template']), '###WTCART###');
+
+		if ( $this->powermailAction == 'confirmation' ) {
+			$confirmation_all = $obj->cObj->getSubpart($obj->cObj->fileResource($obj->conf['main.']['template']), '###WTCART_CONFIRMATION###');
+			if ( !empty( $confirmation_all ) ) {
+				$obj->tmpl['all'] = $confirmation_all;
+			}
+		}
+
 		$obj->tmpl['empty'] = $obj->cObj->getSubpart($obj->cObj->fileResource($obj->conf['main.']['template']), '###WTCART_EMPTY###');
 		$obj->tmpl['item'] = $obj->cObj->getSubpart($obj->tmpl['all'], '###ITEM###');
 		$obj->tmpl['variantitem'] = $obj->cObj->getSubpart($obj->tmpl['all'], '###VARIANTITEM###');
@@ -140,7 +159,14 @@ class tx_wtcart_render extends tslib_pibase {
 
 		$GLOBALS['TSFE']->cObj->start($productArr, $obj->conf['db.']['table']);
 
-		foreach ((array)$obj->conf['settings.']['fields.'] as $key => $value) {
+		$fields = (array)$obj->conf['settings.']['fields.'];
+
+		if ($this->powermailAction == 'confirmation') {
+			unset( $fields['delete'] );
+			unset( $fields['delete.'] );
+		}
+
+		foreach ($fields as $key => $value) {
 			if (!stristr($key, '.')) {
 				if ($key == 'tax') {
 					$tsKey = $obj->conf['settings.']['fields.']['taxclass.'][$key];

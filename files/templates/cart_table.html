@@ -84,6 +84,89 @@
 </div>
 <!-- ###WTCART### end -->
 
+<!-- ###WTCART_CONFIRMATION### begin -->
+<div class="wtcart_cart">
+	<form name="cart" id="cart" action="###TARGET###" method="post">
+		###VARIANTS###
+		<table cellpadding="0" cellspacing="0" border="0" class="wtcart_cart_table">
+			<thead>
+			<tr>
+				<th class="wtcart_cart_thead_col_title">###WTCART_LL_TITLE###</th>
+				<th class="wtcart_cart_thead_col_sku">###WTCART_LL_SKU###</th>
+				<th class="wtcart_cart_thead_col_price wtcart_cart_right">###WTCART_LL_PRICE###</th>
+				<th class="wtcart_cart_thead_col_qty wtcart_cart_center" colspan="2">###WTCART_LL_QTY###</th>
+				<th class="wtcart_cart_thead_col_total wtcart_cart_right">###WTCART_LL_PRICE_TOTAL###</th>
+			</tr>
+			</thead>
+			<tfoot>
+			<tr class="wtcart_cart_netnoservice">
+				<td class="wtcart_cart_tfoot_col1" colspan="5">###WTCART_LL_CART_NET###</td>
+				<td class="wtcart_cart_tfoot_col2">###CART_NET_NO_SERVICE###</td>
+			</tr>
+			<tr class="wtcart_cart_servicecost">
+				<td class="wtcart_cart_tfoot_col1" colspan="5">###WTCART_LL_SERVICE_COST###</td>
+				<td class="wtcart_cart_tfoot_col2">###SERVICE_COST_NET###</td>
+			</tr>
+			<tr class="wtcart_cart_tax">
+				<td class="wtcart_cart_tfoot_col1" colspan="5">###TAXCLASS_1_STRING### ###TAXCLASS_2_STRING### ###TAXCLASS_3_STRING###</td>
+				<td class="wtcart_cart_tfoot_col2">###CART_TAX_1### ###CART_TAX_2### ###CART_TAX_3###</td>
+			</tr>
+			<tr class="wtcart_cart_gross">
+				<td class="wtcart_cart_tfoot_col1" colspan="5">###WTCART_LL_GROSS_TOTAL###</td>
+				<td class="wtcart_cart_tfoot_col2">###CART_GROSS###</td>
+			</tr>
+			</tfoot>
+			<tbody>
+			<!-- ###CONTENT### begin -->
+			<!-- ###ITEM### begin -->
+			<tr>
+				<td class="wtcart_cart_col_title">###TITLE###</td>
+				<td class="wtcart_cart_col_sku">###SKU###</td>
+				<td class="wtcart_cart_col_price wtcart_cart_right">###PRICE###</td>
+				<td class="wtcart_cart_col_qty">###QTY###</td>
+				<td class="wtcart_cart_col_total wtcart_cart_right">###PRICE_TOTAL###</td>
+			</tr>
+			<tr>
+				<td colspan="6">###ERROR_MSG###</td>
+			</tr>
+			<!-- ###ITEM### end -->
+			<!-- ###VARIANTITEM### begin -->
+			<!-- ###VARIANTITEMALL### begin -->
+			<tr class="wtcart_cart_itemall">
+				<td class="wtcart_cart_col_title">###TITLE###</td>
+				<td class="wtcart_cart_col_sku">&nbsp;</td>
+				<td class="wtcart_cart_col_price">&nbsp;</td>
+				<td class="wtcart_cart_col_qty">###QTY###</td>
+				<td class="wtcart_cart_col_total wtcart_cart_right" colspan="2">###PRICE_TOTAL###</td>
+			</tr>
+			<tr>
+				<td colspan="6">###ERROR_MSG###</td>
+			</tr>
+			<!-- ###VARIANTITEMALL### end -->
+			<!-- ###VARIANTITEMVARIANT### begin -->
+			<tr>
+				<td class="wtcart_cart_col_title">###TITLE_WITH_VARIANTS###</td>
+				<td class="wtcart_cart_col_sku">###SKU_WITH_VARIANTS###</td>
+				<td class="wtcart_cart_col_price wtcart_cart_right">###PRICE###</td>
+				<td class="wtcart_cart_col_qty">###QTY###</td>
+				<td class="wtcart_cart_col_total">###PRICE_TOTAL###</td>
+			</tr>
+			<tr>
+				<td colspan="6">###ERROR_MSG###</td>
+			</tr>
+			<!-- ###VARIANTITEMVARIANT### end -->
+			<!-- ###VARIANTITEM### end -->
+			<!-- ###CONTENT### -->
+			</tbody>
+		</table>
+		###SHIPPING_RADIO###
+		###PAYMENT_RADIO###
+		###SPECIAL_CHECKBOX###
+		###ADDITIONAL_LIST###
+		###CLEARCART###
+	</form>
+</div>
+<!-- ###WTCART_CONFIRMATION### end -->
 
 <!-- ###WTCART_SHIPPING### begin -->
 <div id="wtcart_shipping">

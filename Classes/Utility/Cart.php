@@ -130,8 +130,7 @@ class Tx_WtCart_Utility_Cart {
 			$this->callHook( 'beforeClearSession', $params );
 		}
 
-		$div = t3lib_div::makeInstance('tx_wtcart_div');
-		$div->removeAllProductsFromSession();
+		$this->removeAllProductsFromSession();
 
 		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
 
@@ -243,6 +242,18 @@ class Tx_WtCart_Utility_Cart {
 
 			$GLOBALS['TSFE']->fe_user->setKey('ses', 'powermail', $powermailSession);
 		}
+	}
+
+	/**
+	 * Clear complete session
+	 *
+	 * @return  void
+	 */
+	public function removeAllProductsFromSession() {
+		//TODO: check for $errorNumber to be Zero*/
+		$pid = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['main.']['pid'];
+		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->extKey . '_' . $pid, array());
+		$GLOBALS['TSFE']->storeSessionData();
 	}
 }
 
