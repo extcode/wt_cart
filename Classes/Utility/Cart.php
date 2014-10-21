@@ -252,7 +252,7 @@ class Tx_WtCart_Utility_Cart {
 	public function removeAllProductsFromSession() {
 		//TODO: check for $errorNumber to be Zero*/
 		$pid = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['main.']['pid'];
-		$GLOBALS['TSFE']->fe_user->setKey('ses', $this->extKey . '_' . $pid, array());
+		$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $pid, array());
 		$GLOBALS['TSFE']->storeSessionData();
 	}
 }
