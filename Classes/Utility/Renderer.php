@@ -676,12 +676,13 @@ class Tx_WtCart_Utility_Renderer {
 	}
 
 	/**
-	 * @param $cart
+	 * @param Tx_WtCart_Domain_Model_Cart $cart
 	 * @param $seloption
+	 * @param string $type
 	 * @param $obj
 	 * @return null
 	 */
-	public function renderServiceItem(&$cart, &$seloption, &$obj) {
+	public function renderServiceItem(&$cart, &$seloption, $type, &$obj) {
 		$item = '';
 
 		if (is_array($seloption)) {
@@ -695,7 +696,6 @@ class Tx_WtCart_Utility_Renderer {
 				$item .= $selected->getName() . ' (' . $this->formatPrice($price, $obj) . ') <br />';
 			}
 		} else {
-			$upperType = strtoupper(get_class($seloption));
 			if ($seloption) {
 				if ($seloption->getIsNetPrice()) {
 					$price = $seloption->getNet($cart);
@@ -706,7 +706,7 @@ class Tx_WtCart_Utility_Renderer {
 			}
 		}
 
-		$obj->outerMarkerArray['###' . $upperType . '_OPTION###'] = $item;
+		$obj->outerMarkerArray['###' . strtoupper($type) . '_OPTION###'] = $item;
 
 		return NULL;
 	}

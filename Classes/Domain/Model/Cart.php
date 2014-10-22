@@ -741,9 +741,9 @@ class Tx_WtCart_Domain_Model_Cart {
 		$this->maxServiceAttr3 =
 				$this->maxServiceAttr3 > $newproduct->getServiceAttribute3() ? $this->maxServiceAttr3 : $newproduct->getServiceAttribute3();
 
-		$this->sumServiceAttr1 += $newproduct->getServiceAttribute1() * $newproduct->getQty;
-		$this->sumServiceAttr2 += $newproduct->getServiceAttribute2() * $newproduct->getQty;
-		$this->sumServiceAttr3 += $newproduct->getServiceAttribute3() * $newproduct->getQty;
+		$this->sumServiceAttr1 += $newproduct->getServiceAttribute1() * $newproduct->getQty();
+		$this->sumServiceAttr2 += $newproduct->getServiceAttribute2() * $newproduct->getQty();
+		$this->sumServiceAttr3 += $newproduct->getServiceAttribute3() * $newproduct->getQty();
 	}
 
 	/**

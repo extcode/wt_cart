@@ -314,11 +314,11 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 			$this->render->renderOverall($cart, $this);
 
-			$this->render->renderServiceItem($cart, $cart->getShipping(), $this);
+			$this->render->renderServiceItem($cart, $cart->getShipping(), 'SHIPPING', $this);
 
-			$this->render->renderServiceItem($cart, $cart->getPayment(), $this);
+			$this->render->renderServiceItem($cart, $cart->getPayment(), 'PAYMENT', $this);
 
-			$this->render->renderServiceItem($cart, $cart->getSpecials(), $this);
+			$this->render->renderServiceItem($cart, $cart->getSpecials(), 'SPECIAL', $this);
 
 			$this->render->renderClearCartLink($this);
 
