@@ -146,11 +146,11 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		}
 
 			// if no qty given set qty to 1
-		if ($this->gpvar['qty'] === 0) {
+		if ( empty($this->gpvar['qty']) ) {
 			$this->gpvar['qty'] = 1;
 		}
 			// change quantity of products
-		if (isset($this->piVars['qty'])) {
+		if ( isset($this->piVars['qty']) ) {
 			$cart->changeProductsQty($this->piVars['qty']);
 		}
 
