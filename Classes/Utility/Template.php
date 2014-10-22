@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2012 Sebastian Wagner <sebastian.wagner@tritum.de>, tritum.de
+ *  (c) 2011-2014 - wt_cart Development Team <info@wt-cart.com>
  *
  *  All rights reserved
  *
