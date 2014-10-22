@@ -44,7 +44,7 @@ to customize the documents extensively.
 
 You can download the extension from our `github <https://github.com/extcode/wt_cart_pdf>`_ account.
 
-|logo-2|
+|logo-3|
 
 wt_cart_paypal
 """"""""""""""
@@ -55,4 +55,4 @@ so far.
 
 Soon you will be able to download the extension from our github account.
 
-|logo-3|
+|logo-2|

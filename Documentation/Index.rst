@@ -21,19 +21,19 @@ EXT: wt\_cart
 |img-1|
 
 :Created:
-      2010-07-06 12::0:0:
+      2010-07-06
 
 :Changed by:
       Björn Jacob, Daniel Lorenz
 
 :Changed:
-      2013-11-25 21::0:0:
+      2014-10-22
 
 :Description:
       wt\_cart is a small but powerful extension which adds some shopping cart functionality to your TYPO3 installation.
 
 :Keywords:
-      cart, shopping, e-commerce, commerce, checkout
+      cart, shop, shopping, e-commerce, ecommerce, checkout, payment, wt\_cart
 
 :Author:
       Björn Jacob, Daniel Lorenz
