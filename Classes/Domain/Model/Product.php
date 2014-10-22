@@ -132,28 +132,63 @@ class Tx_WtCart_Domain_Model_Product {
 	/**
 	 * __construct
 	 *
-	 * @param $id
+	 * @param int $productId
 	 * @param int $tableId
 	 * @param int $contentId
-	 * @param $sku
-	 * @param $title
-	 * @param $price
-	 * @param Tx_WtCart_Domain_Model_Tax $taxclass
-	 * @param $qty
+	 * @param string $sku
+	 * @param string $title
+	 * @param float $price
+	 * @param Tx_WtCart_Domain_Model_Tax $taxClass
+	 * @param int $qty
 	 * @param bool $isNetPrice
-	 * @internal param $boolean
-	 * @return \Tx_WtCart_Domain_Model_Product
+	 * @throws InvalidArgumentException
 	 */
-	public function __construct($id, $tableId = 0, $contentId = 0, $sku, $title, $price, Tx_WtCart_Domain_Model_Tax $taxclass, $qty, $isNetPrice = FALSE) {
-		$this->productId = $id;
+	public function __construct($productId, $tableId = 0, $contentId = 0, $sku, $title, $price, Tx_WtCart_Domain_Model_Tax $taxClass, $qty, $isNetPrice = FALSE) {
+		if ( !$productId ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $productId for constructor.',
+				1413999100
+			);
+		}
+		if ( !$sku ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $sku for constructor.',
+				1413999110
+			);
+		}
+		if ( !$title ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $title for constructor.',
+				1413999120
+			);
+		}
+		if ( !$price ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $price for constructor.',
+				1413999130
+			);
+		}
+		if ( !$taxClass ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $taxClass for constructor.',
+				1413999140
+			);
+		}
+		if ( !$qty ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $qty for constructor.',
+				1413999150
+			);
+		}
+
+		$this->productId = $productId;
 		$this->tableId = $tableId;
 		$this->contentId = $contentId;
 		$this->sku = $sku;
 		$this->title = $title;
-		$this->price = floatval(str_replace(',', '.', $price));
-		$this->taxClass = $taxclass;
+		$this->price = $price;
+		$this->taxClass = $taxClass;
 		$this->qty = $qty;
-
 		$this->isNetPrice = $isNetPrice;
 
 		$this->calcGross();

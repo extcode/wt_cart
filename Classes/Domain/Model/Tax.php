@@ -32,23 +32,28 @@
  * @version    1.5.0
  */
 class Tx_WtCart_Domain_Model_Tax {
+
 	/**
 	 * @var integer
+	 * @validate NotEmpty
 	 */
 	private $id;
 
 	/**
 	 * @var string
+	 * @validate NotEmpty
 	 */
 	private $value;
 
 	/**
 	 * @var integer
+	 * @validate NotEmpty
 	 */
 	private $calc;
 
 	/**
 	 * @var string
+	 * @validate NotEmpty
 	 */
 	private $name;
 
@@ -59,9 +64,35 @@ class Tx_WtCart_Domain_Model_Tax {
 	 * @param $value
 	 * @param $calc
 	 * @param $name
+	 * @throws InvalidArgumentException
 	 * @return \Tx_WtCart_Domain_Model_Tax
 	 */
 	public function __construct($id, $value, $calc, $name) {
+		if ( !$id ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $id for constructor.',
+				1413981328
+			);
+		}
+		if ( !$value ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $value for constructor.',
+				1413981329
+			);
+		}
+		if ( !$calc ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $calc for constructor.',
+				1413981330
+			);
+		}
+		if ( !$name ) {
+			throw new \InvalidArgumentException(
+				'You have to specify a valid $name for constructor.',
+				1413981331
+			);
+		}
+
 		$this->id = $id;
 		$this->value = str_replace($LocaleInfo["mon_decimal_point"] , ".", $value);
 		$this->calc = $calc;

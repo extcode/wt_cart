@@ -202,9 +202,17 @@ class Tx_WtCart_Domain_Model_Cart {
 
 	/**
 	 * @param string
+	 * @throws LogicException
 	 * @return void
 	 */
 	public function setOrderNumber($orderNumber) {
+		if ( ($this->orderNumber) && ($this->orderNumber != $orderNumber) ) {
+			throw new \LogicException(
+				'You can not redeclare the order number of your cart.',
+				1413969668
+			);
+		}
+
 		$this->orderNumber = $orderNumber;
 	}
 
@@ -217,8 +225,17 @@ class Tx_WtCart_Domain_Model_Cart {
 
 	/**
 	 * @param string $invoiceNumber
+	 * @throws LogicException
+	 * @return void
 	 */
 	public function setInvoiceNumber($invoiceNumber) {
+		if ( ($this->invoiceNumber) && ($this->invoiceNumber != $invoiceNumber) ) {
+			throw new \LogicException(
+				'You can not redeclare the invoice number of your cart.',
+				1413969712
+			);
+		}
+
 		$this->invoiceNumber = $invoiceNumber;
 	}
 
@@ -657,37 +674,55 @@ class Tx_WtCart_Domain_Model_Cart {
 
 	/**
 	 * @param $productsArray
-	 * @internal param $productPuid
-	 * @internal param null $variantId
-	 * @internal param $id
 	 * @return bool|int
 	 */
-	public function removeProducts($productsArray) {
-		foreach ($productsArray as $productPuid => $value) {
-			$product = $this->products[$productPuid];
-			if ($product) {
-				if (is_array($value)) {
-					$product->removeVariants($value);
-
-					if (!$product->getVariants()) {
-						unset($this->products[$productPuid]);
-					}
-
-					$this->calcAll();
+	public function removeProducts( $productsArray ) {
+		if ( is_array($productsArray) ) {
+			foreach ($productsArray as $productPuid => $productValue ) {
+				$product = $this->products[$productPuid];
+				if ( $product ) {
+					$this->removeProduct( $product, $productValue );
 				} else {
-					$this->subCount($product->getQty());
-					$this->subGross($product->getGross());
-					$this->subNet($product->getNet());
-					$this->subTax($product->getTax());
-
-					unset($this->products[$productPuid]);
+					return -1;
 				}
+			}
+		} else {
+			$productPuid = $productsArray;
+			$product = $this->products[$productPuid];
+			if ( $product ) {
+				$this->removeProduct( $product );
 			} else {
 				return -1;
 			}
 		}
 
 		$this->updateServiceAttributes();
+
+		return TRUE;
+	}
+
+	/**
+	 * @param Tx_WtCart_Domain_Model_Product $product
+	 * @param array $productValue
+	 * @return bool
+	 */
+	public function removeProduct( $product, $productValue = NULL) {
+		if ( is_array($productValue) ) {
+			$product->removeVariants($productValue);
+
+			if (!$product->getVariants()) {
+				unset( $this->products[$product->getTableProductId()] );
+			}
+
+			$this->calcAll();
+		} else {
+			$this->subCount($product->getQty());
+			$this->subGross($product->getGross());
+			$this->subNet($product->getNet());
+			$this->subTax($product->getTax());
+
+			unset( $this->products[$product->getTableProductId()] );
+		}
 
 		return TRUE;
 	}
