@@ -24,8 +24,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-
 class tx_wtcart_dynamicmarkers extends tslib_pibase {
 
 	public $extKey = 'wt_cart';

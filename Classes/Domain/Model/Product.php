@@ -26,9 +26,6 @@
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Tax.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Variant.php');
-
 /**
  * Plugin 'Cart' for the 'wt_cart' extension.
  *

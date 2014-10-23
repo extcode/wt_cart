@@ -24,9 +24,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
-
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
 /**

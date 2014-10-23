@@ -24,9 +24,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php'); // file for div functions
-
 /**
  * plugin 'Cart' for the 'wt_cart' extension.
  *
@@ -34,8 +31,7 @@ require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php'); 
  * @package	TYPO3
  * @subpackage	tx_wtcart
  */
-class user_wtcart_userfuncs extends tslib_pibase
-{
+class user_wtcart_userfuncs extends tslib_pibase {
 
 	public $prefixId = 'tx_wtcart_pi1';
 

@@ -26,11 +26,6 @@
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Payment.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Product.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Tax.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Special.php');
-
 /**
 * Plugin 'Cart' for the 'wt_cart' extension.
 *

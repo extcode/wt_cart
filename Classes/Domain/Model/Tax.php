@@ -47,7 +47,7 @@ class Tx_WtCart_Domain_Model_Tax {
 	private $value;
 
 	/**
-	 * @var integer
+	 * @var float
 	 * @validate NotEmpty
 	 */
 	private $calc;
@@ -61,9 +61,9 @@ class Tx_WtCart_Domain_Model_Tax {
 	/**
 	 * __construct
 	 *
-	 * @param $id
-	 * @param $value
-	 * @param $calc
+	 * @param int $id
+	 * @param string $value
+	 * @param float $calc
 	 * @param $name
 	 * @throws InvalidArgumentException
 	 * @return \Tx_WtCart_Domain_Model_Tax
@@ -75,7 +75,7 @@ class Tx_WtCart_Domain_Model_Tax {
 				1413981328
 			);
 		}
-		if ( !$value ) {
+		if ( empty($value) && ($value !== '0') ) {
 			throw new \InvalidArgumentException(
 				'You have to specify a valid $value for constructor.',
 				1413981329
@@ -87,7 +87,7 @@ class Tx_WtCart_Domain_Model_Tax {
 				1413981330
 			);
 		}
-		if ( !$name ) {
+		if ( empty($name) && ($name !== '0') ) {
 			throw new \InvalidArgumentException(
 				'You have to specify a valid $name for constructor.',
 				1413981331

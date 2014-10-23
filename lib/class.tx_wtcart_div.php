@@ -26,8 +26,6 @@
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-
 /**
 * Plugin 'Cart' for the 'wt_cart' extension.
 *

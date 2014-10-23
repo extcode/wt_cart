@@ -28,12 +28,7 @@ if (!defined ('PATH_typo3conf'))	 die ('Could not access this script directly!')
 
 define('TYPO3_DLOG', $GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']);
 
-require_once(t3lib_extMgm::extPath('wt_cart') . 'Classes/Domain/Model/Cart.php');
-
 require_once(PATH_site . 'typo3/sysext/css_styled_content/pi1/class.tx_cssstyledcontent_pi1.php');
-
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_div.php');
-require_once(t3lib_extMgm::extPath('wt_cart') . 'lib/class.tx_wtcart_dynamicmarkers.php');
 
 /**
  * Plugin 'Cart' for the 'wt_cart' extension.
