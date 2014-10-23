@@ -5,4 +5,4 @@ nor includes a checkout functionality. The extension depends on powermail
 which helps you to integrate the checkout process. Furthermore powermail is
 utilized for sending the order confirmation.
 
-Homepage: http://www.wt-cart.com
+Homepage: http://wt-cart.com
