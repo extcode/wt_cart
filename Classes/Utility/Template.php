@@ -49,9 +49,9 @@ class Tx_WtCart_Utility_Template {
 			return false; // stop
 		}
 
-		//
 		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $powermailUid) {
 			$emptyTmpl = 'files/fluid_templates/powermail_empty.html';
+			$emptyTmpl = t3lib_extMgm::extPath('wt_cart', $emptyTmpl);
 
 			// read cart from session
 			$cart = unserialize($GLOBALS['TSFE']->fe_user->getKey('ses', 'wt_cart_' . $conf['main.']['pid']));
@@ -66,8 +66,33 @@ class Tx_WtCart_Utility_Template {
 			if ( ( $cart->getGross() < floatval( $cartmin['value'] ) ) && ( $cartmin['hideifnotreached.']['powermail'] ) ) {
 				return $emptyTmpl;
 			}
+
+			$params = array(
+				'cart' => $cart,
+				'emptyTemplate' => &$emptyTmpl,
+				'returnTemplate' => '',
+			);
+			$this->callHook( 'afterCheckTemplate', $params );
+
+			if ( !empty( $params['returnTemplate'] ) ) {
+				return $params['returnTemplate'];
+			}
 		}
 
+	}
+
+	/**
+	 * @param string $hookName
+	 * @param array $params
+	 */
+	protected function callHook( $hookName, &$params ) {
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart'][$hookName]) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart'][$hookName] as $funcRef) {
+				if ($funcRef) {
+					t3lib_div::callUserFunction($funcRef, $params, $this);
+				}
+			}
+		}
 	}
 
 }

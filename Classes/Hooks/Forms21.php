@@ -71,7 +71,6 @@ class Tx_WtCart_Hooks_Forms21 extends In2code\Powermail\Controller\FormControlle
 	 * @param String $templatePath Template Path and Filename
 	 */
 	protected function switchTemplate($obj, $templatePath){
-		$templatePath = t3lib_extMgm::extPath('wt_cart', $templatePath);
 		$obj->view->setTemplatePathAndFilename( $templatePath );
 	}
 
