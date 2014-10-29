@@ -1,3 +1,16 @@
+3.0.0
+	wt_cart Development Team <info@wt-cart.com>
+
+	* Release of wt_cart 3.0.0
+	* [FEATURE] #62412 . Add template for confirmation page
+	* [FEATURE] #62411 - Make wt_cart compatible with powermail 2.1.x
+	* [FEATURE] #62300 - 6.2 compatibility
+	* [BUGFIX] #62410 - Deletion of products in cart does not work
+	* [BUGFIX] #62240 - Follow up on pid conf
+	* [BUGFIX] #51237 - No quantity given
+	* [BUGFIX] #42764 - Calculation of shipping cost in value ranges and free_from
+	* [TASK] - Update manual
+
 2.1.0
 	wt_cart Development Team <info@wt-cart.com>
 
