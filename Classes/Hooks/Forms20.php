@@ -65,7 +65,7 @@ class Tx_WtCart_Hooks_Forms20 extends Tx_Powermail_Controller_FormsController {
 	 */
 	public function slotCreateActionBeforeRenderView($mail, $hash, $obj) {
 		$utilityCart = t3lib_div::makeInstance('Tx_WtCart_Utility_Cart');
-		return $utilityCart->slotCreateActionBeforeRenderView($mail, $hash, $obj->cObj->data['uid']);
+		return $utilityCart->slotCreateActionBeforeRenderView($mail, $hash, $obj->cObj->data['uid'], $obj->settings);
 	}
 
 	/**

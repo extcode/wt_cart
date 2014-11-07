@@ -146,9 +146,10 @@ class Tx_WtCart_Utility_Cart {
 	/**
 	 * @param \In2code\Powermail\Domain\Model\Mail $mail
 	 * @param $hash
-	 * @param $obj
+	 * @param int $objUid
+	 * @param array $objSettings
 	 */
-	public function slotCreateActionBeforeRenderView($mail, $hash, $obj) {
+	public function slotCreateActionBeforeRenderView($mail, $hash, $objUid, $objSettings) {
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.'];
 
 		/**
@@ -156,7 +157,7 @@ class Tx_WtCart_Utility_Cart {
 		 */
 		$cart = unserialize( $GLOBALS['TSFE']->fe_user->getKey( 'ses', 'wt_cart_' . $conf['main.']['pid'] ) );
 
-		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $obj->cObj->data['uid']) {
+		if ($conf['powermailContent.']['uid'] > 0 && intval($conf['powermailContent.']['uid']) == $objUid) {
 
 			$files = array();
 			$errors = array();
@@ -190,11 +191,11 @@ class Tx_WtCart_Utility_Cart {
 			}
 
 			if ( $params['preventEmailToSender'] == TRUE ) {
-				$obj->settings['sender']['enable'] = 0;
+				$objSettings['sender']['enable'] = 0;
 			}
 
 			if ( $params['preventEmailToReceiver'] == TRUE ) {
-				$obj->settings['receiver']['enable'] = 0;
+				$objSettings['receiver']['enable'] = 0;
 			}
 
 			$this->callHook( 'beforeAddAttachmentToMail', $params );
@@ -247,9 +248,11 @@ class Tx_WtCart_Utility_Cart {
 	 * @return  void
 	 */
 	public function removeAllProductsFromSession() {
-		//TODO: check for $errorNumber to be Zero*/
+		$isNetCart = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
+		$cart = new Tx_WtCart_Domain_Model_Cart($isNetCart);
+
 		$pid = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['main.']['pid'];
-		$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $pid, array());
+		$GLOBALS['TSFE']->fe_user->setKey('ses', 'wt_cart_' . $pid, serialize($cart));
 		$GLOBALS['TSFE']->storeSessionData();
 	}
 }
