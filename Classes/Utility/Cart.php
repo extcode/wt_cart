@@ -248,7 +248,7 @@ class Tx_WtCart_Utility_Cart {
 	 * @return  void
 	 */
 	public function removeAllProductsFromSession() {
-		$isNetCart = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
+		$isNetCart = intval($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['main.']['isNetCart']) == 0 ? FALSE : TRUE;
 		$cart = new Tx_WtCart_Domain_Model_Cart($isNetCart);
 
 		$pid = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_wtcart_pi1.']['main.']['pid'];
