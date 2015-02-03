@@ -76,7 +76,7 @@ class addProduct extends tslib_pibase {
 		$this->gpvar['isNetPrice'] = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
 
 			// parse all taxclasses
-		$this->taxes = $this->div->parseTaxes($this);
+		$this->taxes = $this->div->parseTaxes($this->conf);
 
 		/* Cart - Section */
 

@@ -875,17 +875,57 @@ class tx_wtcart_div extends tslib_pibase {
 	}
 
 	/**
-	 * @param $obj
-	 * @return array
+	 * @param array $conf
+	 * @return array $taxes
 	 */
-	public function parseTaxes(&$obj) {
+	public function parseTaxes(&$conf) {
 		$taxes = array();
-		foreach ($obj->conf['taxclass.'] as $key => $value) {
-			$taxes[rtrim($key, '.')] = new Tx_WtCart_Domain_Model_Tax(rtrim($key, '.'), $value['value'], $value['calc'], $value['name']);
+
+		if ( isset($conf['taxClassRepository.']) && is_array($conf['taxClassRepository.'])) {
+			$taxes = $this->parseTaxesFromRepository($conf);
+		} elseif ( isset($conf['taxclass.']) && is_array($conf['taxclass.'])) {
+			$taxes = $this->parseTaxesFromTypoScript($conf);
 		}
 
 		if (TYPO3_DLOG) {
-			t3lib_div::devLog('parsed Taxes', $obj->extKey, 0, $taxes);
+			t3lib_div::devLog('parsed Taxes', 'wt_cart', 0, $taxes);
+		}
+
+		return $taxes;
+	}
+
+	/**
+	 * @param array $conf
+	 * @return array $taxes
+	 */
+	public function parseTaxesFromTypoScript(&$conf) {
+		$taxes = array();
+
+		foreach ($conf['taxclass.'] as $key => $value) {
+			$taxes[rtrim($key, '.')] = new Tx_WtCart_Domain_Model_Tax(rtrim($key, '.'), $value['value'], $value['calc'], $value['name']);
+		}
+
+		return $taxes;
+	}
+
+	/**
+	 * @param array $conf
+	 * @return array $taxes
+	 */
+	public function parseTaxesFromRepository(&$conf) {
+		$taxes = array();
+
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		$taxClassRepository = $objectManager->get( $conf['taxClassRepository.']['class'] );
+		$taxClassObjects = $taxClassRepository->findAll( );
+
+		foreach ($taxClassObjects as $taxClassObject) {
+			$taxClassUid = $taxClassObject->getUid();
+			$taxClassValue = $taxClassObject->getValue();
+			$taxClassCalc = $taxClassObject->getCalc();
+			$taxClassName = $taxClassObject->getTitle();
+
+			$taxes[$taxClassUid] = new Tx_WtCart_Domain_Model_Tax($taxClassUid, $taxClassValue, $taxClassCalc, $taxClassName);
 		}
 
 		return $taxes;

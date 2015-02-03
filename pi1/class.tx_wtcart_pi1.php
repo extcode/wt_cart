@@ -68,7 +68,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		$this->dynamicMarkers = t3lib_div::makeInstance('tx_wtcart_dynamicmarkers');
 
 		// parse all taxclasses
-		$this->taxes = $this->div->parseTaxes($this);
+		$this->taxes = $this->div->parseTaxes($this->conf);
 
 		// in this version it is not possible mixing prices for products
 		$this->gpvar['isNetPrice'] = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
