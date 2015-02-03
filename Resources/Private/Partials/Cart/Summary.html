@@ -1,0 +1,69 @@
+<div class="wtcart_cart_footer">
+	<div class="wtcart_cart_col wtcart_cart_foot_col1 wtcart_cart_net">
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.cart_net" />
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col2 wtcart_cart_net">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{cart.net}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<div class="wtcart_cart_col wtcart_cart_foot_col1 wtcart_cart_gross">
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.cart_gross" />
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col2 wtcart_cart_gross">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{cart.gross}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<f:render partial="Cart/TaxList" arguments="{taxes: cart.taxes}" />
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<div class="wtcart_cart_col wtcart_cart_foot_col1 wtcart_cart_servicecost_net">
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.service_cost_net" />
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col2 wtcart_cart_servicecost_net">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{cart.serviceNet}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<div class="wtcart_cart_col wtcart_cart_foot_col1 wtcart_cart_servicecost_gross">
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.service_cost_gross" />
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col2 wtcart_cart_servicecost_gross">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{cart.serviceGross}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<f:render partial="Cart/TaxList" arguments="{taxes: cart.serviceTaxes}" />
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<div class="wtcart_cart_col wtcart_cart_foot_col1 wtcart_cart_servicecost_total_net">
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.total_cart_net" />
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col2 wtcart_cart_servicecost_total_net">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{cart.totalNet}
+		</f:format.currency>
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col1 wtcart_cart_servicecost_total_gross">
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.total_cart_gross" />
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_foot_col2 wtcart_cart_servicecost_total_gross">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{cart.totalGross}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<f:render partial="Cart/TaxList" arguments="{taxes: cart.totalTaxes}" />
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+</div>

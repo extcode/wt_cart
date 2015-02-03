@@ -1,0 +1,16 @@
+<div class="wtcart_cart_col wtcart_cart_col_title">{product.title}</div>
+<div class="wtcart_cart_col wtcart_cart_col_sku">{product.sku}</div>
+<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">
+	<f:format.currency currencySign="{settings.format.currency.currencySign}">
+		{product.price}
+	</f:format.currency>
+</div>
+<div class="wtcart_cart_col wtcart_cart_col_qty wtcart_cart_center">
+	{product.qty}
+</div>
+<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">
+	<f:format.currency currencySign="{settings.format.currency.currencySign}">
+		{product.gross}
+	</f:format.currency>
+</div>
+<div class="wt_cart_cleaner"><!-- --></div>

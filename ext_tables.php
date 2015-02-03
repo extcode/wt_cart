@@ -6,6 +6,12 @@ if (!defined ('TYPO3_MODE')) {
 t3lib_extMgm::addStaticFile($_EXTKEY, 'files/static/', 'wt_cart main');
 t3lib_extMgm::addStaticFile($_EXTKEY, 'files/css/', 'Add default CSS');
 
+if (version_compare(TYPO3_branch, '6.2', '>=')) {
+
+	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Shopping Cart - Example 6.2 Configuration');
+
+}
+
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1'] = 'layout,select_key,pages';
 t3lib_extMgm::addPlugin(array(
@@ -39,5 +45,15 @@ t3lib_extMgm::addPlugin(array(
 	$_EXTKEY . '_pi4',
 	t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
 ),'list_type');
+
+if (version_compare(TYPO3_branch, '6.2', '>=')) {
+
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		'Extcode.' . $_EXTKEY,
+		'MiniCart',
+		'LLL:EXT:wt_cart/Resources/Private/Language/locallang_db.xlf:tx_wtcart.plugin.mini_cart'
+	);
+
+}
 
 ?>

@@ -1,0 +1,9 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+	<div class="wtcart_cart">
+		<f:render partial="Cart/ProductList" arguments="{products: cart.products}" />
+		<f:render partial="Cart/Summary" arguments="{cart: cart}" />
+		<f:render partial="Cart/Service" arguments="{cart: cart}" />
+	</div>
+</f:section>

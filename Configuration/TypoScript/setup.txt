@@ -1,0 +1,26 @@
+plugin.tx_wtcart {
+  view {
+    templateRootPaths {
+      100 = {$plugin.tx_wtcart.view.templateRootPath}
+    }
+    partialRootPaths {
+      100 = {$plugin.tx_wtcart.view.partialRootPath}
+    }
+    layoutRootPaths {
+      100 = {$plugin.tx_wtcart.view.layoutRootPath}
+    }
+  }
+
+  settings {
+    cart {
+      pid =
+      isNetCart = 0
+    }
+
+    format.currency {
+      currencySign = €
+      decimalSeparator= ,
+      thousandsSeparator= .
+    }
+  }
+}

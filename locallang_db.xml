@@ -6,16 +6,16 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tt_content.list_type_pi1">wt_cart : Cart</label>
-			<label index="tt_content.list_type_pi2">wt_cart : Add Product to Cart</label>
-			<label index="tt_content.list_type_pi3">wt_cart : Mini-Cart</label>
-			<label index="tt_content.list_type_pi4">wt_cart : Cart clear</label>
+			<label index="tt_content.list_type_pi1">wt_cart : Cart (Pi1)</label>
+			<label index="tt_content.list_type_pi2">wt_cart : Add Product to Cart (Pi2)</label>
+			<label index="tt_content.list_type_pi3">wt_cart : Mini-Cart (Pi3)</label>
+			<label index="tt_content.list_type_pi4">wt_cart : Cart clear (Pi4)</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="tt_content.list_type_pi1">wt_cart : Warenkorb</label>
-			<label index="tt_content.list_type_pi2">wt_cart : Produkt in den Warenkorb</label>
-			<label index="tt_content.list_type_pi3">wt_cart : Miniwarenkorb</label>
-			<label index="tt_content.list_type_pi4">wt_cart : Warenkorb leeren</label>
+			<label index="tt_content.list_type_pi1">wt_cart : Warenkorb (Pi1)</label>
+			<label index="tt_content.list_type_pi2">wt_cart : Produkt in den Warenkorb (Pi2)</label>
+			<label index="tt_content.list_type_pi3">wt_cart : Miniwarenkorb (Pi3)</label>
+			<label index="tt_content.list_type_pi4">wt_cart : Warenkorb leeren (Pi4)</label>
 		</languageKey>
 	</data>
 </T3locallang>

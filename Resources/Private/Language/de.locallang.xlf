@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-02-03T16:30:00Z" product-name="wt_cart">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_wtcart.plugin.mini_cart.empty_cart">
+				<target>Der Warenkorb ist leer.</target>
+			</trans-unit>
+			<trans-unit id="tx_wtcart.plugin.mini_cart.go_to_cart_page">
+				<source>Gehe zum Warenkorb.</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
