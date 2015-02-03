@@ -131,7 +131,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 			} elseif ($this->gpvar['puid']) {
 					// product added by own form
 				if (!$this->gpvar['ownForm']) {
-					$this->div->getProductDetails($this->gpvar, $this);
+					$this->div->getProductDetails($this->gpvar, $this->conf);
 				} else {
 					$this->parseDataFromOwnForm();
 				}
@@ -482,7 +482,7 @@ class tx_wtcart_pi1 extends tslib_pibase {
 	private function parseDataToProductToCart(&$cart) {
 		if (intval($this->gpvar['qty']) > 0 ) {
 
-			$this->div->getProductDetails($this->gpvar, $this);
+			$this->div->getProductDetails($this->gpvar, $this->conf);
 			// create new product
 			if ($this->gpvar['puid']) {
 				$newProduct = $this->div->createProduct($this);

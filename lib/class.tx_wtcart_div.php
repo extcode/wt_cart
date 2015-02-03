@@ -42,72 +42,88 @@ class tx_wtcart_div extends tslib_pibase {
 	public $extKey = 'wt_cart';
 
 	/**
-	 * read product details (title, price from table)
+	 * read product details (title, price, ...)
 	 *
-	 * @param array   $gpvar: array with product uid, title, taxclass, etc...
-	 * @param $pObj
-	 * @internal param array $pobj : Parent Object
-	 * @return array $arr: array with title and price
+	 * @param array $gpvar
+	 * @param array $conf
+	 * @return void
 	 */
-	public function getProductDetails(&$gpvar, &$pObj) {
-			// all values already filled via POST or GET param
+	public function getProductDetails(&$gpvar, &$conf) {
+		// all values already filled via POST or GET param
 		if (!empty($gpvar['title']) && !empty($gpvar['price']) && !empty($gpvar['taxclass'])) {
 			return $gpvar;
 		}
 
 		$puid = intval($gpvar['puid']);
-			// stop if no puid given
+		// stop if no puid given
 		if ($puid === 0) {
 			return FALSE;
 		}
 
+		if ( isset($conf['repository.']) && is_array($conf['repository.']) ) {
+			$this->getProductDetailsFromRepository($gpvar, $conf);
+		} elseif ( isset($conf['db.']) && is_array($conf['db.']) ) {
+			$this->getProductDetailsFromTable($gpvar, $conf);
+		}
+	}
+
+	/**
+	 * read product details (title, price, ...)  from table
+	 *
+	 * @param array $gpvar
+	 * @param array $conf
+	 * @return void
+	 */
+	public function getProductDetailsFromTable(&$gpvar, &$conf) {
+
 		$tableId = intval($gpvar['tableId']);
+		$puid = intval($gpvar['puid']);
 
 		if (TYPO3_DLOG) {
 			t3lib_div::devLog('tableId', $this->extKey, 0, array($tableId));
 		}
 
-		if (($tableId != 0) && ($pObj->conf['db.'][$tableId . '.'])) {
-			$pObj->conf['db.'] = $pObj->conf['db.'][$tableId . '.'];
+		if (($tableId != 0) && ($conf['db.'][$tableId . '.'])) {
+			$conf['db.'] = $conf['db.'][$tableId . '.'];
 		}
 
-		$table = $pObj->conf['db.']['table'];
+		$table = $conf['db.']['table'];
 
 		if (TYPO3_DLOG) {
 			t3lib_div::devLog('table', $this->extKey, 0, array($table));
 		}
 
-		$l10nParent = $pObj->conf['db.']['l10n_parent'];
+		$l10nParent = $conf['db.']['l10n_parent'];
 
-		$select = $table . '.' . $pObj->conf['db.']['title'] . ', ' .
-				$table . '.' . $pObj->conf['db.']['price'] . ', ' .
-				$table . '.' . $pObj->conf['db.']['taxclass'];
+		$select = $table . '.' . $conf['db.']['title'] . ', ' .
+				$table . '.' . $conf['db.']['price'] . ', ' .
+				$table . '.' . $conf['db.']['taxclass'];
 
-		if ($pObj->conf['db.']['sku'] != '' && $pObj->conf['db.']['sku'] != '{$plugin.wtcart.db.sku}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['sku'];
+		if ($conf['db.']['sku'] != '' && $conf['db.']['sku'] != '{$plugin.wtcart.db.sku}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['sku'];
 		}
-		if ($pObj->conf['db.']['variants'] != '' && $pObj->conf['db.']['variants'] != '{$plugin.wtcart.db.variants}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['variants'];
+		if ($conf['db.']['variants'] != '' && $conf['db.']['variants'] != '{$plugin.wtcart.db.variants}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['variants'];
 		}
-		if ($pObj->conf['db.']['service_attribute_1'] != '' &&
-				$pObj->conf['db.']['service_attribute_1'] != '{$plugin.wtcart.db.service_attribute_1}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['service_attribute_1'];
+		if ($conf['db.']['service_attribute_1'] != '' &&
+				$conf['db.']['service_attribute_1'] != '{$plugin.wtcart.db.service_attribute_1}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['service_attribute_1'];
 		}
-		if ($pObj->conf['db.']['service_attribute_2'] != '' &&
-				$pObj->conf['db.']['service_attribute_2'] != '{$plugin.wtcart.db.service_attribute_2}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['service_attribute_2'];
+		if ($conf['db.']['service_attribute_2'] != '' &&
+				$conf['db.']['service_attribute_2'] != '{$plugin.wtcart.db.service_attribute_2}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['service_attribute_2'];
 		}
-		if ($pObj->conf['db.']['service_attribute_3'] != '' &&
-				$pObj->conf['db.']['service_attribute_3'] != '{$plugin.wtcart.db.service_attribute_3}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['service_attribute_3'];
+		if ($conf['db.']['service_attribute_3'] != '' &&
+				$conf['db.']['service_attribute_3'] != '{$plugin.wtcart.db.service_attribute_3}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['service_attribute_3'];
 		}
-		if ($pObj->conf['db.']['has_fe_variants'] != '' &&
-				$pObj->conf['db.']['has_fe_variants'] != '{$plugin.wtcart.db.has_fe_variants}') {
-			$select .= ', ' . $table . '.' . $pObj->conf['db.']['has_fe_variants'];
+		if ($conf['db.']['has_fe_variants'] != '' &&
+				$conf['db.']['has_fe_variants'] != '{$plugin.wtcart.db.has_fe_variants}') {
+			$select .= ', ' . $table . '.' . $conf['db.']['has_fe_variants'];
 		}
 
-		if ($pObj->conf['db.']['additional.']) {
-			foreach ($pObj->conf['db.']['additional.'] as $additional) {
+		if ($conf['db.']['additional.']) {
+			foreach ($conf['db.']['additional.'] as $additional) {
 				if ($additional['field']) {
 					$select .= ', ' . $table . '.' . $additional['field'];
 				}
@@ -143,29 +159,29 @@ class tx_wtcart_div extends tslib_pibase {
 		if ($res) {
 			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-			$gpvar['title'] = $row[$pObj->conf['db.']['title']];
-			$gpvar['price'] = $row[$pObj->conf['db.']['price']];
-			$gpvar['taxclass'] = $row[$pObj->conf['db.']['taxclass']];
+			$gpvar['title'] = $row[$conf['db.']['title']];
+			$gpvar['price'] = $row[$conf['db.']['price']];
+			$gpvar['taxclass'] = $row[$conf['db.']['taxclass']];
 
-			if ($row[$pObj->conf['db.']['sku']]) {
-				$gpvar['sku'] = $row[$pObj->conf['db.']['sku']];
+			if ($row[$conf['db.']['sku']]) {
+				$gpvar['sku'] = $row[$conf['db.']['sku']];
 			}
-			if ($row[$pObj->conf['db.']['service_attribute_1']]) {
-				$gpvar['service_attribute_1'] = $row[$pObj->conf['db.']['service_attribute_1']];
+			if ($row[$conf['db.']['service_attribute_1']]) {
+				$gpvar['service_attribute_1'] = $row[$conf['db.']['service_attribute_1']];
 			}
-			if ($row[$pObj->conf['db.']['service_attribute_2']]) {
-				$gpvar['service_attribute_2'] = $row[$pObj->conf['db.']['service_attribute_2']];
+			if ($row[$conf['db.']['service_attribute_2']]) {
+				$gpvar['service_attribute_2'] = $row[$conf['db.']['service_attribute_2']];
 			}
-			if ($row[$pObj->conf['db.']['service_attribute_3']]) {
-				$gpvar['service_attribute_3'] = $row[$pObj->conf['db.']['service_attribute_3']];
+			if ($row[$conf['db.']['service_attribute_3']]) {
+				$gpvar['service_attribute_3'] = $row[$conf['db.']['service_attribute_3']];
 			}
-			if ($row[$pObj->conf['db.']['has_fe_variants']]) {
-				$gpvar['has_fe_variants'] = $row[$pObj->conf['db.']['has_fe_variants']];
+			if ($row[$conf['db.']['has_fe_variants']]) {
+				$gpvar['has_fe_variants'] = $row[$conf['db.']['has_fe_variants']];
 			}
 
-			if ($pObj->conf['db.']['additional.']) {
+			if ($conf['db.']['additional.']) {
 				$gpvar['additional'] = array();
-				foreach ($pObj->conf['db.']['additional.'] as $additionalKey => $additionalValue) {
+				foreach ($conf['db.']['additional.'] as $additionalKey => $additionalValue) {
 					if ($additionalValue['field']) {
 						$gpvar['additional'][rtrim($additionalKey, '.')] = $row[$additionalValue['field']];
 					} elseif ($additionalValue['value']) {
@@ -188,7 +204,98 @@ class tx_wtcart_div extends tslib_pibase {
 		}
 	}
 
+	/**
+	 * read product details (title, price, ...) from repository
+	 *
+	 * @param array $gpvar
+	 * @param array $conf
+	 * @return void
+	 */
+	public function getProductDetailsFromRepository(&$gpvar, &$conf) {
+
+		$repositoryId = intval($gpvar['$repositoryId']);
+		$productId = intval($gpvar['puid']);
+
+		if (TYPO3_DLOG) {
+			t3lib_div::devLog('$repositoryId', $this->extKey, 0, array($repositoryId));
+		}
+
+		if (($repositoryId != 0) && ($conf['repository.'][$repositoryId . '.'])) {
+			$conf['repository.'] = $conf['repository.'][$repositoryId . '.'];
+		}
+
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		$productRepository = $objectManager->get( $conf['repository.']['class'] );
+		$productObject = $productRepository->findByUid( $productId );
+
+		if ($productObject) {
+
+			if ( isset($conf['repository.']['getTitle']) ) {
+				$gpvar['title'] = $productObject->$conf['repository.']['getTitle'];
+			} else {
+				$gpvar['title'] = $productObject->getTitle();
+			}
+			if ( isset($conf['repository.']['getSku']) ) {
+				$gpvar['sku'] = $productObject->$conf['repository.']['getSku'];
+			} else {
+				$gpvar['sku'] = $productObject->getSku();
+			}
+			if ( isset($conf['repository.']['getPrice']) ) {
+				$gpvar['price'] = $productObject->$conf['repository.']['getPrice'];
+			} else {
+				$gpvar['price'] = $productObject->getPrice();
+			}
+			if ( isset($conf['repository.']['getTaxClass']) ) {
+				$gpvar['taxclass'] = $productObject->$conf['repository.']['getTaxClass']->getUid();
+			} else {
+				$gpvar['taxclass'] = $productObject->getTaxClass()->getUid();
+			}
+
+			if ( isset($conf['repository.']['getServiceAttribute1']) ) {
+				$gpvar['service_attribute_1'] = $productObject->$conf['repository.']['getServiceAttribute1'];
+			}
+
+			if ( isset($conf['repository.']['getServiceAttribute2']) ) {
+				$gpvar['service_attribute_1'] = $productObject->$conf['repository.']['getServiceAttribute2'];
+			}
+
+			if ( isset($conf['repository.']['getServiceAttribute3']) ) {
+				$gpvar['service_attribute_1'] = $productObject->$conf['repository.']['getServiceAttribute3'];
+			}
+
+			if ( isset($conf['repository.']['hasFeVariants']) ) {
+				$gpvar['has_fe_variants'] = $productObject->$conf['repository.']['hasFeVariants'];
+			}
+
+			if ($conf['repository.']['additional.']) {
+				$gpvar['additional'] = array();
+				foreach ($conf['repository.']['additional.'] as $additionalKey => $additionalValue) {
+					if ($additionalValue['field']) {
+						$gpvar['additional'][rtrim($additionalKey, '.')] = $productObject->$additionalValue['field'];
+					} elseif ($additionalValue['value']) {
+						$gpvar['additional'][rtrim($additionalKey, '.')] = $additionalValue['value'];
+					}
+				}
+			}
+
+		}
+	}
+
+	/**
+	 * @param Tx_WtCart_Domain_Model_Variant $variant
+	 * @param array $conf
+	 */
 	public function getVariantDetails(&$variant, &$conf) {
+
+		if ( isset($conf['repository.']) ) {
+			$this->getVariantDetailsFromRepository($variant, $conf);
+		} elseif ( isset($conf['db.']) ) {
+			$this->getVariantDetailsFromTable($variant, $conf);
+		}
+
+	}
+
+	public function getVariantDetailsFromTable(&$variant, &$conf) {
 		$variantId = $variant->getId();
 
 		$table = $conf['db.']['table'];
@@ -306,6 +413,76 @@ class tx_wtcart_div extends tslib_pibase {
 
 			t3lib_div::devLog('ERROR in query variant', $this->extKey, 0, $out);
 		}
+	}
+
+	/**
+	 * @param Tx_WtCart_Domain_Model_Variant $variant
+	 * @param array $conf
+	 */
+	public function getVariantDetailsFromRepository(&$variant, &$conf) {
+		$variantId = $variant->getId();
+
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		$variantRepository = $objectManager->get($conf['repository.']['class']);
+		$variantObject = $variantRepository->findByUid( $variantId );
+
+		if ($variantObject) {
+
+			if ( isset($variantObject->$conf['repository.']['getTitle']) ) {
+				$variant->setTitle( $variantObject->$conf['repository.']['getTitle'] );
+			} else {
+				$variant->setTitle( $variantObject->getTitle() );
+			}
+			if ( isset($variantObject->$conf['repository.']['getSku']) ) {
+				$variant->setSku( $variantObject->$conf['repository.']['getSku'] );
+			} else {
+				$variant->setSku( $variantObject->getSku() );
+			}
+
+			if ( isset($variantObject->$conf['repository.']['getPriceCalcMethod']) ) {
+				$variant->setPriceCalcMethod( $variantObject->$conf['repository.']['getPriceCalcMethod'] );
+			} else {
+				$variant->setPriceCalcMethod( $variantObject->getPriceCalcMethod() );
+			}
+
+			if ( isset($variantObject->$conf['repository.']['getPrice']) ) {
+				$variant->setPrice( $variantObject->$conf['repository.']['getPrice'] );
+			} else {
+				$variant->setPrice( $variantObject->getPrice() );
+			}
+
+			if ( isset($conf['repository.']['hasFeVariants']) ) {
+				$variant->setHasFeVariants( $variantObject->$conf['repository.']['hasFeVariants'] );
+			}
+
+			if ( isset($conf['repository.']['additional.']) ) {
+				foreach ($conf['repository.']['additional.'] as $additionalKey => $additionalValue) {
+					if ($additionalValue['field']) {
+						$variant->setAdditional(rtrim($additionalKey, '.'),  $variantObject->$additionalValue['field'] );
+					} elseif ($additionalValue['value']) {
+						$variant->setAdditional(rtrim($additionalKey, '.'),  $additionalValue['value']);
+					}
+				}
+			}
+
+		/*
+					// if inherit_price is defined then check the inherit_price and replace the with variant price
+					// if inherit_price is not defined then replace the with variant price
+					if ($conf['db.']['inherit_price'] != '' && $conf['db.']['price'] != '{$plugin.wtcart.db.variants.db.inherit_price}') {
+						if ($row[$conf['db.']['inherit_price']]) {
+							if ($row[$conf['db.']['price']]) {
+								$variant->setPrice($row[$conf['db.']['price']]);
+							}
+						}
+					} else {
+						if ($row[$conf['db.']['price']]) {
+							$variant->setPrice($row[$conf['db.']['price']]);
+						}
+					}
+		*/
+
+		}
+
 	}
 
 	/**
@@ -778,6 +955,13 @@ class tx_wtcart_div extends tslib_pibase {
 		$newProduct = new Tx_WtCart_Domain_Model_Product($obj->gpvar['puid'], $obj->gpvar['tableId'], $obj->gpvar['cid'], $obj->gpvar['sku'], $obj->gpvar['title'], $obj->gpvar['price'], $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 
 		if ($obj->gpvar['variants']) {
+
+			if ( isset($obj->conf['repository.']) ) {
+				$variantConf = $obj->conf['repository.']['variants.'];
+			} elseif ( isset($obj->conf['db.']) ) {
+				$variantConf = $obj->conf['db.']['variants.'];
+			}
+
 			$price_calc_method = $obj->gpvar['price_calc_method'];
 			$price = $obj->gpvar['price'];
 			foreach ($obj->gpvar['variants'] as $key => $value) {
@@ -789,14 +973,12 @@ class tx_wtcart_div extends tslib_pibase {
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
 						} else {
-							$dbconf = isset($dbconf) ? $dbconf['db.']['variants.'] : $obj->conf['db.']['variants.'];
-
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
 								// creating a new Tx_WtCart_Domain_Model_Variant and using Price and Taxclass form Product
 								$newVariant[$key] = new Tx_WtCart_Domain_Model_Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 								// get further data of variant
-								$obj->div->getVariantDetails($newVariant[$key], $dbconf);
+								$obj->div->getVariantDetails($newVariant[$key], $variantConf);
 							} else {
 								var_dump($obj->div->msg("Error, id was expected."));
 							}
@@ -813,14 +995,18 @@ class tx_wtcart_div extends tslib_pibase {
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
 						} else {
-							$dbconf = isset($dbconf) ? $dbconf['db.']['variants.'] : $obj->conf['db.']['variants.'];
+							if ( isset($variantConf['repository.']) ) {
+								$variantConf = $variantConf['repository.']['variants.'];
+							} elseif ( isset($variantConf['db.']) ) {
+								$variantConf = $variantConf['db.']['variants.'];
+							}
 
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
 								// creating a new Tx_WtCart_Domain_Model_Variant and using Price and Taxclass form Product
 								$newVariant[$key] = new Tx_WtCart_Domain_Model_Variant($obj->gpvar['variants'][$key], '', '', $price_calc_method, $price, $obj->taxes[$obj->gpvar['taxclass']], $obj->gpvar['qty'], $obj->gpvar['isNetPrice']);
 								// get further data of variant
-								$obj->div->getVariantDetails($newVariant[$key], $dbconf);
+								$obj->div->getVariantDetails($newVariant[$key], $variantConf);
 							} else {
 								var_dump($obj->div->msg("Error, id was expected."));
 							}
