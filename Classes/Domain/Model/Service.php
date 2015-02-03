@@ -33,6 +33,12 @@
  * @version    1.5.0
  */
 abstract class Tx_WtCart_Domain_Model_Service {
+
+	/**
+	 * @var Tx_WtCart_Domain_Model_Cart
+	 */
+	private $cart;
+
 	/**
 	 * @var integer
 	 */
@@ -104,6 +110,21 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	private $additional;
 
 	/**
+	 * @var float
+	 */
+	private $gross;
+
+	/**
+	 * @var float
+	 */
+	private $net;
+
+	/**
+	 * @var float
+	 */
+	private $tax;
+
+	/**
 	 * __construct
 	 */
 	public function __construct($id, $name, Tx_WtCart_Domain_Model_Tax $taxclass, $status, $note, $isNetPrice) {
@@ -113,6 +134,26 @@ abstract class Tx_WtCart_Domain_Model_Service {
 		$this->status = $status;
 		$this->note = $note;
 		$this->isNetPrice = $isNetPrice;
+	}
+
+	/**
+	 * @param Tx_WtCart_Domain_Model_Cart $cart
+	 * @return void
+	 */
+	public function setCart( $cart ) {
+		$this->cart = $cart;
+		$this->calcGross();
+		$this->calcTax();
+		$this->calcNet();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function calcAll() {
+		$this->calcGross();
+		$this->calcTax();
+		$this->calcNet();
 	}
 
 	/**
@@ -151,33 +192,41 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	}
 
 	/**
-	 * @param $cart
 	 * @return float
 	 */
-	public function getGross($cart) {
+	public function getGross() {
+		$this->calcGross();
+		return $this->gross;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function calcGross() {
 		$gross = 0.0;
 
-		$condition = $this->getConditionFromCart($cart);
+		$condition = $this->getConditionFromCart();
 
 		if (isset($condition)) {
 			if ($condition === 0.0) {
-				return 0.0;
-			}
-			foreach ($this->extras as $extra) {
-				if ($extra->leq($condition)) {
-					$gross = $extra->getGross();
-				} else {
-					break;
+				$gross = 0.0;
+			} else {
+				foreach ($this->extras as $extra) {
+					if ($extra->leq($condition)) {
+						$gross = $extra->getGross();
+					} else {
+						break;
+					}
 				}
 			}
 		} else {
 			$gross = $this->extras[0]->getGross();
 			if ($this->getExtraType() == 'each') {
-				$gross = $cart->getCount() * $gross;
+				$gross = $this->cart->getCount() * $gross;
 			}
 		}
 
-		return $gross;
+		$this->gross = $gross;
 	}
 
 	/**
@@ -188,33 +237,41 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	}
 
 	/**
-	 * @param $cart
 	 * @return float
 	 */
-	public function getNet($cart) {
+	public function getNet() {
+		$this->calcNet();
+		return $this->net;
+	}
+
+	/**
+	 * @return void
+	 */
+	private function calcNet() {
 		$net = 0.0;
 
-		$condition = $this->getConditionFromCart($cart);
+		$condition = $this->getConditionFromCart();
 
-		if (isset($condition)) {
+		if ( isset($condition) ) {
 			if ($condition === 0.0) {
-				return 0.0;
-			}
-			foreach ($this->extras as $extra) {
-				if ($extra->leq($condition)) {
-					$net = $extra->getNet();
-				} else {
-					break;
+				$net = 0.0;
+			} else {
+				foreach ($this->extras as $extra) {
+					if ($extra->leq($condition)) {
+						$net = $extra->getNet();
+					} else {
+						break;
+					}
 				}
 			}
 		} else {
 			$net = $this->extras[0]->getNet();
 			if ($this->getExtraType() == 'each') {
-				$net = $cart->getCount() * $net;
+				$net = $this->cart->getCount() * $net;
 			}
 		}
 
-		return $net;
+		$this->net = $net;
 	}
 
 	/**
@@ -225,32 +282,44 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	}
 
 	/**
-	 * @param $cart
 	 * @return float
 	 */
-	public function getTax($cart) {
+	public function getTax() {
+		$this->calcTax();
+		return $this->tax;
+	}
+
+	/**
+	 * @return void
+	 */
+	private function calcTax() {
 		$tax = 0.0;
 
-		$condition = $this->getConditionFromCart($cart);
+		$condition = $this->getConditionFromCart();
 
 		if (isset($condition)) {
 			if ($condition === 0.0) {
-				return 0.0;
-			}
-			foreach ($this->extras as $extra) {
-				if ($extra->leq($condition)) {
-					$tax = $extra->getTax();
-				} else {
-					return $tax;
+				$tax = 0.0;
+			} else {
+				foreach ($this->extras as $extra) {
+					if ($extra->leq($condition)) {
+						$tax = $extra->getTax();
+						$tax = $tax['tax'];
+					} else {
+						break;
+					}
 				}
 			}
 		} else {
 			$tax = $this->extras[0]->getTax();
 			if ($this->getExtraType() == 'each') {
-				$tax = $cart->getCount() * $tax['tax'];
+				$tax = $this->cart->getCount() * $tax['tax'];
+			} else {
+				$tax = $tax['tax'];
 			}
 		}
-		return $tax;
+
+		$this->tax = $tax;
 	}
 
 	/**
@@ -379,40 +448,39 @@ abstract class Tx_WtCart_Domain_Model_Service {
 	}
 
 	/**
-	 * @param $cart
 	 * @return null
 	 */
-	private function getConditionFromCart($cart) {
+	private function getConditionFromCart() {
 		$condition = NULL;
 
-		if ( $this->isFree($cart->getGross()) ) {
+		if ( $this->isFree($this->cart->getGross()) ) {
 			return 0.0;
 		}
 
 		switch ($this->getExtraType()) {
 			case 'by_price':
-				$condition = $cart->getGross();
+				$condition = $this->cart->getGross();
 				break;
 			case 'by_quantity':
-				$condition = $cart->getCount();
+				$condition = $this->cart->getCount();
 				break;
 			case 'by_service_attribute_1_sum':
-				$condition = $cart->getSumServiceAttribute1();
+				$condition = $this->cart->getSumServiceAttribute1();
 				break;
 			case 'by_service_attribute_1_max':
-				$condition = $cart->getMaxServiceAttribute1();
+				$condition = $this->cart->getMaxServiceAttribute1();
 				break;
 			case 'by_service_attribute_2_sum':
-				$condition = $cart->getSumServiceAttribute2();
+				$condition = $this->cart->getSumServiceAttribute2();
 				break;
 			case 'by_service_attribute_2_max':
-				$condition = $cart->getMaxServiceAttribute2();
+				$condition = $this->cart->getMaxServiceAttribute2();
 				break;
 			case 'by_service_attribute_3_sum':
-				$condition = $cart->getSumServiceAttribute3();
+				$condition = $this->cart->getSumServiceAttribute3();
 				break;
 			case 'by_service_attribute_3_max':
-				$condition = $cart->getMaxServiceAttribute3();
+				$condition = $this->cart->getMaxServiceAttribute3();
 				break;
 			default:
 		}

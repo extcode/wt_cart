@@ -73,15 +73,6 @@ class tx_wtcart_pi1 extends tslib_pibase {
 		// in this version it is not possible mixing prices for products
 		$this->gpvar['isNetPrice'] = intval($this->conf['main.']['isNetCart']) == 0 ? FALSE : TRUE;
 
-		// parse all shippings
-		$shippings = $this->div->parseServices('Shipping', $this);
-
-		// parse all payments
-		$payments = $this->div->parseServices('Payment', $this);
-
-		// parse all specials
-		$specials = $this->div->parseServices('Special', $this);
-
 		/* Cart - Section */
 
 			// remove product from session
@@ -99,6 +90,15 @@ class tx_wtcart_pi1 extends tslib_pibase {
 
 			$cart = new Tx_WtCart_Domain_Model_Cart($this->isNetCart);
 		}
+
+		// parse all shippings
+		$shippings = $this->div->parseServices('Shipping', $this, $cart);
+
+		// parse all payments
+		$payments = $this->div->parseServices('Payment', $this, $cart);
+
+		// parse all specials
+		$specials = $this->div->parseServices('Special', $this, $cart);
 
 		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad']) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeCartAfterLoad'] as $funcRef) {

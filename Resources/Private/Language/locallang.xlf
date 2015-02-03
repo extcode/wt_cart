@@ -10,6 +10,113 @@
 			<trans-unit id="tx_wtcart.plugin.mini_cart.go_to_cart_page">
 				<source>Go to shopping cart.</source>
 			</trans-unit>
+			
+			
+			<trans-unit id="tx_wtcart_domain_model_product.title">
+				<source>Product</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.sku">
+				<source>SKU</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.qty">
+				<source>Qty</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.price">
+				<source>Unit Price</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.price_total">
+				<source>Subtotal</source>#
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.tax">
+				<source>Tax (%s)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.empty">
+				<source>Currently there are no products in your cart.</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.cart_net">
+				<source>Price (net)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.cart_gross">
+				<source>Price (gross)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.total_net">
+				<source>Total Price (net)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.total_gross">
+				<source>Total Price (gross)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.shipping">
+				<source>Shipping Options</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.service_from">
+				<source>from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.service_each">
+				<source>each</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.shipping_free_from">
+				<source>free shipping from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.shipping_free_until">
+				<source>free shipping until</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.shipping_available_from">
+				<source>shipping available from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.shipping_available_until">
+				<source>shipping available until</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.payment">
+				<source>Service Options</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.payment_free_from">
+				<source>free service option from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.payment_free_until">
+				<source>free service option until</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.payment_available_from">
+				<source>service option available from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.payment_available_until">
+				<source>service option available until</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.special">
+				<source>Special Options</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.special_free_from">
+				<source>free special option from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.special_free_until">
+				<source>free special option until</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.special_available_from">
+				<source>special option available from</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.special_available_until">
+				<source>special option available until</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.special_each">
+				<source>%s each</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.service_net">
+				<source>Service- and Shipping costs (net)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.service_gross">
+				<source>Service- and Shipping costs (gross)</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.delete">
+				<source>Remove this product from cart.</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.clear_cart">
+				<source>Remove all products from cart.</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.ordernumber">
+				<source>Order number</source>
+			</trans-unit>
+			<trans-unit id="tx_wtcart_domain_model_product.invoicenumber">
+				<source>Invoice number</source>
+			</trans-unit>
 
 		</body>
 	</file>

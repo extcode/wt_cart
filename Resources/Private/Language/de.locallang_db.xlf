@@ -11,6 +11,9 @@
 			<trans-unit id="tx_wtcart.plugin.mini_cart">
 				<target>Shopping Cart : Miniwarenkorb</target>
 			</trans-unit>
+			<trans-unit id="tx_wtcart.plugin.cart">
+				<target>Shopping Cart : Warenkorb</target>
+			</trans-unit>
 
 		</body>
 	</file>

@@ -321,22 +321,54 @@ class Tx_WtCart_Domain_Model_Cart {
 
 	/**
 	 * @return array
+	 * @deprecated
 	 */
 	public function getTaxesWithServices() {
+		return $this->getTotalTaxes();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getTotalTaxes() {
 		$taxes = $this->taxes;
 
 		if ($this->payment) {
 			$tax = $this->payment->getTax($this);
-			$taxes[$tax['taxclassid']] += $tax['tax'];
+			$taxes[$this->payment->getTaxClass()->getId()] += $tax;
 		}
 		if ($this->shipping) {
 			$tax = $this->shipping->getTax($this);
-			$taxes[$tax['taxclassid']] += $tax['tax'];
+			$taxes[$this->payment->getTaxClass()->getId()] += $tax;
 		}
 		if ($this->specials) {
 			foreach ($this->specials as $special) {
 				$tax = $special->getTax($this);
-				$taxes[$tax['taxclassid']] += $tax['tax'];
+				$taxes[$this->payment->getTaxClass()->getId()] += $tax;
+			}
+		}
+
+		return $taxes;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getServiceTaxes() {
+		$taxes = array();
+
+		if ($this->payment) {
+			$tax = $this->payment->getTax();
+			$taxes[$this->payment->getTaxClass()->getId()] += $tax;
+		}
+		if ($this->shipping) {
+			$tax = $this->shipping->getTax();
+			$taxes[$this->payment->getTaxClass()->getId()] += $tax;
+		}
+		if ($this->specials) {
+			foreach ($this->specials as $special) {
+				$tax = $special->getTax();
+				$taxes[$special->getTaxClass()->getId()] += $tax;
 			}
 		}
 
@@ -451,14 +483,14 @@ class Tx_WtCart_Domain_Model_Cart {
 		$net = 0.0;
 
 		if ($this->payment) {
-			$net += $this->payment->getNet($this);
+			$net += $this->payment->getNet();
 		}
 		if ($this->shipping) {
-			$net += $this->shipping->getNet($this);
+			$net += $this->shipping->getNet();
 		}
 		if ($this->specials) {
 			foreach ($this->specials as $special) {
-				$net += $special->getNet($this);
+				$net += $special->getNet();
 			}
 		}
 
@@ -472,14 +504,14 @@ class Tx_WtCart_Domain_Model_Cart {
 		$gross = 0.0;
 
 		if ($this->payment) {
-			$gross += $this->payment->getGross($this);
+			$gross += $this->payment->getGross();
 		}
 		if ($this->shipping) {
-			$gross += $this->shipping->getGross($this);
+			$gross += $this->shipping->getGross();
 		}
 		if ($this->specials) {
 			foreach ($this->specials as $special) {
-				$gross += $special->getGross($this);
+				$gross += $special->getGross();
 			}
 		};
 
@@ -963,6 +995,20 @@ class Tx_WtCart_Domain_Model_Cart {
 	 */
 	public function getOrderId() {
 		return $this->orderId;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getTotalGross() {
+		return $this->gross + $this->getServiceGross();
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getTotalNet() {
+		return $this->net + $this->getServiceNet();
 	}
 }
 

@@ -1,16 +1,33 @@
-<div class="wtcart_cart_col wtcart_cart_col_title">{product.title}</div>
-<div class="wtcart_cart_col wtcart_cart_col_sku">{product.sku}</div>
-<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">
-	<f:format.currency currencySign="{settings.format.currency.currencySign}">
-		{product.price}
-	</f:format.currency>
+<div class="wtcart_cart_product">
+	<div class="wtcart_cart_col wtcart_cart_col_title wtcart_cart_itemall">{product.title}</div>
+	<div class="wtcart_cart_col wtcart_cart_col_sku wtcart_cart_itemall">{product.sku}</div>
+	<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right wtcart_cart_itemall">
+		<f:if condition="{product.variants}">
+			<f:then>
+				&nbsp;
+			</f:then>
+			<f:else>
+				<f:format.currency currencySign="{settings.format.currency.currencySign}">
+					{product.price}
+				</f:format.currency>
+			</f:else>
+		</f:if>
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_col_qty wtcart_cart_center wtcart_cart_itemall">
+		{product.qty}
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right wtcart_cart_itemall">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{product.gross}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+
+	<f:if condition="{product.variants}">
+		<f:then>
+			<f:for each="{product.variants}" as="variant">
+				<f:render partial="Cart/ProductVariant" arguments="{variant: variant}" />
+			</f:for>
+		</f:then>
+	</f:if>
 </div>
-<div class="wtcart_cart_col wtcart_cart_col_qty wtcart_cart_center">
-	{product.qty}
-</div>
-<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">
-	<f:format.currency currencySign="{settings.format.currency.currencySign}">
-		{product.gross}
-	</f:format.currency>
-</div>
-<div class="wt_cart_cleaner"><!-- --></div>

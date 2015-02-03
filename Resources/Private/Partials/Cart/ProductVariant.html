@@ -1,0 +1,18 @@
+<div class="wtcart_cart_product_variant">
+	<div class="wtcart_cart_col wtcart_cart_col_title">{variant.title}</div>
+	<div class="wtcart_cart_col wtcart_cart_col_sku">{variant.sku}</div>
+	<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{variant.price}
+		</f:format.currency>
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_col_qty wtcart_cart_center">
+		{variant.qty}
+	</div>
+	<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">
+		<f:format.currency currencySign="{settings.format.currency.currencySign}">
+			{variant.gross}
+		</f:format.currency>
+	</div>
+	<div class="wt_cart_cleaner"><!-- --></div>
+</div>

@@ -40,11 +40,11 @@ class CartController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	protected $sessionHandler;
 
 	/**
-	 * action show
+	 * action showCart
 	 *
 	 * @return void
 	 */
-	public function showAction() {
+	public function showCartAction() {
 		$cart = $this->sessionHandler->restoreFromSession( $this->settings['cart']['pid'] );
 
 		if ( !$cart ) {

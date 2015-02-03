@@ -1,22 +1,22 @@
 <div class="wtcart_cart_header">
 	<div class="wtcart_cart_col wtcart_cart_col_title">
-		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.title" />
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xlf:tx_wtcart_domain_model_product.title" />
 	</div>
 	<div class="wtcart_cart_col wtcart_cart_col_sku">
-		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.sku" />
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xlf:tx_wtcart_domain_model_product.sku" />
 	</div>
 	<div class="wtcart_cart_col wtcart_cart_col_price wtcart_cart_right">
-		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.price" />
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:tx_wtcart_domain_model_product.price" />
 	</div>
 	<div class="wtcart_cart_col wtcart_cart_col_qty wtcart_cart_center">
-		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.qty" />
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:tx_wtcart_domain_model_product.qty" />
 	</div>
 	<div class="wtcart_cart_col wtcart_cart_col_total wtcart_cart_right">
-		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:plugin.cart.product.price_total" />
+		<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xml:tx_wtcart_domain_model_product.price_total" />
 	</div>
 	<div class="wt_cart_cleaner"><!-- --></div>
 </div>
-<div class="wtcart_cart_product">
+<div class="wtcart_cart_product_list">
 	<f:for each="{products}" as="product">
 		<f:render partial="Cart/Product" arguments="{product: product}" />
 	</f:for>

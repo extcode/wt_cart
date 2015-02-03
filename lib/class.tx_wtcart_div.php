@@ -934,10 +934,11 @@ class tx_wtcart_div extends tslib_pibase {
 	/**
 	 * @param $class
 	 * @param $obj
+	 * @param $cart
 	 * @internal param $taxes
 	 * @return array
 	 */
-	public function parseServices($class, &$obj) {
+	public function parseServices($class, &$obj, $cart) {
 		$services = array();
 		$type = strtolower($class);
 		if ($obj->conf[$type . '.']['options.']) {
@@ -979,6 +980,7 @@ class tx_wtcart_div extends tslib_pibase {
 				}
 
 				$service->setAdditionalArray($additional);
+				$service->setCart( $cart );
 
 				$services[rtrim($key, '.')] = $service;
 			}

@@ -54,6 +54,13 @@ if (version_compare(TYPO3_branch, '6.2', '>=')) {
 		'LLL:EXT:wt_cart/Resources/Private/Language/locallang_db.xlf:tx_wtcart.plugin.mini_cart'
 	);
 
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		'Extcode.' . $_EXTKEY,
+		'Cart',
+		'LLL:EXT:wt_cart/Resources/Private/Language/locallang_db.xlf:tx_wtcart.plugin.cart'
+	);
+
+
 }
 
 ?>

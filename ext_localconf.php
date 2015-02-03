@@ -22,6 +22,18 @@ if (version_compare(TYPO3_branch, '6.2', '>=')) {
 		)
 	);
 
+	Tx_Extbase_Utility_Extension::configurePlugin(
+		'Extcode.' . $_EXTKEY,
+		'Cart',
+		array(
+			'Cart' => 'showCart',
+		),
+		// non-cacheable actions
+		array(
+			'Cart' => 'showCart',
+		)
+	);
+
 }
 
 
