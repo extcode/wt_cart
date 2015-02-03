@@ -34,8 +34,8 @@
 */
 class tx_wtcart_pi2 extends tslib_pibase {
 	// make configurations
-	public $prefixId = 'tx_wtcart_pi3';
-	public $scriptRelPath = 'pi3/class.tx_wtcart_pi3.php';
+	public $prefixId = 'tx_wtcart_pi2';
+	public $scriptRelPath = 'pi2/class.tx_wtcart_pi2.php';
 	public $extKey = 'wt_cart';
 
 	public $tmpl = array();
