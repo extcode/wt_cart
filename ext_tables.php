@@ -32,4 +32,12 @@ t3lib_extMgm::addPlugin(array(
 ),'list_type');
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi3', 'FILE:EXT:'.$_EXTKEY.'/pi3/flexform_ds.xml');
 
+t3lib_div::loadTCA('tt_content');
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1'] = 'layout,select_key,pages';
+t3lib_extMgm::addPlugin(array(
+	'LLL:EXT:wt_cart/locallang_db.xml:tt_content.list_type_pi4',
+	$_EXTKEY . '_pi4',
+	t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
+),'list_type');
+
 ?>

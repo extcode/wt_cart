@@ -9,11 +9,13 @@
 			<label index="tt_content.list_type_pi1">wt_cart : Cart</label>
 			<label index="tt_content.list_type_pi2">wt_cart : Add Product to Cart</label>
 			<label index="tt_content.list_type_pi3">wt_cart : Mini-Cart</label>
+			<label index="tt_content.list_type_pi4">wt_cart : Cart clear</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.list_type_pi1">wt_cart : Warenkorb</label>
 			<label index="tt_content.list_type_pi2">wt_cart : Produkt in den Warenkorb</label>
 			<label index="tt_content.list_type_pi3">wt_cart : Miniwarenkorb</label>
+			<label index="tt_content.list_type_pi4">wt_cart : Warenkorb leeren</label>
 		</languageKey>
 	</data>
 </T3locallang>
