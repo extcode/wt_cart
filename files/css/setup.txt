@@ -30,6 +30,11 @@ plugin.wtcart {
 		div#wtcart_shipping,
 		div#wtcart_payment { padding:10px 0; }
 
+		div.wtcart_minicart_col { float:left; display:block; }
+		div.wtcart_minicart_col_qty { width:10%; }
+		div.wtcart_minicart_col_title { width:75%; }
+		div.wtcart_minicart_col_total { width:15%; }
+
         /* table based cart */
         table.wtcart_cart_table { width:100%; }
         table.wtcart_cart_table thead { background:#3d3a37; border-bottom:1px solid #fff; }

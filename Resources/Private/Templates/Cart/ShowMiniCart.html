@@ -4,24 +4,60 @@
 	<div id="tx-wtcart-minicart">
 		<f:if condition="{cart.products}">
 			<f:then>
-				<f:for each="{cart.products}" as="product">
-					<div class="title">
-						{product.title}
-					</div>
-					<div class="price right">
-						<f:format.currency currencySign="{settings.format.currency.currencySign}"
-										   decimalSeparator="{settings.format.currency.decimalSeparator}"
-										   thousandsSeparator="{settings.format.currency.thousandsSeparator}">
-							{product.price}
-						</f:format.currency>
-					</div>
-				</f:for>
+				<div class="wtcart_cart_product_list">
+					<f:for each="{cart.products}" as="product">
+						<f:if condition="{product.variants}">
+							<f:then>
+								<f:for each="{product.variants}" as="variant">
+									<div class="wtcart_cart_product">
+										<div class="wtcart_minicart_col wtcart_minicart_col_title">
+											{product.title} ({variant.title})
+										</div>
+										<div class="wtcart_minicart_col wtcart_minicart_col_qty wtcart_cart_center">
+											{variant.qty}
+										</div>
+										<div class="wtcart_minicart_col wtcart_minicart_col_total wtcart_cart_right">
+											<f:format.currency currencySign="{settings.format.currency.currencySign}"
+															   decimalSeparator="{settings.format.currency.decimalSeparator}"
+															   thousandsSeparator="{settings.format.currency.thousandsSeparator}">
+												{variant.gross}
+											</f:format.currency>
+										</div>
+										<div class="wt_cart_cleaner"><!-- --></div>
+									</div>
+								</f:for>
+							</f:then>
+							<f:else>
+								<div class="wtcart_cart_product">
+									<div class="wtcart_minicart_col wtcart_minicart_col_title">
+										{product.title}
+									</div>
+									<div class="wtcart_minicart_col wtcart_minicart_col_qty wtcart_cart_center">
+										{product.qty}
+									</div>
+									<div class="wtcart_minicart_col wtcart_minicart_col_total wtcart_cart_right">
+										<f:format.currency currencySign="{settings.format.currency.currencySign}"
+														   decimalSeparator="{settings.format.currency.decimalSeparator}"
+														   thousandsSeparator="{settings.format.currency.thousandsSeparator}">
+											{product.gross}
+										</f:format.currency>
+									</div>
+									<div class="wt_cart_cleaner"><!-- --></div>
+								</div>
+							</f:else>
+						</f:if>
+					</f:for>
+				</div>
 
-				<div class="wtcart_cart_gross">
+				<div class="wtcart_minicart_col wtcart_cart_foot_col1 wtcart_cart_gross">
+					<f:translate key="LLL:EXT:wt_cart/Resources/Private/Language/locallang.xlf:tx_wtcart_domain_model_product.cart_gross" />
+				</div>
+				<div class="wtcart_minicart_col wtcart_cart_foot_col2 wtcart_cart_gross">
 					<f:format.currency currencySign="{settings.format.currency.currencySign}">
 						{cart.gross}
 					</f:format.currency>
 				</div>
+				<div class="wt_cart_cleaner"><!-- --></div>
 
 				<f:link.page pageUid="{settings.cart.pid}"><f:translate key="tx_wtcart.plugin.mini_cart.go_to_cart_page" /></f:link.page>
 			</f:then>
