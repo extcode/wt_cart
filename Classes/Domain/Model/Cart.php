@@ -399,7 +399,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
-	 * @param $shipping
+	 * @param Tx_WtCart_Domain_Model_Shipping $shipping
 	 * @return void
 	 */
 	public function setShipping($shipping) {
@@ -414,7 +414,7 @@ class Tx_WtCart_Domain_Model_Cart {
 	}
 
 	/**
-	 * @param $payment
+	 * @param Tx_WtCart_Domain_Model_Payment $payment
 	 * @return void
 	 */
 	public function setPayment($payment) {

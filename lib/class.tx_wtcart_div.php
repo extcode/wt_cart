@@ -943,19 +943,20 @@ class tx_wtcart_div extends tslib_pibase {
 		if ($obj->conf[$type . '.']['options.']) {
 			foreach ($obj->conf[$type . '.']['options.'] as $key => $value) {
 				$className = 'Tx_WtCart_Domain_Model_' . $class;
+				/** @var Tx_WtCart_Domain_Model_Service $service */
 				$service = new $className(rtrim($key, '.'), $value['title'], $obj->taxes[$value['taxclass']], $value['status'], $value['note'], $obj->gpvar['isNetPrice']);
 				if (isset($value['extra.'])) {
-					$service->setExtratype($value['extra']);
+					$service->setExtraType($value['extra']);
 					foreach ($value['extra.'] as $extrakey => $extravalue) {
 						$extra = new Tx_WtCart_Domain_Model_Extra(rtrim($extrakey, '.'), $extravalue['value'], $extravalue['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 						$service->addExtra($extra);
 					}
 				} elseif (! floatval($value['extra'])) {
-					$service->setExtratype($value['extra']);
+					$service->setExtraType($value['extra']);
 					$extra = new Tx_WtCart_Domain_Model_Extra(0, 0, 0, $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 					$service->addExtra($extra);
 				} else {
-					$service->setExtratype('simple');
+					$service->setExtraType('simple');
 					$extra = new Tx_WtCart_Domain_Model_Extra(0, 0, $value['extra'], $obj->taxes[$value['taxclass']], $obj->gpvar['isNetPrice']);
 					$service->addExtra($extra);
 				}
