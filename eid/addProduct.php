@@ -50,14 +50,15 @@ class addProduct extends tslib_pibase {
 	public $taxes = array();
 
 	function main() {
+		global $TYPO3_CONF_VARS;
+
 			// eID specific initialization of user and database
 		tslib_eidtools::initFeUser();
 		tslib_eidtools::connectDB();
 		$pid = htmlentities(t3lib_div::_POST('cartID'));
 
 			// initialize TSFE
-		require_once(PATH_tslib.'class.tslib_fe.php');
-		require_once(PATH_t3lib.'class.t3lib_page.php');
+		if (!class_exists('tslib_pibase')) require_once(PATH_tslib . 'class.tslib_pibase.php');
 		$temp_TSFEclassName = t3lib_div::makeInstance('tslib_fe');
 		$GLOBALS['TSFE'] = new $temp_TSFEclassName($TYPO3_CONF_VARS, $pid, 0, true);
 		$GLOBALS['TSFE']->initFEuser();
