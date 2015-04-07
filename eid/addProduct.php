@@ -132,9 +132,13 @@ class addProduct extends tslib_pibase {
 		$count = 0;
 		if ($this->gpvar['multi']) {
 			foreach ($this->gpvar['multi'] as $single) {
+				$tmp = $this->gpvar;
+
 				$this->gpvar = $single;
 				$this->gpvar['isNetPrice'] = $cart->getIsNetCart();
 				$count += $this->parseDataToProductToCart($cart);
+
+				$this->gpvar = $tmp;
 			}
 		} else {
 			$count += $this->parseDataToProductToCart($cart);
@@ -173,7 +177,7 @@ class addProduct extends tslib_pibase {
 		} elseif ($this->gpvar['puid']) {
 			// product added by own form
 			if (!$this->gpvar['ownForm']) {
-				$this->div->getProductDetails($this->gpvar, $this);
+				$this->div->getProductDetails($this->gpvar, $this->conf);
 			} else {
 				$this->parseDataFromOwnForm();
 			}
