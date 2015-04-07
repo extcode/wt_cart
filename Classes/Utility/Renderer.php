@@ -220,8 +220,10 @@ class Tx_WtCart_Utility_Renderer {
 
 		$productArr = $product->toArray();
 
-		foreach($productArr['additional'] as $key => $value) {
-			$productArr[$key] = $value;
+		if ( $productArr['additional'] ) {
+			foreach($productArr['additional'] as $key => $value) {
+				$productArr[$key] = $value;
+			}
 		}
 
 		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['wt_cart']['changeFieldArrayBeforeRenderProductItemWithVariants']) {
