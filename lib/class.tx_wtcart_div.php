@@ -1000,9 +1000,9 @@ class tx_wtcart_div extends tslib_pibase {
 		if ($obj->gpvar['variants']) {
 
 			if ( isset($obj->conf['repository.']) ) {
-				$variantConf = $obj->conf['repository.']['variants.'];
+				$variantConf = $obj->conf;
 			} elseif ( isset($obj->conf['db.']) ) {
-				$variantConf = $obj->conf['db.']['variants.'];
+				$variantConf = $obj->conf;
 			}
 
 			$price_calc_method = $obj->gpvar['price_calc_method'];
@@ -1016,6 +1016,11 @@ class tx_wtcart_div extends tslib_pibase {
 							$newVariant[$key]->setTitle($value);
 							$newVariant[$key]->setSku(str_replace(' ', '', $value));
 						} else {
+							if ( isset($obj->conf['repository.']) ) {
+								$variantConf = $variantConf['repository.']['variants.'];
+							} elseif ( isset($obj->conf['db.']) ) {
+								$variantConf = $variantConf['db.']['variants.'];
+							}
 							// if value is a integer, get details from database
 							if (!is_int($value) ? (ctype_digit($value)) : true ) {
 								// creating a new Tx_WtCart_Domain_Model_Variant and using Price and Taxclass form Product
